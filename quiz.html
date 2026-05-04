@@ -1,21 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-  <title>Quiz Night!</title>
+<meta charset="UTF-8">
+<title>Quiz Night</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.container {
+    background: rgba(0,0,0,0.3);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: white;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+#timer {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#result {
+    margin-top: 15px;
+    font-weight: bold;
+}
+</style>
+
 </head>
 <body>
 
-  <h2 id="welcome"></h2>
-  <h2 id="timer">Time: 10</h2>
-  <h1 id="question">What is 2+2?</h1>
+<div class="container">
+    <h2 id="welcome"></h2>
+    <div id="timer">Time: 10</div>
+    <h1 id="question">What is 2+2?</h1>
 
-  <button onclick="answer(0)">3</button>
-  <button onclick="answer(1)">4</button>
-  <button onclick="answer(2)">5</button>
+    <button onclick="answer(0)">3</button>
+    <button onclick="answer(1)">4</button>
+    <button onclick="answer(2)">5</button>
 
-  <p id="result"></p>
+    <p id="result"></p>
+</div>
 
-  <script defer src="quiz.js"></script>
+<script defer src="quiz.js"></script>
 
 </body>
 </html>
