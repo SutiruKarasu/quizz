@@ -1,5 +1,5 @@
 let score = 0;
-let.playername = localStorage.getItem("playerName");
+let.playerName = localStorage.getItem("playerName");
 
 document.getElementById("welcome").innerText = "Player: " + playerName;
 
