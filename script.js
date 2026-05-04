@@ -1,15 +1,14 @@
-let score = 0
-function answer(choice)  {
-  let result = document.getElementById("result");
+function startQuiz() {
+  let name = document.getElementById("nameInput").value;
 
-  if (choice === 1)  {
-    result.innerText = "correct";
-    score++;
-  } else {
-    result.innerText = "Wrong";
-
+  if (name === "") {
+    alert("Please enter your name!");
+    return;
   }
 
-  console.log("Score:", score);
+  // Name speichern
+  localStorage.setItem("playerName", name);
 
+  // Weiter zur Quiz Seite
+  window.location.href = "quiz.html";
 }
