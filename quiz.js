@@ -1,4 +1,4 @@
-console.log("script loaded");
+alert("script l");
 let score = 0;
 let timeLeft = 10;
 let answered = false;
