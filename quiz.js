@@ -1,59 +1,97 @@
-
-let score = 0;
-let timeLeft = 10;
-let answered = false;
-let timerInterval;
-
 let playerName = localStorage.getItem("playerName") || "Guest";
 document.getElementById("welcome").innerText = "Player: " + playerName;
 
-// Timer starten
-startTimer();
+let questions = [
+  {
+    question: "What is 2+2?",
+    answers: ["3", "4", "5"],
+    correct: 1
+  },
+  {
+    question: "What is 5+3?",
+    answers: ["6", "8", "10"],
+    correct: 1
+  },
+  {
+    question: "What is 10-4?",
+    answers: ["5", "6", "7"],
+    correct: 1
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let timeLeft = 10;
+let timerInterval;
+
+function loadQuestion() {
+  let q = questions[currentQuestion];
+
+  document.getElementById("question").innerText = q.question;
+  document.getElementById("result").innerText = "";
+
+  let answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+    let btn = document.createElement("button");
+    btn.innerText = answer;
+    btn.onclick = () => checkAnswer(index);
+    answersDiv.appendChild(btn);
+  });
+
+  startTimer();
+}
 
 function startTimer() {
+  timeLeft = 10;
+  document.getElementById("timer").innerText = "Time: " + timeLeft;
+
+  clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     timeLeft--;
-
     document.getElementById("timer").innerText = "Time: " + timeLeft;
-
-    console.log("tick"); // später Sound möglich
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      lockAnswers();
+      nextQuestion();
     }
   }, 1000);
 }
 
-// Antwort Funktion
-function answer(choice) {
-  if (answered) return; // schon beantwortet → nix mehr möglich
-
-  answered = true;
+function checkAnswer(choice) {
   clearInterval(timerInterval);
 
-  let result = document.getElementById("result");
+  let correct = questions[currentQuestion].correct;
 
-  if (choice === 1) {
-    result.innerText = "Correct!";
-
-    // Punkte nach Zeit
-    let points = timeLeft * 10;
-    score += points;
-
-    console.log("Points:", points);
+  if (choice === correct) {
+    document.getElementById("result").innerText = "✅ Correct!";
+    score += timeLeft * 10;
   } else {
-    result.innerText = "Wrong!";
+    document.getElementById("result").innerText = "❌ Wrong!";
   }
 
-  lockAnswers();
+  setTimeout(nextQuestion, 1000);
 }
 
-// Buttons deaktivieren
-function lockAnswers() {
-  let buttons = document.querySelectorAll("button");
+function nextQuestion() {
+  currentQuestion++;
 
-  buttons.forEach(btn => {
-    btn.disabled = true;
-  });
+  if (currentQuestion < questions.length) {
+    loadQuestion();
+  } else {
+    endGame();
+  }
 }
+
+function endGame() {
+  document.body.innerHTML = `
+    <div style="text-align:center; margin-top:100px; color:white;">
+      <h1>Game Over</h1>
+      <h2>Your Score: ${score}</h2>
+      <button onclick="location.reload()">Restart</button>
+    </div>
+  `;
+}
+
+loadQuestion();
