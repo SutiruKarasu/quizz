@@ -1,1 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-align: center;
+  margin: 0;
+}
 
+.container {
+  margin-top: 100px;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+#timer {
+  font-size: 22px;
+  margin: 10px;
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  width: 200px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
+}
+
+#result {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+#score {
+  font-size: 20px;
+}
