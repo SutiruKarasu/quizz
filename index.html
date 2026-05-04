@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Quiz CIH</title>
-  </head>
-  <body>
+<head>
+  <title>Quiz App</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+      margin-top: 100px;
+    }
 
-  <h1 id="questions"> What is 2+2</h1>
+    .box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 15px;
+      display: inline-block;
+    }
 
-  <button onclick="answer(0)">3</button>
-  <button onclick="answer(1)">4</button>
-  <button onclick="answer(2)">5</button>
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin: 10px;
+      font-size: 16px;
+    }
 
-    <p id="result"></p>
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ffcc00;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-    <script src="script.js"></script>
-    
-  </body>
+    button:hover {
+      background: #ffaa00;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>Quiz Night 🎉</h1>
+  <p>Enter your name:</p>
+
+  <input id="nameInput" placeholder="Your name...">
+  <br>
+
+  <button onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<script src="script.js"></script>
+
+</body>
 </html>
