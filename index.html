@@ -51,7 +51,32 @@
   <br>
 
   <button onclick="startQuiz()">Start Quiz</button>
+  <h2>Queue</h2>
+  <ul  id="playerList":></ul>
 </div>
+  
+<script type="module">
+  import {  initializeApp  }  from  "https://www.gstatic.com/firebasejs/10.12.0/firebase-a=pp.js"
+  import {  initializeApp  }, ref,  push,  onValue  }  from  "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig=  {
+    apiKey:  "AIzaSyBtzetr0BJfn12mveR0HN1r5vHKQxfSS5g",
+    authDomain: "quiz-45541.firebaseapp.com", 
+    databaseURL: "https://quiz-45541-default-rtdb.europe-west1.firebasedatabase.app/",
+    projectId:  "quiz-45541",
+    storageBucket:  "quiz-45541.firebasestorage.app",
+    messagingSenderId:  "553766876270",
+    appId:  "1:553766876270:web:94185e75081ab5ccb9e27f",
+  };
+
+  const app  =  InitializeApp(firebaseconfig);
+  const db  =  getDatabase(app);
+
+  window.db  =  db;
+  window.ref  =  ref;
+  window.push  =  push;
+  window.onValue  =  onValue;
+  
 
 <script src="script.js"></script>
 
