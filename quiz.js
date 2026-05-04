@@ -1,3 +1,4 @@
+console.log("script loaded");
 let score = 0;
 let timeLeft = 10;
 let answered = false;
