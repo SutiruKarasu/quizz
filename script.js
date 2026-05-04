@@ -3,7 +3,7 @@ function answer(choice)  {
   let result = document.getElementById("result");
 
   if (choice === 1)  {
-    result.innertext = "correct";
+    result.innerText = "correct";
     score++;
   } else {
     result.innerText = "Wrong";
