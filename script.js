@@ -1,14 +1,30 @@
-function startQuiz() {
-  let name = document.getElementById("nameInput").value;
+function startQuiz ()  {
+  let name = document.getElementById("NameInput").value;
 
-  if (name === "") {
-    alert("Please enter your name!");
-    return;
-  }
-
-  // Name speichern
-  localStorage.setItem("playerName", name);
-
-  // Weiter zur Quiz Seite
-  window.location.href = "quiz.html";
+if(!name)  {
+  alert("Please Enter your Name!");
+  return;
 }
+
+localStorage.setItem("playerName",  name);
+
+push(ref(db,  "players"),  {
+  name:  name,
+  timestamp:  Date.now()
+});
+
+window.location.href  =  "quiz.html;
+}
+
+function loadPlayers()  {
+  const list  =  document.getElementById("playerList");
+
+onValue(ref(db,  "players"),  (snapshot) =>  {
+  let li = document.createElement("li");
+  li.innerText  =  child.val().name;
+  list.appendChild(li");
+    });
+  });
+}
+
+loadPlayers();
