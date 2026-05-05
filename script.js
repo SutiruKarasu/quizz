@@ -1,5 +1,5 @@
 function startQuiz ()  {
-  let name = document.getElementById("NameInput").value;
+  let name = document.getElementById("nameInput").value;
 
 if(!name)  {
   alert("Please Enter your Name!");
