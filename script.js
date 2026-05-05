@@ -1,4 +1,4 @@
-function startQuiz ()  {
+window.startQuiz  =  function ()  {
   let name = document.getElementById("nameInput").value;
 
 if(!name)  {
