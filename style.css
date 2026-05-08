@@ -1,59 +1,122 @@
+:root {
+    --bg-color: #0f111a;
+    --container-bg: #1a1d29;
+    --gold: #d4af37;
+    --text-light: #f5f5f5;
+    --wrong: #ff4757;
+    --correct: #2ed573;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  text-align: center;
-  margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
 
-.container {
-  margin-top: 100px;
+.app-container {
+    background: var(--container-bg);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 2px rgba(212, 175, 55, 0.2);
+    text-align: center;
+    position: relative;
 }
 
-h1 {
-  font-size: 40px;
+.screen {
+    display: none;
+    animation: fadeIn 0.5s;
 }
 
-#timer {
-  font-size: 22px;
-  margin: 10px;
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.clock-icon { font-size: 60px; margin-bottom: 10px; }
+
+h1, h2 { color: var(--gold); margin-bottom: 20px; }
+
+input[type="text"] {
+    width: 80%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #0f111a;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
 }
 
 button {
-  display: block;
-  margin: 10px auto;
-  padding: 15px 30px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  background-color: white;
-  color: #333;
-  cursor: pointer;
-  width: 200px;
-  transition: 0.3s;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 80%;
 }
 
-button:hover {
-  background-color: #ddd;
-  transform: scale(1.05);
+button:hover { transform: scale(1.05); background: #b5952f; }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 20px;
 }
 
-#result {
-  font-size: 24px;
-  margin-top: 20px;
+.clock-timer {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(var(--gold) var(--progress, 100%), #333 0deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 25px auto;
 }
 
-#score {
-  font-size: 20px;
+.clock-timer-inner {
+    width: 86px;
+    height: 86px;
+    background: var(--container-bg);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
 }
 
-ul {
-  list-style: none;
-  padding:  0;
+.answers-container { display: flex; flex-direction: column; gap: 10px; }
+
+.answer-btn {
+    background: #2a2e40;
+    color: #fff;
+    border: 1px solid #3a3f58;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
 }
 
-li  {
-  background:  rgba(255,255,255,0.20;
-  margin:  5px;
-  padding:  10px;
-  border-radius:  8px;
+.answer-btn.correct { background: var(--correct); color: #000; }
+.answer-btn.wrong { background: var(--wrong); }
+.final-score { font-size: 60px; color: var(--gold); margin: 20px 0; }
