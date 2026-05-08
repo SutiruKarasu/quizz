@@ -1,84 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Quiz App</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: white;
-      text-align: center;
-      margin-top: 100px;
-    }
-
-    .box {
-      background: rgba(255,255,255,0.1);
-      padding: 30px;
-      border-radius: 15px;
-      display: inline-block;
-    }
-
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin: 10px;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #ffcc00;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #ffaa00;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeMaster Quiz</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="box">
-  <h1>Quiz Night 🎉</h1>
-  <p>Enter your name:</p>
+    <div class="app-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="clock-icon">🕐</div>
+            <h1>TimeMaster Quiz</h1>
+            <p>40 Questions. 10 Seconds per question. The clock is ticking.</p>
+            <input type="text" id="player-name" placeholder="Enter your name..." autocomplete="off">
+            <button id="start-btn">Start Quiz</button>
+        </div>
 
-  <input id="nameInput" placeholder="Your name...">
-  <br>
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="header">
+                <span id="topic-display">Topic</span>
+                <span id="question-counter">Question 1 / 40</span>
+            </div>
+            
+            <div class="clock-timer" id="clock-timer">
+                <div class="clock-timer-inner" id="time-display">10</div>
+            </div>
 
-  <button onclick="startQuiz()">Start Quiz</button>
-  <h2>Queue...</h2>
-  <ul  id="playerList":></ul>
-</div>
-  
-<script type="module">
-  import {  initializeApp  }  from  "https://www.gstatic.com/firebasejs/10.12.0/firebase-a=pp.js"
-  import {  initializeApp  }, ref,  push,  onValue  }  from  "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+            <h2 id="question-text">Question?</h2>
+            
+            <div class="answers-container" id="answers-container">
+                <!-- Answer buttons generated via JS -->
+            </div>
+            
+            <div class="footer-stats">
+                Score: <span id="score-display">0</span>
+            </div>
+        </div>
 
-  const firebaseConfig=  {
-    apiKey:  "AIzaSyBtzetr0BJfn12mveR0HN1r5vHKQxfSS5g",
-    authDomain: "quiz-45541.firebaseapp.com", 
-    databaseURL: "https://quiz-45541-default-rtdb.europe-west1.firebasedatabase.app/",
-    projectId:  "quiz-45541",
-    storageBucket:  "quiz-45541.firebasestorage.app",
-    messagingSenderId:  "553766876270",
-    appId:  "1:553766876270:web:94185e75081ab5ccb9e27f",
-  };
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="clock-icon">🕰️</div>
+            <h2>Time's Up!</h2>
+            <p>Well done, <span id="result-name">Player</span>!</p>
+            <div class="final-score" id="final-score">0</div>
+            <p>Points</p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+    </div>
 
-  const app  =  initializeApp(firebaseconfig);
-  const db  =  getDatabase(app);
-
-  window.db  =  db;
-  window.ref  =  ref;
-  window.push  =  push;
-  window.onValue  =  onValue;
-  
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
