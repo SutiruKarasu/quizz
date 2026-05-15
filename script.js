@@ -3,7 +3,6 @@ const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 // --- 1. TEILNAHME-SPERRE (One-time per device) ---
 window.onload = function() {
     if (localStorage.getItem('quiz_completed') === 'true') {
-        // Ersetzt den Start-Inhalt, falls schon gespielt wurde
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1>Access Denied</h1>
@@ -14,7 +13,6 @@ window.onload = function() {
 
 // --- 2. FRAGEN-DATENBANK ---
 const quizData = [
-    // Geography
     { topic: "Geography", q: "What is the capital of France?", a: ["Paris", "London", "Berlin", "Madrid"], c: 0 },
     { topic: "Geography", q: "Which is the longest river in the world?", a: ["Amazon", "Nile", "Rhine", "Mississippi"], c: 1 },
     { topic: "Geography", q: "Which ocean is the largest?", a: ["Atlantic", "Indian", "Pacific", "Arctic"], c: 2 },
@@ -25,8 +23,6 @@ const quizData = [
     { topic: "Geography", q: "What is the tallest mountain in the world?", a: ["K2", "Mount Everest", "Kilimanjaro", "Mont Blanc"], c: 1 },
     { topic: "Geography", q: "Which is the largest hot desert in the world?", a: ["Gobi", "Atacama", "Sahara", "Kalahari"], c: 2 },
     { topic: "Geography", q: "What is the smallest country in the world?", a: ["Monaco", "Vatican City", "San Marino", "Liechtenstein"], c: 1 },
-
-    // History
     { topic: "History", q: "In which year did Columbus reach America?", a: ["1492", "1512", "1488", "1501"], c: 0 },
     { topic: "History", q: "When did World War II end?", a: ["1942", "1945", "1948", "1950"], c: 1 },
     { topic: "History", q: "In which year did the Berlin Wall fall?", a: ["1987", "1988", "1989", "1990"], c: 2 },
@@ -37,8 +33,6 @@ const quizData = [
     { topic: "History", q: "Who was known as the 'Iron Chancellor'?", a: ["Willy Brandt", "Otto von Bismarck", "Konrad Adenauer", "Helmut Kohl"], c: 1 },
     { topic: "History", q: "When was the US Declaration of Independence signed?", a: ["1770", "1776", "1783", "1789"], c: 1 },
     { topic: "History", q: "Which historical figure is known as the 'Maid of Orleans'?", a: ["Mary Stuart", "Joan of Arc", "Catherine the Great", "Elizabeth I"], c: 1 },
-
-    // Science
     { topic: "Science", q: "What does the chemical formula H2O stand for?", a: ["Oxygen", "Hydrogen", "Water", "Carbon Dioxide"], c: 2 },
     { topic: "Science", q: "Which planet is closest to the Sun?", a: ["Venus", "Mars", "Earth", "Mercury"], c: 3 },
     { topic: "Science", q: "Who formulated the theory of relativity?", a: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"], c: 1 },
@@ -49,8 +43,6 @@ const quizData = [
     { topic: "Science", q: "What is the hardest natural material?", a: ["Gold", "Iron", "Diamond", "Platinum"], c: 2 },
     { topic: "Science", q: "What is the solid state of water?", a: ["Steam", "Ice", "Mist", "Plasma"], c: 1 },
     { topic: "Science", q: "What pigment makes leaves green?", a: ["Melanin", "Carotene", "Chlorophyll", "Hemoglobin"], c: 2 },
-
-    // Pop Culture
     { topic: "Pop Culture", q: "Who is the famous boy wizard created by J.K. Rowling?", a: ["Percy Jackson", "Harry Potter", "Frodo Baggins", "Luke Skywalker"], c: 1 },
     { topic: "Pop Culture", q: "Who created Mickey Mouse?", a: ["Stan Lee", "Walt Disney", "Hanna Barbera", "Charles Schulz"], c: 1 },
     { topic: "Pop Culture", q: "Which movie features the line: 'I'll be back'?", a: ["Die Hard", "Rocky", "The Terminator", "Rambo"], c: 2 },
@@ -114,9 +106,16 @@ function startTimer() {
 }
 
 function updateUI() {
+    // Digitale Anzeige (Sekunden aufgerundet)
     document.getElementById('time-display').innerText = Math.ceil(timeLeft);
-    const perc = (timeLeft / 10) * 100;
-    document.getElementById('clock-timer').style.setProperty('--progress', `${perc}%`);
+    
+    // Rotation des mechanischen Uhrzeigers
+    // 10 Sekunden = 360 Grad. Wir rechnen (10 - timeLeft) * 36 Grad
+    const rotation = (10 - timeLeft) * 36;
+    const hand = document.getElementById('clock-hand');
+    if(hand) {
+        hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+    }
 }
 
 function selectAnswer(idx, btn) {
@@ -145,7 +144,6 @@ function selectAnswer(idx, btn) {
 }
 
 function showResults() {
-    // 1. Sperre setzen
     localStorage.setItem('quiz_completed', 'true');
 
     const finalName = document.getElementById('player-name').value;
@@ -154,7 +152,6 @@ function showResults() {
     document.getElementById('result-name').innerText = finalName;
     document.getElementById('final-score').innerText = score;
 
-    // 2. Daten an Formspree senden
     fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -164,9 +161,12 @@ function showResults() {
             Message: "Clock-In Quiz completed" 
         })
     })
-    .then(res => console.log("Success: Results mailed to host."))
-    .catch(err => console.error("Error: Could not send results."));
+    .then(() => {
+        document.getElementById('mail-status').innerText = "Results successfully synced with host.";
+    })
+    .catch(() => {
+        document.getElementById('mail-status').innerText = "Sync failed, but score saved.";
+    });
 }
 
-// Restart button (nur sichtbar falls nicht blockiert)
 document.getElementById('restart-btn').onclick = () => location.reload();
