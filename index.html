@@ -9,7 +9,6 @@
 <body>
 
     <div class="app-container">
-        <!-- Start Screen -->
         <div id="start-screen" class="screen active">
             <div class="clock-icon">🕐</div>
             <h1>Clock-In Quiz</h1>
@@ -18,29 +17,39 @@
             <button id="start-btn">Clock In</button>
         </div>
 
-        <!-- Quiz Screen -->
         <div id="quiz-screen" class="screen">
             <div class="header">
                 <span id="topic-display">Topic</span>
                 <span id="question-counter">Question 1 / 40</span>
             </div>
             
-            <div class="clock-timer" id="clock-timer">
-                <div class="clock-timer-inner" id="time-display">10</div>
+            <div class="clock-container">
+                <div class="clock-face">
+                    <div class="gear-large">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M50 0 L55 15 L70 10 L75 25 L90 20 L85 35 L100 40 L100 60 L85 65 L90 80 L75 75 L70 90 L55 85 L50 100 L45 85 L30 90 L25 75 L10 80 L15 65 L0 60 L0 40 L15 35 L10 20 L25 25 L30 10 L45 15 Z" fill="none" stroke="#d4af37" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="gear-small">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M50 0 L55 15 L70 10 L75 25 L90 20 L85 35 L100 40 L100 60 L85 65 L90 80 L75 75 L70 90 L55 85 L50 100 L45 85 L30 90 L25 75 L10 80 L15 65 L0 60 L0 40 L15 35 L10 20 L25 25 L30 10 L45 15 Z" fill="none" stroke="#b5952f" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <div class="clock-hand" id="clock-hand"></div>
+                    <div class="clock-digital" id="time-display">10</div>
+                </div>
             </div>
 
             <h2 id="question-text">Loading question...</h2>
             
             <div class="answers-container" id="answers-container">
-                <!-- Answer buttons generated via JS -->
-            </div>
+                </div>
             
             <div class="footer-stats">
                 Score: <span id="score-display">0</span>
             </div>
         </div>
 
-        <!-- Result Screen -->
         <div id="result-screen" class="screen">
             <div class="clock-icon">🕰️</div>
             <h2>Shift Ended!</h2>
@@ -48,6 +57,7 @@
             <div class="final-score" id="final-score">0</div>
             <p>Points</p>
             <p id="mail-status" style="font-size: 0.8em; color: #888; margin-top: 15px;">Sending results to host...</p>
+            <button id="restart-btn" style="margin-top: 20px;">Restart</button>
         </div>
     </div>
 
