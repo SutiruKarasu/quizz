@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TimeMaster Quiz</title>
+    <title>Clock-In Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,10 +12,10 @@
         <!-- Start Screen -->
         <div id="start-screen" class="screen active">
             <div class="clock-icon">🕐</div>
-            <h1>TimeMaster Quiz</h1>
+            <h1>Clock-In Quiz</h1>
             <p>40 Questions. 10 Seconds per question. The clock is ticking.</p>
             <input type="text" id="player-name" placeholder="Enter your name..." autocomplete="off">
-            <button id="start-btn">Start Quiz</button>
+            <button id="start-btn">Clock In</button>
         </div>
 
         <!-- Quiz Screen -->
@@ -29,7 +29,7 @@
                 <div class="clock-timer-inner" id="time-display">10</div>
             </div>
 
-            <h2 id="question-text">Question?</h2>
+            <h2 id="question-text">Loading question...</h2>
             
             <div class="answers-container" id="answers-container">
                 <!-- Answer buttons generated via JS -->
@@ -43,11 +43,11 @@
         <!-- Result Screen -->
         <div id="result-screen" class="screen">
             <div class="clock-icon">🕰️</div>
-            <h2>Time's Up!</h2>
+            <h2>Shift Ended!</h2>
             <p>Well done, <span id="result-name">Player</span>!</p>
             <div class="final-score" id="final-score">0</div>
             <p>Points</p>
-            <button id="restart-btn">Play Again</button>
+            <p id="mail-status" style="font-size: 0.8em; color: #888; margin-top: 15px;">Sending results to host...</p>
         </div>
     </div>
 
