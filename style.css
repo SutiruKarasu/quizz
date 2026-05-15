@@ -82,28 +82,69 @@ button:hover { transform: scale(1.05); background: #b5952f; }
     margin-bottom: 20px;
 }
 
-.clock-timer {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: conic-gradient(var(--gold) var(--progress, 100%), #333 0deg);
+/* --- NEUES GOLDENES UHRWERK --- */
+.clock-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 0 auto 25px auto;
+    margin-bottom: 30px;
 }
 
-.clock-timer-inner {
-    width: 86px;
-    height: 86px;
-    background: var(--container-bg);
+.clock-face {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border: 4px solid var(--gold);
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    font-weight: bold;
+    background: radial-gradient(circle, #1a1d29 0%, #0a0c12 100%);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(0,0,0,0.8);
+    overflow: hidden;
 }
+
+/* Zahnrad Animationen */
+.gear-large {
+    position: absolute;
+    top: 15px; left: 15px; width: 110px; height: 110px;
+    opacity: 0.2;
+    animation: rotateGear 15s linear infinite;
+}
+
+.gear-small {
+    position: absolute;
+    top: 80px; left: 80px; width: 45px; height: 45px;
+    opacity: 0.3;
+    animation: rotateGearRev 6s linear infinite;
+}
+
+@keyframes rotateGear { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rotateGearRev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+/* Der mechanische Uhrzeiger */
+.clock-hand {
+    position: absolute;
+    bottom: 50%; left: 50%;
+    width: 4px; height: 55px;
+    background: var(--gold);
+    border-radius: 4px;
+    transform-origin: bottom center;
+    box-shadow: 0 0 10px var(--gold);
+    z-index: 10;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 0.05s linear; /* Für flüssiges Ticken */
+}
+
+/* Die digitale Zeit im Zifferblatt */
+.clock-digital {
+    position: absolute;
+    width: 100%;
+    top: 65%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    z-index: 5;
+}
+/* ------------------------------ */
 
 .answers-container { display: flex; flex-direction: column; gap: 10px; }
 
@@ -115,8 +156,12 @@ button:hover { transform: scale(1.05); background: #b5952f; }
     border-radius: 8px;
     cursor: pointer;
     width: 100%;
+    transition: 0.2s;
 }
 
-.answer-btn.correct { background: var(--correct); color: #000; }
-.answer-btn.wrong { background: var(--wrong); }
+.answer-btn:hover { background: #3a3f58; }
+
+.answer-btn.correct { background: var(--correct) !important; color: #000; border-color: var(--correct); }
+.answer-btn.wrong { background: var(--wrong) !important; color: #fff; border-color: var(--wrong); }
+
 .final-score { font-size: 60px; color: var(--gold); margin: 20px 0; }
