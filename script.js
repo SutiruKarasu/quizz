@@ -1,3 +1,18 @@
+const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
+
+// --- 1. TEILNAHME-SPERRE (One-time per device) ---
+window.onload = function() {
+    if (localStorage.getItem('quiz_completed') === 'true') {
+        // Ersetzt den Start-Inhalt, falls schon gespielt wurde
+        document.getElementById('start-screen').innerHTML = `
+            <div class="clock-icon">🚫</div>
+            <h1>Access Denied</h1>
+            <p>You have already clocked in for this quiz. Only one attempt per device is allowed.</p>
+        `;
+    }
+};
+
+// --- 2. FRAGEN-DATENBANK ---
 const quizData = [
     // Geography
     { topic: "Geography", q: "What is the capital of France?", a: ["Paris", "London", "Berlin", "Madrid"], c: 0 },
@@ -58,8 +73,8 @@ const startBtn = document.getElementById('start-btn');
 const answersContainer = document.getElementById('answers-container');
 
 startBtn.onclick = () => {
-    const name = document.getElementById('player-name').value;
-    if(!name) return alert("Enter a name!");
+    const nameValue = document.getElementById('player-name').value.trim();
+    if(!nameValue) return alert("Please enter your name!");
     document.getElementById('start-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     loadQuestion();
@@ -110,6 +125,8 @@ function selectAnswer(idx, btn) {
     clearInterval(timerInterval);
     
     const correctIdx = quizData[currentQuestionIndex].c;
+    const btns = answersContainer.querySelectorAll('.answer-btn');
+
     if(idx === correctIdx) {
         btn.classList.add('correct');
         score += Math.round(timeLeft * 10);
@@ -118,8 +135,6 @@ function selectAnswer(idx, btn) {
         btn.classList.add('wrong');
     }
     
-    // Show correct answer if wrong or time out
-    const btns = answersContainer.querySelectorAll('.answer-btn');
     btns[correctIdx].classList.add('correct');
 
     setTimeout(() => {
@@ -130,10 +145,28 @@ function selectAnswer(idx, btn) {
 }
 
 function showResults() {
+    // 1. Sperre setzen
+    localStorage.setItem('quiz_completed', 'true');
+
+    const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
     document.getElementById('result-screen').classList.add('active');
-    document.getElementById('result-name').innerText = document.getElementById('player-name').value;
+    document.getElementById('result-name').innerText = finalName;
     document.getElementById('final-score').innerText = score;
+
+    // 2. Daten an Formspree senden
+    fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ 
+            PlayerName: finalName, 
+            FinalScore: score,
+            Message: "Clock-In Quiz completed" 
+        })
+    })
+    .then(res => console.log("Success: Results mailed to host."))
+    .catch(err => console.error("Error: Could not send results."));
 }
 
+// Restart button (nur sichtbar falls nicht blockiert)
 document.getElementById('restart-btn').onclick = () => location.reload();
