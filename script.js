@@ -7,7 +7,6 @@ window.onload = function() {
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
             <p>You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
-            <button onclick="localStorage.clear(); location.reload();" style="width: auto; font-size: 14px; background: #333; color: #fff; border: 1px solid #444; margin-top: 10px; cursor: pointer;">Debug: Reset (Host Only)</button>
         `;
     }
 };
