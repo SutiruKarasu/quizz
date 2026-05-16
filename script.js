@@ -1,18 +1,18 @@
 const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
-// --- 1. ACCESS CONTROL (One-time per device) ---
+// --- 1. ACCESS CONTROL ---
 window.onload = function() {
     if (localStorage.getItem('quiz_completed') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
             <p>You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
-            <button onclick="localStorage.clear(); location.reload();" style="width: auto; font-size: 14px; background: #333; color: #fff;">Debug: Reset (Host Only)</button>
+            <button onclick="localStorage.clear(); location.reload();" style="width: auto; font-size: 14px; background: #333; color: #fff; border: 1px solid #444; margin-top: 10px; cursor: pointer;">Debug: Reset (Host Only)</button>
         `;
     }
 };
 
-// --- 2. THE 60-QUESTION DATABASE ---
+// --- 2. DATABASE (60 Questions) ---
 const quizData = [
     // --- BLOCK 1: MOVIES & SERIES ---
     { topic: "Cinema", q: "Which film won the Oscar for Best Picture in 2024?", a: ["Barbie", "Oppenheimer", "Poor Things", "Killers of the Flower Moon"], c: 1 },
@@ -90,13 +90,18 @@ const quizData = [
 // --- 3. CORE LOGIC ---
 let currentQuestionIndex = 0;
 let score = 0;
+let displayedScore = 0;
 let timeLeft = 10.0;
 let timerInterval;
 let isAnswered = false;
+let streak = 0; // Streak Counter
 
+const mainContainer = document.getElementById('main-container');
 const startBtn = document.getElementById('start-btn');
 const answersContainer = document.getElementById('answers-container');
 const eventScreen = document.getElementById('event-screen');
+const progressBar = document.getElementById('progress-bar');
+const streakBadge = document.getElementById('streak-badge');
 
 startBtn.onclick = () => {
     const nameValue = document.getElementById('player-name').value.trim();
@@ -111,7 +116,11 @@ function loadQuestion() {
     timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
     
-    // Update UI
+    // Update Progress Bar
+    const progress = ((currentQuestionIndex) / quizData.length) * 100;
+    progressBar.style.width = `${progress}%`;
+
+    // Update UI Labels
     document.getElementById('topic-display').innerText = q.topic;
     document.getElementById('question-counter').innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
     document.getElementById('question-text').innerText = q.q;
@@ -157,21 +166,44 @@ function selectAnswer(idx, btn) {
     const btns = answersContainer.querySelectorAll('.answer-btn');
 
     if(idx === correctIdx) {
+        // --- LOGIC: STREAK & POINTS ---
+        streak++;
         btn.classList.add('correct');
-        // MULTIPLIER UPGRADE: timeLeft * 100
-        score += Math.round(timeLeft * 100); 
-        document.getElementById('score-display').innerText = score;
-    } else if(idx !== -1) {
-        btn.classList.add('wrong');
+        
+        // Multiplier Logic: Streak 3+ (1.2x), Streak 5+ (1.5x), Streak 10+ (2.0x)
+        let multiplier = 1;
+        if(streak >= 10) multiplier = 2.0;
+        else if(streak >= 5) multiplier = 1.5;
+        else if(streak >= 3) multiplier = 1.2;
+
+        const pointsEarned = Math.round((timeLeft * 100) * multiplier);
+        score += pointsEarned;
+
+        // Visual Juice: Score Ticker & Badge
+        updateScoreVisuals(true);
+        if(streak >= 3) {
+            streakBadge.innerText = `${streak}x STREAK`;
+            streakBadge.classList.add('active');
+            mainContainer.classList.add('streak-active');
+        }
+
+    } else {
+        // --- LOGIC: WRONG ANSWER ---
+        streak = 0;
+        if(btn) btn.classList.add('wrong');
+        
+        // Visual Juice: Shake & Reset Streak
+        mainContainer.classList.add('shake');
+        setTimeout(() => mainContainer.classList.remove('shake'), 400);
+        
+        streakBadge.classList.remove('active');
+        mainContainer.classList.remove('streak-active');
     }
     
     btns[correctIdx].classList.add('correct');
 
     setTimeout(() => {
         currentQuestionIndex++;
-        
-        // --- CHAPTER TRANSITION LOGIC ---
-        // Every 10 questions, show the chapter break
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
             showChapterTransition();
         } else if(currentQuestionIndex < quizData.length) {
@@ -180,6 +212,28 @@ function selectAnswer(idx, btn) {
             showResults();
         }
     }, 1500);
+}
+
+// Visual Juice: Smoother Score counting
+function updateScoreVisuals(isBoosted) {
+    const scoreDisplay = document.getElementById('score-display');
+    const scoreWrapper = document.getElementById('score-wrapper');
+    
+    scoreWrapper.classList.add('score-bump');
+    setTimeout(() => scoreWrapper.classList.remove('score-bump'), 400);
+
+    let step = (score - displayedScore) / 10;
+    let counter = 0;
+    let ticker = setInterval(() => {
+        displayedScore += step;
+        scoreDisplay.innerText = Math.round(displayedScore);
+        counter++;
+        if(counter >= 10) {
+            clearInterval(ticker);
+            displayedScore = score;
+            scoreDisplay.innerText = score;
+        }
+    }, 30);
 }
 
 function showChapterTransition() {
@@ -192,11 +246,12 @@ function showChapterTransition() {
     setTimeout(() => {
         eventScreen.style.display = 'none';
         loadQuestion();
-    }, 2500); // 2.5 second pause for the "Vibe"
+    }, 2500);
 }
 
 function showResults() {
     localStorage.setItem('quiz_completed', 'true');
+    progressBar.style.width = `100%`;
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
