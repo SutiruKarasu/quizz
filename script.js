@@ -2,7 +2,7 @@ const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completed') === 'true') {
+    if (localStorage.getItem('quiz_completed_v2') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
@@ -250,7 +250,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completed', 'true');
+    localStorage.setItem('quiz_completed_2', 'true');
     progressBar.style.width = `100%`;
 
     const finalName = document.getElementById('player-name').value;
