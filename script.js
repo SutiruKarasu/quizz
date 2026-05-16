@@ -249,7 +249,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completed_2', 'true');
+    localStorage.setItem('quiz_completed_v2', 'true');
     progressBar.style.width = `100%`;
 
     const finalName = document.getElementById('player-name').value;
