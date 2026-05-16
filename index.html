@@ -8,7 +8,13 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="app-container" id="main-container">
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+
+        <div id="streak-badge" class="streak-badge">0x STREAK</div>
+
         <div id="event-screen" class="event-overlay">
             <div class="event-content">
                 <div class="event-gear">⚙️</div>
@@ -62,7 +68,7 @@
             <div class="answers-container" id="answers-container">
                 </div>
             
-            <div class="footer-stats">
+            <div class="footer-stats" id="score-wrapper">
                 Score: <span id="score-display">0</span>
             </div>
         </div>
