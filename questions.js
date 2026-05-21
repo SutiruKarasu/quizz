@@ -1,4 +1,4 @@
-[
+const rawQuizData = [
   { "topic": "Pop Culture", "question": "Who is known as the 'King of Pop'?", "answers": ["Michael Jackson", "Prince", "Elvis Presley", "Justin Timberlake"], "correct": 0 },
   { "topic": "Pop Culture", "question": "Which platform is best known for its short-form, viral dance videos?", "answers": ["TikTok", "Instagram", "YouTube", "Facebook"], "correct": 0 },
   { "topic": "Pop Culture", "question": "What is the real name of the rapper Eminem?", "answers": ["Marshall Mathers", "Shawn Carter", "Curtis Jackson", "Calvin Broadus"], "correct": 0 },
