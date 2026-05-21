@@ -43,25 +43,34 @@ window.onload = function() {
 let quizData = [];
 
 function buildDailyQuiz() {
-    if (typeof rawQuizData === 'undefined' || Object.keys(rawQuizData).length === 0) {
+    if (typeof rawQuizData === 'undefined' || rawQuizData.length === 0) {
         console.error("Questions database (rawQuizData) not found or empty!");
         return;
     }
 
-    // 1. Alle verfügbaren Themen-Kategorien aus der questions.js holen
-    const allTopics = Object.keys(rawQuizData);
+    // 1. Gruppiere die flache Liste aus questions.js dynamisch nach Themen
+    const groupedByTopic = {};
+    rawQuizData.forEach(item => {
+        if (!groupedByTopic[item.topic]) {
+            groupedByTopic[item.topic] = [];
+        }
+        groupedByTopic[item.topic].push(item);
+    });
+
+    // 2. Alle verfügbaren Themen-Kategorien extrahieren
+    const allTopics = Object.keys(groupedByTopic);
     
-    // 2. Die Kategorien für den heutigen Tag mischen
+    // 3. Die Kategorien für den heutigen Tag mischen
     const shuffledTopics = shuffleArrayDaily(allTopics);
     
-    // 3. Die ersten 5 Kategorien für heute auswählen
+    // 4. Die ersten 5 Kategorien für heute auswählen
     const selectedTopics = shuffledTopics.slice(0, 5);
     
     let compiledQuestions = [];
 
-    // 4. Aus jeder der 5 Kategorien genau 10 Fragen ziehen
+    // 5. Aus jeder der 5 ausgewählten Kategorien genau 10 Fragen ziehen
     selectedTopics.forEach(topic => {
-        let categoryQuestions = [...rawQuizData[topic]];
+        let categoryQuestions = [...groupedByTopic[topic]];
         
         // Die Fragen innerhalb dieser Kategorie für den Tag mischen
         categoryQuestions = shuffleArrayDaily(categoryQuestions);
@@ -69,15 +78,10 @@ function buildDailyQuiz() {
         // Die ersten 10 Fragen nehmen
         const dailyTen = categoryQuestions.slice(0, 10);
         
-        // Das 'topic' Attribut injizieren, falls es in der JSON fehlt, damit die UI es anzeigen kann
-        dailyTen.forEach(q => {
-            q.topic = topic;
-        });
-
         compiledQuestions = compiledQuestions.concat(dailyTen);
     });
 
-    // 5. Das finale Set aus 50 Fragen zuweisen
+    // 6. Das finale Set aus 50 Fragen zuweisen
     quizData = compiledQuestions;
 }
 
@@ -101,7 +105,7 @@ startBtn.onclick = () => {
     const nameValue = document.getElementById('player-name').value.trim();
     if(!nameValue) return alert("Please enter your name!");
     
-    // Generiere das Quiz genau jetzt beim Start
+    // Generiere das Quiz genau jetzt beim Starten
     buildDailyQuiz();
     
     if (quizData.length === 0) return alert("Error loading quiz data!");
@@ -123,12 +127,12 @@ function loadQuestion() {
     // Update UI Labels
     document.getElementById('topic-display').innerText = q.topic;
     document.getElementById('question-counter').innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
-    document.getElementById('question-text').innerText = q.question; // Nutzt den Key aus deinen JSONs ('question')
+    document.getElementById('question-text').innerText = q.question; 
     
     answersContainer.innerHTML = "";
     
     // Erstellt die Antwort-Buttons dynamisch
-    q.answers.forEach((alt, i) => { // Nutzt 'answers' aus deinen JSONs
+    q.answers.forEach((alt, i) => { 
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
         btn.innerText = alt;
@@ -164,7 +168,7 @@ function selectAnswer(idx, btn) {
     isAnswered = true;
     clearInterval(timerInterval);
     
-    const correctIdx = quizData[currentQuestionIndex].correct; // Nutzt 'correct' aus deinen JSONs
+    const correctIdx = quizData[currentQuestionIndex].correct; 
     const btns = answersContainer.querySelectorAll('.answer-btn');
 
     if(idx === correctIdx) {
