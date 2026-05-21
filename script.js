@@ -1702,6 +1702,7 @@ const rawQuizData = [
   { "category": "Records", "question": "Which country produces the most coffee?", "answers": ["Brazil", "Vietnam", "Colombia", "Indonesia"], "correct": 0 },
   { "category": "Records", "question": "What is the record for the most points scored in an NBA game by one player?", "answers": ["Wilt Chamberlain (100)", "Kobe Bryant (81)", "David Thompson (73)", "Devin Booker (70)"], "correct": 0 },
   { "category": "Records", "question": "Which country has the largest number of islands?", "answers": ["Sweden", "Norway", "Finland", "Canada"], "correct": 0 },
+];
 
 // =========================================================================
 // 2. SEED-BASED PSEUDO-RANDOM GENERATOR
@@ -1734,11 +1735,14 @@ function shuffleArrayDaily(array) {
 // =========================================================================
 window.onload = function() {
     if (localStorage.getItem(`quiz_completed_${todayStr}`) === 'true') {
-        document.getElementById('start-screen').innerHTML = `
-            <div class="clock-icon">🚫</div>
-            <h1 style="color: #ff4757;">Shift Denied</h1>
-            <p>You have already clocked in for today's shift.<br>Return tomorrow for the next deployment.</p>
-        `;
+        const startScreen = document.getElementById('start-screen');
+        if (startScreen) {
+            startScreen.innerHTML = `
+                <div class="clock-icon">🚫</div>
+                <h1 style="color: #ff4757;">Shift Denied</h1>
+                <p>You have already clocked in for today's shift.<br>Return tomorrow for the next deployment.</p>
+            `;
+        }
     }
 };
 
@@ -1807,18 +1811,22 @@ const answersContainer = document.getElementById('answers-container');
 const progressBar = document.getElementById('progress-bar');
 const streakBadge = document.getElementById('streak-badge');
 
-startBtn.onclick = () => {
-    const nameValue = document.getElementById('player-name').value.trim();
-    if(!nameValue) return alert("Please enter your name!");
-    
-    buildDailyQuiz();
-    
-    if (quizData.length === 0) return alert("Error loading quiz data!");
+if (startBtn) {
+    startBtn.onclick = () => {
+        const playerNameElem = document.getElementById('player-name');
+        const nameValue = playerNameElem ? playerNameElem.value.trim() : "Unknown";
+        
+        if(!nameValue && playerNameElem) return alert("Please enter your name!");
+        
+        buildDailyQuiz();
+        
+        if (quizData.length === 0) return alert("Error loading quiz data!");
 
-    document.getElementById('start-screen').classList.remove('active');
-    document.getElementById('quiz-screen').classList.add('active');
-    loadQuestion();
-};
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        loadQuestion();
+    };
+}
 
 function loadQuestion() {
     isAnswered = false;
@@ -1935,7 +1943,8 @@ function endQuiz() {
     const finalScoreElem = document.getElementById('final-score');
     if(finalScoreElem) finalScoreElem.innerText = score;
 
-    const playerName = document.getElementById('player-name').value.trim();
+    const playerNameElem = document.getElementById('player-name');
+    const playerName = playerNameElem ? playerNameElem.value.trim() : "Unknown";
 
     // Heute als erledigt markieren
     localStorage.setItem(`quiz_completed_${todayStr}`, 'true');
