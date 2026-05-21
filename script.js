@@ -201,7 +201,7 @@ const rawQuizData = [
   { "category": "Geographic", "question": "Which famous canal connects the Mediterranean Sea to the Red Sea?", "answers": ["Suez Canal", "Panama Canal", "Corinth Canal", "Kiel Canal"], "correct": 0 },
   { "category": "Geographic", "question": "What is the capital of Greece?", "answers": ["Athens", "Thessaloniki", "Patras", "Heraklion"], "correct": 0 },
   { "category": "Geographic", "question": "Which island nation is located southeast of India?", "answers": ["Sri Lanka", "Maldives", "Mauritius", "Seychelles"], "correct": 0 },
-  { "category": "Geographic", "question": "What is the capital of New Zealand?", "answers": ["Wellington", "Auckland", "Christchurch", "Queenstown"], "correct": 0 }
+  { "category": "Geographic", "question": "What is the capital of New Zealand?", "answers": ["Wellington", "Auckland", "Christchurch", "Queenstown"], "correct": 0 },
   { "category": "Movies and Series", "question": "Who directed the 1993 dinosaur blockbuster Jurassic Park?", "answers": ["Steven Spielberg", "George Lucas", "James Cameron", "Ridley Scott"], "correct": 0 },
   { "category": "Movies and Series", "question": "What is the name of the wizarding school in the Harry Potter series?", "answers": ["Hogwarts", "Beauxbatons", "Durmstrang", "Ilvermorny"], "correct": 0 },
   { "category": "Movies and Series", "question": "Which actor played the character Jack Dawson in the 1997 film Titanic?", "answers": ["Leonardo DiCaprio", "Brad Pitt", "Matt Damon", "Johnny Depp"], "correct": 0 },
