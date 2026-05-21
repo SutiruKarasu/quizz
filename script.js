@@ -39,7 +39,7 @@ window.onload = function() {
     }
 };
 
-// --- 3. DYNAMIC DATA SELECTION (5 Categories x 10 Questions = 50 Total) ---
+// --- 3. DYNAMIC DATA SELECTION & ANSWER SHUFFLING ---
 let quizData = [];
 
 function buildDailyQuiz() {
@@ -78,7 +78,21 @@ function buildDailyQuiz() {
         // Die ersten 10 Fragen nehmen
         const dailyTen = categoryQuestions.slice(0, 10);
         
-        compiledQuestions = compiledQuestions.concat(dailyTen);
+        // --- ANTWORTEN SHUFFELN & CORRECT-INDEX ANPASSEN ---
+        dailyTen.forEach(q => {
+            // Wir mischen eine Kopie der Antworten, um die Quelldaten nicht permanent zu verändern
+            const shuffledAnswers = shuffleArrayDaily([...q.answers]);
+            // Findet heraus, wo die korrekte Antwort (ursprünglich bei q.correct) im neuen Array liegt
+            const newCorrectIndex = shuffledAnswers.indexOf(q.answers[q.correct]);
+
+            // Erstellt ein neues, sicheres Fragen-Objekt für das heutige Quiz
+            compiledQuestions.push({
+                topic: q.topic,
+                question: q.question,
+                answers: shuffledAnswers,
+                correct: newCorrectIndex
+            });
+        });
     });
 
     // 6. Das finale Set aus 50 Fragen zuweisen
@@ -105,7 +119,7 @@ startBtn.onclick = () => {
     const nameValue = document.getElementById('player-name').value.trim();
     if(!nameValue) return alert("Please enter your name!");
     
-    // Generiere das Quiz genau jetzt beim Starten
+    // Generiere das Quiz exakt beim Klick auf den Start-Button
     buildDailyQuiz();
     
     if (quizData.length === 0) return alert("Error loading quiz data!");
@@ -120,7 +134,7 @@ function loadQuestion() {
     timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
     
-    // Update Progress Bar (jetzt dynamisch basierend auf 50 Fragen)
+    // Update Progress Bar (basiert dynamisch auf den 50 Fragen)
     const progress = (currentQuestionIndex / quizData.length) * 100;
     progressBar.style.width = `${progress}%`;
 
@@ -131,7 +145,7 @@ function loadQuestion() {
     
     answersContainer.innerHTML = "";
     
-    // Erstellt die Antwort-Buttons dynamisch
+    // Erstellt die Antwort-Buttons dynamisch aus dem geshuffelten Array
     q.answers.forEach((alt, i) => { 
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
@@ -150,7 +164,7 @@ function startTimer() {
         if(timeLeft <= 0) {
             timeLeft = 0;
             clearInterval(timerInterval);
-            selectAnswer(-1); // Timeout
+            selectAnswer(-1); // Timeout auslösen
         }
         updateClockUI();
     }, 50);
@@ -180,110 +194,4 @@ function selectAnswer(idx, btn) {
         let multiplier = 1;
         if(streak >= 10) multiplier = 2.0;
         else if(streak >= 5) multiplier = 1.5;
-        else if(streak >= 3) multiplier = 1.2;
-
-        const pointsEarned = Math.round((timeLeft * 100) * multiplier);
-        score += pointsEarned;
-
-        // Score Ticker & Badge
-        updateScoreVisuals(true);
-        if(streak >= 3) {
-            streakBadge.innerText = `${streak}x STREAK`;
-            streakBadge.classList.add('active');
-            mainContainer.classList.add('streak-active');
-        }
-
-    } else {
-        // --- WRONG ANSWER / TIMEOUT ---
-        streak = 0;
-        if(btn) btn.classList.add('wrong');
-        
-        // Screen Shake Effect
-        mainContainer.classList.add('shake');
-        setTimeout(() => mainContainer.classList.remove('shake'), 400);
-        
-        streakBadge.classList.remove('active');
-        mainContainer.classList.remove('streak-active');
-    }
-    
-    if (btns[correctIdx]) {
-        btns[correctIdx].classList.add('correct');
-    }
-
-    setTimeout(() => {
-        currentQuestionIndex++;
-        // Alle 10 Fragen kommt der "New Shift" Screen für das nächste Thema
-        if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
-            showChapterTransition();
-        } else if(currentQuestionIndex < quizData.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }, 1500);
-}
-
-function updateScoreVisuals(isBoosted) {
-    const scoreDisplay = document.getElementById('score-display');
-    const scoreWrapper = document.getElementById('score-wrapper');
-    
-    scoreWrapper.classList.add('score-bump');
-    setTimeout(() => scoreWrapper.classList.remove('score-bump'), 400);
-
-    let step = (score - displayedScore) / 10;
-    let counter = 0;
-    let ticker = setInterval(() => {
-        displayedScore += step;
-        scoreDisplay.innerText = Math.round(displayedScore);
-        counter++;
-        if(counter >= 10) {
-            clearInterval(ticker);
-            displayedScore = score;
-            scoreDisplay.innerText = score;
-        }
-    }, 30);
-}
-
-function showChapterTransition() {
-    const nextTopic = quizData[currentQuestionIndex].topic;
-    document.getElementById('event-title').innerText = `NEW SHIFT: ${nextTopic}`;
-    document.getElementById('event-desc').innerText = "Recalibrating the clock...";
-    
-    eventScreen.style.display = 'flex';
-    
-    setTimeout(() => {
-        eventScreen.style.display = 'none';
-        loadQuestion();
-    }, 2500);
-}
-
-function showResults() {
-    // Setzt die datumsbasierte Sperre für den heutigen Tag
-    localStorage.setItem(`quiz_completed_${todayStr}`, 'true');
-    progressBar.style.width = `100%`;
-
-    const finalName = document.getElementById('player-name').value;
-    document.getElementById('quiz-screen').classList.remove('active');
-    document.getElementById('result-screen').classList.add('active');
-    document.getElementById('result-name').innerText = finalName;
-    document.getElementById('final-score').innerText = score;
-
-    fetch(FORMSPREE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ 
-            Player: finalName, 
-            Score: score,
-            Date: todayStr,
-            Timestamp: new Date().toLocaleString()
-        })
-    })
-    .then(() => {
-        document.getElementById('mail-status').innerText = "Report transmitted to host successfully.";
-    })
-    .catch(() => {
-        document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
-    });
-}
-
-document.getElementById('restart-btn').onclick = () => location.reload();
+        else if(streak
