@@ -1,99 +1,94 @@
 const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
-// --- 1. ACCESS CONTROL ---
+// --- 1. SEED-BASED PSEUDO-RANDOM GENERATOR ---
+// Sorgt dafür, dass der Zufall jeden Tag anders, aber für den aktuellen Tag fix ist.
+function getDailyRandom(seedString) {
+    let hash = 0;
+    for (let i = 0; i < seedString.length; i++) {
+        hash = seedString.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return function() {
+        const x = Math.sin(hash++) * 10000;
+        return x - Math.floor(x);
+    };
+}
+
+// Generiert den heutigen Datums-String (Format: YYYY-MM-DD)
+const todayStr = new Date().toISOString().split('T')[0];
+const dailyRandom = getDailyRandom(todayStr);
+
+// Hilfsfunktion zum Mischen eines Arrays basierend auf dem Tages-Zufall
+function shuffleArrayDaily(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(dailyRandom() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// --- 2. DYNAMIC ACCESS CONTROL (DAILY REFRESH) ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completed_v2') === 'true') {
+    // Die Sperre zieht sich das aktuelle Datum – somit schaltet sie sich jeden Tag automatisch frei
+    if (localStorage.getItem(`quiz_completed_${todayStr}`) === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
-            <p>You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
+            <p>You have already clocked in for today's shift.<br>Return tomorrow for the next deployment.</p>
         `;
     }
 };
 
-// --- 2. DATABASE (60 Questions) ---
-const quizData = [
-    // --- BLOCK 1: MOVIES & SERIES ---
-    { topic: "Cinema", q: "Which film won the Oscar for Best Picture in 2024?", a: ["Barbie", "Oppenheimer", "Poor Things", "Killers of the Flower Moon"], c: 1 },
-    { topic: "Series", q: "In which city is 'Money Heist' (La Casa de Papel) primarily set?", a: ["Barcelona", "Madrid", "Seville", "Valencia"], c: 1 },
-    { topic: "Movies", q: "What is the name of the fictional planet in 'Avatar'?", a: ["Tatooine", "Pandora", "Arrakis", "Krypton"], c: 1 },
-    { topic: "Series", q: "Which show follows a chemistry teacher who starts cooking Crystal Meth?", a: ["Narcos", "Ozark", "Breaking Bad", "Better Call Saul"], c: 2 },
-    { topic: "Movies", q: "Who plays the lead role in the 'John Wick' franchise?", a: ["Keanu Reeves", "Tom Cruise", "Brad Pitt", "Jason Statham"], c: 0 },
-    { topic: "Series", q: "What is the name of the small creature called 'Baby Yoda'?", a: ["Grogu", "Jar Jar", "Ewok", "Porg"], c: 0 },
-    { topic: "Movies", q: "Which movie holds the record for the highest global box office gross?", a: ["Titanic", "Avengers: Endgame", "Avatar", "Star Wars 7"], c: 2 },
-    { topic: "Series", q: "How many seasons does the original 'Game of Thrones' series have?", a: ["6", "7", "8", "9"], c: 2 },
-    { topic: "Movies", q: "What car is used as the time machine in 'Back to the Future'?", a: ["Mustang", "DeLorean", "Ferrari", "Porsche"], c: 1 },
-    { topic: "Series", q: "Who is the main protagonist in 'The Witcher' series?", a: ["Geralt of Rivia", "Jaskier", "Vesemir", "Ciri"], c: 0 },
+// --- 3. DYNAMIC DATA SELECTION (5 Categories x 10 Questions = 50 Total) ---
+let quizData = [];
 
-    // --- BLOCK 2: FOOD & DRINKS ---
-    { topic: "Food", q: "From which country does Halloumi cheese originate?", a: ["Greece", "Turkey", "Cyprus", "Italy"], c: 2 },
-    { topic: "Drinks", q: "Which botanical gives Gin its primary flavor?", a: ["Juniper", "Ginger", "Coriander", "Cinnamon"], c: 0 },
-    { topic: "Food", q: "What is the main ingredient of Hummus?", a: ["Lentils", "Chickpeas", "Beans", "Peas"], c: 1 },
-    { topic: "Drinks", q: "Which country has the highest coffee consumption per capita?", a: ["Italy", "Brazil", "Finland", "USA"], c: 2 },
-    { topic: "Food", q: "What does 'Al Dente' mean when referring to pasta?", a: ["Soft", "Firm to the bite", "Well seasoned", "In sauce"], c: 1 },
-    { topic: "Drinks", q: "From which plant is Tequila distilled?", a: ["Sugar cane", "Cactus", "Agave", "Corn"], c: 2 },
-    { topic: "Food", q: "How many calories are approximately in one gram of Fat?", a: ["4", "7", "9", "12"], c: 2 },
-    { topic: "Drinks", q: "Which beverage is sometimes called 'Liquid Bread'?", a: ["Wine", "Beer", "Milk", "Wodka"], c: 1 },
-    { topic: "Food", q: "What is 'Scoville' a measurement for?", a: ["Cheese fat", "Chili heat", "Knife sharpness", "Sugar"], c: 1 },
-    { topic: "Food", q: "Which of these fruits is botanically a berry?", a: ["Strawberry", "Raspberry", "Banana", "Cherry"], c: 2 },
+function buildDailyQuiz() {
+    if (typeof rawQuizData === 'undefined' || Object.keys(rawQuizData).length === 0) {
+        console.error("Questions database (rawQuizData) not found or empty!");
+        return;
+    }
 
-    // --- BLOCK 3: TECHNOLOGY ---
-    { topic: "Tech", q: "What was the most downloaded app globally in 2025?", a: ["Instagram", "TikTok", "ChatGPT", "WhatsApp"], c: 2 },
-    { topic: "Tech", q: "Who is the primary founder of Microsoft?", a: ["Steve Jobs", "Elon Musk", "Bill Gates", "Mark Zuckerberg"], c: 2 },
-    { topic: "Tech", q: "In which year was the first iPhone released?", a: ["2005", "2007", "2008", "2010"], c: 1 },
-    { topic: "Tech", q: "Which mobile OS is based on the Linux kernel?", a: ["Windows", "iOS", "Android", "Blackberry"], c: 2 },
-    { topic: "Tech", q: "What does 'CPU' stand for?", a: ["Central Process Unit", "Core Program", "Central Processing Unit", "Power Unit"], c: 2 },
-    { topic: "Tech", q: "Which company developed the AI model 'ChatGPT'?", a: ["Google", "Microsoft", "OpenAI", "Meta"], c: 2 },
-    { topic: "Tech", q: "How many bits are in a single Byte?", a: ["4", "8", "16", "32"], c: 1 },
-    { topic: "Tech", q: "Standard programming language for web interactivity?", a: ["Swift", "JavaScript", "C++", "Java"], c: 1 },
-    { topic: "Tech", q: "Which company acquired WhatsApp in 2014?", a: ["Google", "Apple", "Facebook (Meta)", "Microsoft"], c: 2 },
-    { topic: "Tech", q: "What does 'SSD' stand for in computer storage?", a: ["Speed Drive", "Solid State Drive", "System Disk", "Secure Device"], c: 1 },
+    // 1. Alle verfügbaren Themen-Kategorien aus der questions.js holen
+    const allTopics = Object.keys(rawQuizData);
+    
+    // 2. Die Kategorien für den heutigen Tag mischen
+    const shuffledTopics = shuffleArrayDaily(allTopics);
+    
+    // 3. Die ersten 5 Kategorien für heute auswählen
+    const selectedTopics = shuffledTopics.slice(0, 5);
+    
+    let compiledQuestions = [];
 
-    // --- BLOCK 4: RANDOM FACTS ---
-    { topic: "Random", q: "How many hearts does an Octopus have?", a: ["1", "2", "3", "4"], c: 2 },
-    { topic: "Random", q: "Which large land animal is unable to jump?", a: ["Rhino", "Elephant", "Hippo", "Sloth"], c: 1 },
-    { topic: "Random", q: "Which country has the most islands in the world?", a: ["Philippines", "Indonesia", "Sweden", "Canada"], c: 2 },
-    { topic: "Random", q: "How long is a day on Venus (compared to its year)?", a: ["24h", "116 days", "243 days", "400 days"], c: 2 },
-    { topic: "Random", q: "Which fruit carries its seeds on the outside?", a: ["Strawberry", "Banana", "Kiwi", "Apple"], c: 0 },
-    { topic: "Random", q: "What color is a Giraffe's tongue?", a: ["Pink", "Blue/Black", "Red", "White"], c: 1 },
-    { topic: "Random", q: "How many federal states (Bundesländer) does Germany have?", a: ["12", "14", "16", "18"], c: 2 },
-    { topic: "Random", q: "Which letter does not appear in any of the 50 US State names?", a: ["X", "Z", "Q", "J"], c: 2 },
-    { topic: "Random", q: "In which country are there more sheep than people?", a: ["Ireland", "New Zealand", "Scotland", "Australia"], c: 1 },
-    { topic: "Random", q: "How many teeth does a normal adult human have?", a: ["28", "30", "32", "34"], c: 2 },
+    // 4. Aus jeder der 5 Kategorien genau 10 Fragen ziehen
+    selectedTopics.forEach(topic => {
+        let categoryQuestions = [...rawQuizData[topic]];
+        
+        // Die Fragen innerhalb dieser Kategorie für den Tag mischen
+        categoryQuestions = shuffleArrayDaily(categoryQuestions);
+        
+        // Die ersten 10 Fragen nehmen
+        const dailyTen = categoryQuestions.slice(0, 10);
+        
+        // Das 'topic' Attribut injizieren, falls es in der JSON fehlt, damit die UI es anzeigen kann
+        dailyTen.forEach(q => {
+            q.topic = topic;
+        });
 
-    // --- BLOCK 5: MUSIC ---
-    { topic: "Music", q: "Who won the 2026 Grammy for Album of the Year?", a: ["Bad Bunny", "Rosalía", "Rauw Alejandro", "Peso Pluma"], c: 0 },
-    { topic: "Music", q: "Which band performed the hit 'Bohemian Rhapsody'?", a: ["The Beatles", "Led Zeppelin", "Queen", "ABBA"], c: 2 },
-    { topic: "Music", q: "How many strings does a standard classical guitar have?", a: ["4", "5", "6", "7"], c: 2 },
-    { topic: "Music", q: "Which country won Eurovision 2024 (Nemo)?", a: ["Switzerland", "Croatia", "Ukraine", "France"], c: 0 },
-    { topic: "Music", q: "From which UK city did The Beatles originate?", a: ["London", "Manchester", "Liverpool", "Birmingham"], c: 2 },
-    { topic: "Music", q: "Which female artist released the 'Eras Tour'?", a: ["Adele", "Billie Eilish", "Taylor Swift", "Beyoncé"], c: 2 },
-    { topic: "Music", q: "Which musical instrument is Lang Lang famous for?", a: ["Violin", "Piano", "Cello", "Flute"], c: 1 },
-    { topic: "Music", q: "In which decade did MTV first launch?", a: ["1970s", "1980s", "1990s", "2000s"], c: 1 },
-    { topic: "Music", q: "Which genre is most associated with Bob Marley?", a: ["Jazz", "Reggae", "Blues", "Ska"], c: 1 },
-    { topic: "Music", q: "Who composed the 9th Symphony (Ode to Joy)?", a: ["Mozart", "Bach", "Beethoven", "Wagner"], c: 2 },
+        compiledQuestions = compiledQuestions.concat(dailyTen);
+    });
 
-    // --- BLOCK 6: SPORTS ---
-    { topic: "Sports", q: "How many players per team in a standard Soccer match?", a: ["10", "11", "12", "13"], c: 1 },
-    { topic: "Sports", q: "In which sport can you score a 'Hole-in-one'?", a: ["Tennis", "Golf", "Darts", "Bowling"], c: 1 },
-    { topic: "Sports", q: "Who holds the world record for the 100m sprint?", a: ["Tyson Gay", "Yohan Blake", "Usain Bolt", "Carl Lewis"], c: 2 },
-    { topic: "Sports", q: "How many rings are on the Olympic flag?", a: ["4", "5", "6", "7"], c: 1 },
-    { topic: "Sports", q: "Which country won the FIFA World Cup in 2022?", a: ["France", "Argentina", "Croatia", "Morocco"], c: 1 },
-    { topic: "Sports", q: "Which city hosted the 2024 Summer Olympics?", a: ["London", "Tokyo", "Paris", "Los Angeles"], c: 2 },
-    { topic: "Sports", q: "What do you call a score of zero in Tennis?", a: ["Zero", "Nil", "Love", "None"], c: 2 },
-    { topic: "Sports", q: "Which basketball player is called the 'G.O.A.T'?", a: ["LeBron James", "Michael Jordan", "Kobe Bryant", "Shaq"], c: 1 },
-    { topic: "Sports", q: "How long is a standard Marathon race?", a: ["21.1 km", "40 km", "42.195 km", "50 km"], c: 2 },
-    { topic: "Sports", q: "Most Men's Grand Slam titles as of 2026?", a: ["Federer", "Nadal", "Djokovic", "Alcaraz"], c: 2 }
-];
+    // 5. Das finale Set aus 50 Fragen zuweisen
+    quizData = compiledQuestions;
+}
 
-// --- 3. CORE LOGIC ---
+// --- 4. CORE GAME LOGIC ---
 let currentQuestionIndex = 0;
 let score = 0;
 let displayedScore = 0;
 let timeLeft = 10.0;
 let timerInterval;
 let isAnswered = false;
-let streak = 0; // Streak Counter
+let streak = 0;
 
 const mainContainer = document.getElementById('main-container');
 const startBtn = document.getElementById('start-btn');
@@ -105,6 +100,12 @@ const streakBadge = document.getElementById('streak-badge');
 startBtn.onclick = () => {
     const nameValue = document.getElementById('player-name').value.trim();
     if(!nameValue) return alert("Please enter your name!");
+    
+    // Generiere das Quiz genau jetzt beim Start
+    buildDailyQuiz();
+    
+    if (quizData.length === 0) return alert("Error loading quiz data!");
+
     document.getElementById('start-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     loadQuestion();
@@ -115,17 +116,19 @@ function loadQuestion() {
     timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
     
-    // Update Progress Bar
-    const progress = ((currentQuestionIndex) / quizData.length) * 100;
+    // Update Progress Bar (jetzt dynamisch basierend auf 50 Fragen)
+    const progress = (currentQuestionIndex / quizData.length) * 100;
     progressBar.style.width = `${progress}%`;
 
     // Update UI Labels
     document.getElementById('topic-display').innerText = q.topic;
     document.getElementById('question-counter').innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
-    document.getElementById('question-text').innerText = q.q;
+    document.getElementById('question-text').innerText = q.question; // Nutzt den Key aus deinen JSONs ('question')
     
     answersContainer.innerHTML = "";
-    q.a.forEach((alt, i) => {
+    
+    // Erstellt die Antwort-Buttons dynamisch
+    q.answers.forEach((alt, i) => { // Nutzt 'answers' aus deinen JSONs
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
         btn.innerText = alt;
@@ -161,15 +164,15 @@ function selectAnswer(idx, btn) {
     isAnswered = true;
     clearInterval(timerInterval);
     
-    const correctIdx = quizData[currentQuestionIndex].c;
+    const correctIdx = quizData[currentQuestionIndex].correct; // Nutzt 'correct' aus deinen JSONs
     const btns = answersContainer.querySelectorAll('.answer-btn');
 
     if(idx === correctIdx) {
-        // --- LOGIC: STREAK & POINTS ---
+        // --- STREAK & POINTS ---
         streak++;
         btn.classList.add('correct');
         
-        // Multiplier Logic: Streak 3+ (1.2x), Streak 5+ (1.5x), Streak 10+ (2.0x)
+        // Multiplier Logic
         let multiplier = 1;
         if(streak >= 10) multiplier = 2.0;
         else if(streak >= 5) multiplier = 1.5;
@@ -178,7 +181,7 @@ function selectAnswer(idx, btn) {
         const pointsEarned = Math.round((timeLeft * 100) * multiplier);
         score += pointsEarned;
 
-        // Visual Juice: Score Ticker & Badge
+        // Score Ticker & Badge
         updateScoreVisuals(true);
         if(streak >= 3) {
             streakBadge.innerText = `${streak}x STREAK`;
@@ -187,11 +190,11 @@ function selectAnswer(idx, btn) {
         }
 
     } else {
-        // --- LOGIC: WRONG ANSWER ---
+        // --- WRONG ANSWER / TIMEOUT ---
         streak = 0;
         if(btn) btn.classList.add('wrong');
         
-        // Visual Juice: Shake & Reset Streak
+        // Screen Shake Effect
         mainContainer.classList.add('shake');
         setTimeout(() => mainContainer.classList.remove('shake'), 400);
         
@@ -199,10 +202,13 @@ function selectAnswer(idx, btn) {
         mainContainer.classList.remove('streak-active');
     }
     
-    btns[correctIdx].classList.add('correct');
+    if (btns[correctIdx]) {
+        btns[correctIdx].classList.add('correct');
+    }
 
     setTimeout(() => {
         currentQuestionIndex++;
+        // Alle 10 Fragen kommt der "New Shift" Screen für das nächste Thema
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
             showChapterTransition();
         } else if(currentQuestionIndex < quizData.length) {
@@ -213,7 +219,6 @@ function selectAnswer(idx, btn) {
     }, 1500);
 }
 
-// Visual Juice: Smoother Score counting
 function updateScoreVisuals(isBoosted) {
     const scoreDisplay = document.getElementById('score-display');
     const scoreWrapper = document.getElementById('score-wrapper');
@@ -249,7 +254,8 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completed_v2', 'true');
+    // Setzt die datumsbasierte Sperre für den heutigen Tag
+    localStorage.setItem(`quiz_completed_${todayStr}`, 'true');
     progressBar.style.width = `100%`;
 
     const finalName = document.getElementById('player-name').value;
@@ -264,6 +270,7 @@ function showResults() {
         body: JSON.stringify({ 
             Player: finalName, 
             Score: score,
+            Date: todayStr,
             Timestamp: new Date().toLocaleString()
         })
     })
