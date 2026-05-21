@@ -1702,7 +1702,7 @@ const rawQuizData = [
   { "category": "Records", "question": "Which country produces the most coffee?", "answers": ["Brazil", "Vietnam", "Colombia", "Indonesia"], "correct": 0 },
   { "category": "Records", "question": "What is the record for the most points scored in an NBA game by one player?", "answers": ["Wilt Chamberlain (100)", "Kobe Bryant (81)", "David Thompson (73)", "Devin Booker (70)"], "correct": 0 },
   { "category": "Records", "question": "Which country has the largest number of islands?", "answers": ["Sweden", "Norway", "Finland", "Canada"], "correct": 0 },
-];
+]
 
 // =========================================================================
 // 2. SEED-BASED PSEUDO-RANDOM GENERATOR
