@@ -2,7 +2,7 @@ const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
 // --- 1. ACCESS CONTROL (One-time per device) ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completedv5') === 'true') {
+    if (localStorage.getItem('quiz_completedv7') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
@@ -14,77 +14,77 @@ window.onload = function() {
 
 // --- 2. THE 60-QUESTION DATABASE ---
 const quizData = [
-    // --- BLOCK 1: FILME & SERIEN ---
-    { topic: "Filme & Serien", q: "Welcher Film gewann im Jahr 2024 den Oscar für den 'Besten Film'?", a: ["Barbie", "Oppenheimer", "Poor Things", "Killers of the Flower Moon"], c: 1 },
-    { topic: "Filme & Serien", q: "In welcher spanischen Stadt spielt die Serie 'Haus des Geldes' hauptsächlich?", a: ["Barcelona", "Madrid", "Sevilla", "Valencia"], c: 1 },
-    { topic: "Filme & Serien", q: "Wie heißt der fiktive Planet, auf dem die Handlung von 'Avatar' spielt?", a: ["Tatooine", "Pandora", "Arrakis", "Krypton"], c: 1 },
-    { topic: "Filme & Serien", q: "Welche Serie handelt von einem Chemielehrer, der beginnt, Crystal Meth herzustellen?", a: ["Narcos", "Ozark", "Breaking Bad", "Better Call Saul"], c: 2 },
-    { topic: "Filme & Serien", q: "Welcher Schauspieler spielt die Hauptrolle in der 'John Wick'-Reihe?", a: ["Keanu Reeves", "Tom Cruise", "Brad Pitt", "Jason Statham"], c: 0 },
-    { topic: "Filme & Serien", q: "Wie heißt die kleine, grüne Kreatur aus der Serie 'The Mandalorian', die oft 'Baby Yoda' genannt wird?", a: ["Grogu", "Jar Jar", "Ewok", "Porg"], c: 0 },
-    { topic: "Filme & Serien", q: "Welcher Film hält den Rekord für das weltweit am höchsten eingespielte Kinogebnis?", a: ["Titanic", "Avengers: Endgame", "Avatar", "Star Wars: Das Erwachen der Macht"], c: 2 },
-    { topic: "Filme & Serien", q: "Wie viele Staffeln hat die originale Fantasy-Serie 'Game of Thrones'?", a: ["6", "7", "8", "9"], c: 2 },
-    { topic: "Filme & Serien", q: "Welches Auto dient im Film 'Zurück in die Zukunft' als Zeitmaschine?", a: ["Ford Mustang", "DeLorean DMC-12", "Ferrari Testarossa", "Porsche 911"], c: 1 },
-    { topic: "Filme & Serien", q: "Welcher britische Geheimagent hat die Codenummer 007?", a: ["Jason Bourne", "Ethan Hunt", "James Bond", "Jack Reacher"], c: 2 },
+    // --- BLOCK 1: GENERAL KNOWLEDGE ---
+    { topic: "General Knowledge", q: "How many hearts does an octopus have?", a: ["1", "2", "3", "4"], c: 2 },
+    { topic: "General Knowledge", q: "Which large land mammal is physically unable to jump?", a: ["Rhino", "Elephant", "Hippo", "Sloth"], c: 1 },
+    { topic: "General Knowledge", q: "What color is a fully grown giraffe's tongue?", a: ["Pink", "Blue-Black", "Bright Red", "White"], c: 1 },
+    { topic: "General Knowledge", q: "Which fruit carries its seeds on the outside?", a: ["Strawberry", "Banana", "Kiwi", "Apple"], c: 0 },
+    { topic: "General Knowledge", q: "Which country has significantly more sheep than human residents?", a: ["Ireland", "New Zealand", "Scotland", "Australia"], c: 1 },
+    { topic: "General Knowledge", q: "Which letter does not appear in the name of any of the 50 US states?", a: ["X", "Z", "Q", "J"], c: 2 },
+    { topic: "General Knowledge", q: "How many teeth does a normal adult human have (including wisdom teeth)?", a: ["28", "30", "32", "34"], c: 2 },
+    { topic: "General Knowledge", q: "Which creature is the official national animal of Scotland?", a: ["Lion", "Unicorn", "Eagle", "Loch Ness Monster"], c: 1 },
+    { topic: "General Knowledge", q: "How many seconds are in one hour?", a: ["60", "1200", "3600", "6000"], c: 2 },
+    { topic: "General Knowledge", q: "According to airport statistics, which item is most frequently left behind in hand luggage?", a: ["Charging Cable", "Neck Pillow", "Umbrella", "Sunglasses"], c: 0 },
 
-    // --- BLOCK 2: ESSEN & TRINKEN ---
-    { topic: "Essen & Trinken", q: "Aus welchem Land stammt der bekannte Halloumi-Käse ursprünglich?", a: ["Griechenland", "Türkei", "Zypern", "Italien"], c: 2 },
-    { topic: "Essen & Trinken", q: "Welche Pflanze gibt dem Gin seinen charakteristischen Hauptgeschmack?", a: ["Wacholder", "Ingwer", "Koriander", "Zimt"], c: 0 },
-    { topic: "Essen & Trinken", q: "Was ist die Hauptzutat für die orientalische Spezialität Hummus?", a: ["Linsen", "Kichererbsen", "Bohnen", "Erbsen"], c: 1 },
-    { topic: "Essen & Trinken", q: "Welches europäische Land hat den höchsten Pro-Kopf-Verbrauch an Kaffee?", a: ["Italien", "Finnland", "Deutschland", "Frankreich"], c: 1 },
-    { topic: "Essen & Trinken", q: "Was bedeutet der Begriff 'Al Dente' bei der Zubereitung von Pasta?", a: ["Weich gekocht", "Bissfest", "Gut gewürzt", "In Sauce geschwenkt"], c: 1 },
-    { topic: "Essen & Trinken", q: "Aus welcher Pflanze wird der mexikanische Schnaps Tequila gewonnen?", a: ["Zuckerrohr", "Kaktus", "Agave", "Mais"], c: 2 },
-    { topic: "Essen & Trinken", q: "Welches Getränk wird im Volksmund oft scherzhaft als 'Flüssiges Brot' bezeichnet?", a: ["Wein", "Bier", "Milch", "Wodka"], c: 1 },
-    { topic: "Essen & Trinken", q: "Was wird auf der sogenannten 'Scoville-Skala' gemessen?", a: ["Fettgehalt von Käse", "Schärfe von Chili", "Härte von Messerklingen", "Süße von Früchten"], c: 1 },
-    { topic: "Essen & Trinken", q: "Welche dieser Früchte ist botanisch gesehen eine echte Beere?", a: ["Erdbeere", "Himbeere", "Banane", "Kirsche"], c: 2 },
-    { topic: "Essen & Trinken", q: "Welches Land ist weltweit bekannt für die Erfindung der Pizza Neapoletana?", a: ["Spanien", "Italien", "Griechenland", "Frankreich"], c: 1 },
+    // --- BLOCK 2: BAR & DRINKS ---
+    { topic: "Bar & Drinks", q: "What are the two main ingredients of a classic 'Cuba Libre'?", a: ["Vodka & Lemon", "Gin & Tonic", "Rum & Cola", "Whiskey & Ginger Ale"], c: 2 },
+    { topic: "Bar & Drinks", q: "What item is traditionally placed on top of a freshly made Espresso Martini?", a: ["Coffee Beans", "Lemon Slice", "Mint Leaf", "Cinnamon Stick"], c: 0 },
+    { topic: "Bar & Drinks", q: "Which spirit forms the base of a classic 'Caipirinha'?", a: ["Rum", "Cachaça", "Vodka", "Tequila"], c: 1 },
+    { topic: "Bar & Drinks", q: "What is the metal cup used by bartenders to mix drinks called?", a: ["Strainer", "Jigger", "Shaker", "Muddler"], c: 2 },
+    { topic: "Bar & Drinks", q: "From which country does the famous beer brand 'Corona' originate?", a: ["Spain", "Brazil", "Mexico", "Cuba"], c: 2 },
+    { topic: "Bar & Drinks", q: "What does a bartender measure using a 'Jigger'?", a: ["Temperature", "Liquid Volume (cl)", "Carbonation", "Alcohol Percentage"], c: 1 },
+    { topic: "Bar & Drinks", q: "Which cocktail is traditionally served in a copper mug with ginger beer and lime?", a: ["Moscow Mule", "Mojito", "Gin Fizz", "Mai Tai"], c: 0 },
+    { topic: "Bar & Drinks", q: "What grain must make up at least 51% of a classic Bourbon whiskey's mash?", a: ["Barley", "Wheat", "Rye", "Corn"], c: 3 },
+    { topic: "Bar & Drinks", q: "Which fruit provides the juice for a classic 'Mimosa' cocktail?", a: ["Ananas", "Orange", "Cranberry", "Grapefruit"], c: 1 },
+    { topic: "Bar & Drinks", q: "Which herb is muddled to give a classic 'Mojito' its fresh flavor?", a: ["Basilikum", "Rosmarinus", "Mint", "Coriander"], c: 2 },
 
-    // --- BLOCK 3: POPKULTUR & MUSIK ---
-    { topic: "Popkultur & Musik", q: "Welche britische Band sang den weltberühmten Hit 'Bohemian Rhapsody'?", a: ["The Beatles", "Led Zeppelin", "Queen", "ABBA"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Wie viele Saiten hat eine klassische Konzertgitarre im Normalfall?", a: ["4", "5", "6", "7"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Aus welcher englischen Stadt stammten die Mitglieder der Band 'The Beatles'?", a: ["London", "Manchester", "Liverpool", "Birmingham"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Welche US-amerikanische Sängerin brach Rekorde mit ihrer weltweiten 'Eras Tour'?", a: ["Adele", "Billie Eilish", "Taylor Swift", "Beyoncé"], c: 2 },
-    { topic: "Popkultur & Musik", q: "In welchem Jahrzehnt ging der Musiksender MTV im Fernsehen das erste Mal auf Sendung?", a: ["1970er", "1980er", "1990er", "2000er"], c: 1 },
-    { topic: "Popkultur & Musik", q: "Welche Musikrichtung wird weltweit am stärksten mit Bob Marley verbunden?", a: ["Jazz", "Reggae", "Blues", "Ska"], c: 1 },
-    { topic: "Popkultur & Musik", q: "Welcher deutsche Komponist schuf die berühmte 9. Sinfonie mit der 'Ode an die Freude'?", a: ["Mozart", "Bach", "Beethoven", "Wagner"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Wie nennt man das berühmte Festival in Kalifornien, das jährlich Musik- und Modebegeisterte anlockt?", a: ["Tomorrowland", "Woodstock", "Coachella", "Glastonbury"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Wie viele Monate hat ein Kalenderjahr im gregorianischen Kalender?", a: ["10", "11", "12", "13"], c: 2 },
-    { topic: "Popkultur & Musik", q: "Welcher fiktive Detektiv wohnt laut den Büchern von Arthur Conan Doyle in der Baker Street 221B?", a: ["Hercule Poirot", "Sherlock Holmes", "Miss Marple", "Columbo"], c: 1 },
+    // --- BLOCK 3: ENTERTAINMENT ---
+    { topic: "Entertainment", q: "How many keys does a standard grand piano have?", a: ["76", "84", "88", "92"], c: 2 },
+    { topic: "Entertainment", q: "Which streaming service is known worldwide for original series like 'Stranger Things'?", a: ["Amazon Prime", "Netflix", "Disney+", "Apple TV"], c: 1 },
+    { topic: "Entertainment", q: "Which Swedish pop group won the Eurovision Song Contest in 1974 with the hit 'Waterloo'?", a: ["Roxette", "Ace of Base", "ABBA", "A*Teens"], c: 2 },
+    { topic: "Entertainment", q: "What is the name of the fictional archaeologist who uses a whip in famous adventure movies?", a: ["Lara Croft", "Nathan Drake", "Indiana Jones", "James Bond"], c: 2 },
+    { topic: "Entertainment", q: "Which pop artist released 'Thriller', the best-selling album of all time?", a: ["Eminem", "Michael Jackson", "Prince", "Elvis Presley"], c: 1 },
+    { topic: "Entertainment", q: "Which superhero has been portrayed on cinema screens by Robert Downey Jr.?", a: ["Batman", "Superman", "Iron Man", "Thor"], c: 2 },
+    { topic: "Entertainment", q: "In which year did the famous passenger ship Titanic sink in the Atlantic Ocean?", a: ["1905", "1912", "1920", "1933"], c: 1 },
+    { topic: "Entertainment", q: "Which rapper played the lead role in the semi-autobiographical movie '8 Mile'?", a: ["50 Cent", "Snoop Dogg", "Eminem", "Dr. Dre"], c: 2 },
+    { topic: "Entertainment", q: "What famous board game is all about buying streets and building hotels?", a: ["Risk", "Monopoly", "Scrabble", "Catan"], c: 1 },
+    { topic: "Entertainment", q: "Which fictional detective lives at 221B Baker Street according to Arthur Conan Doyle's books?", a: ["Hercule Poirot", "Sherlock Holmes", "Miss Marple", "Columbo"], c: 1 },
 
-    // --- BLOCK 4: GEOGRAFIE ---
-    { topic: "Geografie", q: "Wie viele Bundesländer hat die Bundesrepublik Deutschland?", a: ["12", "14", "16", "18"], c: 2 },
-    { topic: "Geografie", q: "In welcher europäischen Hauptstadt befindet sich die berühmte Karlsbrücke?", a: ["Wien", "Prag", "Budapest", "Krakau"], c: 1 },
-    { topic: "Geografie", q: "Welches Land grenzt im Norden direkt an die Tschechische Republik?", a: ["Österreich", "Slowakei", "Polen", "Ungarn"], c: 2 },
-    { topic: "Geografie", q: "Welcher Fluss fließt direkt durch das Zentrum der tschechischen Hauptstadt Prag?", a: ["Donau", "Elbe", "Moldau", "Oder"], c: 2 },
-    { topic: "Geografie", q: "Welcher Kontinent ist flächenmäßig der größte auf der Erde?", a: ["Afrika", "Nordamerika", "Asien", "Europa"], c: 2 },
-    { topic: "Geografie", q: "Welches europäische Land besitzt statistisch gesehen die meisten Inseln weltweit?", a: ["Indonesien", "Kanada", "Schweden", "Philippinen"], c: 2 },
-    { topic: "Geografie", q: "In wie viele offizielle Zeitzonen ist die Erde standardmäßig aufgeteilt?", a: ["12", "24", "36", "48"], c: 1 },
-    { topic: "Geografie", q: "Welche Stadt ist die offizielle Hauptstadt von Australien?", a: ["Sydney", "Melbourne", "Canberra", "Brisbane"], c: 2 },
-    { topic: "Geografie", q: "Welcher Ozean liegt zwischen Europa und dem nordamerikanischen Kontinent?", a: ["Pazifischer Ozean", "Atlantischer Ozean", "Indischer Ozean", "Arktischer Ozean"], c: 1 },
-    { topic: "Geografie", q: "Wie heißt die Hauptstadt von Frankreich?", a: ["Berlin", "London", "Rom", "Paris"], c: 3 },
+    // --- BLOCK 4: TRAVEL & GEOGRAPHY ---
+    { topic: "Travel & Geography", q: "In which European capital city can you find the famous Eiffel Tower?", a: ["Berlin", "London", "Paris", "Madrid"], c: 2 },
+    { topic: "Travel & Geography", q: "What is the official currency used in the Czech Republic?", a: ["Euro", "Czech Koruna", "Zloty", "Forint"], c: 1 },
+    { topic: "Travel & Geography", q: "What is the official capital city of Spain?", a: ["Barcelona", "Madrid", "Valencia", "Sevilla"], c: 1 },
+    { topic: "Travel & Geography", q: "Which is the longest river on Earth?", a: ["Amazon", "Nile", "Mississippi", "Yangtze"], c: 1 },
+    { topic: "Travel & Geography", q: "Which mountain range geographically separates Europe from Asia?", a: ["Alps", "Andes", "Ural", "Himalayas"], c: 2 },
+    { topic: "Travel & Geography", q: "What is the capital city of the United States of America (USA)?", a: ["New York", "Los Angeles", "Washington, D.C.", "Chicago"], c: 2 },
+    { topic: "Travel & Geography", q: "Which sovereign state is the smallest country in the world by land area?", a: ["Monaco", "San Marino", "Vatican City", "Liechtenstein"], c: 2 },
+    { topic: "Travel & Geography", q: "Which country shares a border directly to the south of Germany?", a: ["Denmark", "Poland", "Austria", "Netherlands"], c: 2 },
+    { topic: "Travel & Geography", q: "Which sea is the Italian city of Venice located on?", a: ["Mediterranean / Adriatic", "North Sea", "Baltic Sea", "Red Sea"], c: 0 },
+    { topic: "Travel & Geography", q: "What is the name of the famous, historic opera house in Sydney, Australia?", a: ["Sydney Opera House", "Royal Albert Hall", "La Scala", "Metropolitan Opera"], c: 0 },
 
-    // --- BLOCK 5: TECHNIK & ALLTAG ---
-    { topic: "Technik & Alltag", q: "Welches Unternehmen entwickelte das Betriebssystem Windows?", a: ["Apple", "Google", "Microsoft", "IBM"], c: 2 },
-    { topic: "Technik & Alltag", q: "In welchem Jahr wurde das allererste iPhone von Apple offiziell vorgestellt?", a: ["2005", "2007", "2008", "2010"], c: 1 },
-    { topic: "Technik & Alltag", q: "Wofür steht die Abkürzung 'CPU' bei einem Computer?", a: ["Central Process Unit", "Core Program", "Central Processing Unit", "Power Unit"], c: 2 },
-    { topic: "Technik & Alltag", q: "Wie viele Bits ergeben zusammen exakt einen Byte?", a: ["4", "8", "16", "32"], c: 1 },
-    { topic: "Technik & Alltag", q: "Welche Programmiersprache wird primär für die Interaktivität auf Websites im Browser genutzt?", a: ["Swift", "JavaScript", "C++", "Java"], c: 1 },
-    { topic: "Technik & Alltag", q: "Wofür steht das 'SSD' bei modernen Computer-Festplatten?", a: ["Speed Drive", "Solid State Drive", "System Disk", "Secure Device"], c: 1 },
-    { topic: "Technik & Alltag", q: "Welches Format nutzt man im Webdesign oft für einfache Styling-Anweisungen (Schriftfarbe, Abstände)?", a: ["HTML", "JSON", "CSS", "XML"], c: 2 },
-    { topic: "Technik & Alltag", q: "Welche Plattform wird weltweit am häufigsten genutzt, um Code-Repositories hochzuladen und zu verwalten?", a: ["GitHub", "StackOverflow", "Docker", "Wikipedia"], c: 0 },
-    { topic: "Technik & Alltag", q: "Wie nennt man ein Software-System, das über eine feste Adresse Daten bereitstellt oder abfragt?", a: ["API", "RAM", "CPU", "BIOS"], c: 0 },
-    { topic: "Technik & Alltag", q: "Welches Protokoll sorgt für eine verschlüsselte Übertragung im Browser (erkennbar am 's' am Anfang)?", a: ["HTTP", "FTP", "HTTPS", "SSH"], c: 2 },
+    // --- BLOCK 5: DIGITAL & INTERNET ---
+    { topic: "Digital & Internet", q: "Which symbol is used on social media platforms to tag a keyword or hashtag?", a: ["@", "&", "#", "$"], c: 2 },
+    { topic: "Digital & Internet", q: "What are the small digital icons and faces sent in chats called?", a: ["Logos", "Emojis", "Avatars", "Widgets"], c: 1 },
+    { topic: "Digital & Internet", q: "Which internet browser featuring a red fox logo is developed by Mozilla?", a: ["Safari", "Chrome", "Firefox", "Edge"], c: 2 },
+    { topic: "Digital & Internet", q: "What does 'WWW' stand for at the beginning of a classic website address?", a: ["World Wide Web", "Word Wide Wave", "Web Window World", "World Wide Wireless"], c: 0 },
+    { topic: "Digital & Internet", q: "Which platform is the largest internet search engine in the world?", a: ["Yahoo", "Bing", "Google", "DuckDuckGo"], c: 2 },
+    { topic: "Digital & Internet", q: "What do you call unwanted promotional emails that land in mass quantities in your inbox?", a: ["Trash", "Spam", "Phishing", "Bait"], c: 1 },
+    { topic: "Digital & Internet", q: "Which video platform is the largest globally for streaming and watching user videos?", a: ["Vimeo", "Twitch", "YouTube", "TikTok"], c: 2 },
+    { topic: "Digital & Internet", q: "What protects a home network from unauthorized access coming from the internet?", a: ["Firewall", "Bluetooth", "Mouse", "Graphics Card"], c: 0 },
+    { topic: "Digital & Internet", q: "Which company operates the networks Instagram, Facebook, and WhatsApp?", a: ["Apple", "Google", "Meta", "Microsoft"], c: 2 },
+    { topic: "Digital & Internet", q: "What is the portable storage device that plugs directly into a USB port called?", a: ["SD Card", "USB Flash Drive", "Hard Drive", "Router"], c: 1 },
 
-    // --- BLOCK 6: SPORT ---
-    { topic: "Sport", q: "Wie viele Feldspieler stehen pro Team standardmäßig bei einem Fußballspiel gleichzeitig auf dem Platz?", a: ["10", "11", "12", "13"], c: 1 },
-    { topic: "Sport", q: "In welcher Sportart versucht man, mit möglichst wenigen Schlägen einen 'Hole-in-one' zu erzielen?", a: ["Tennis", "Golf", "Darts", "Bowling"], c: 1 },
-    { topic: "Sport", q: "Wer hält den aktuellen Weltrekord im 100-Meter-Sprint der Herren?", a: ["Tyson Gay", "Yohan Blake", "Usain Bolt", "Carl Lewis"], c: 2 },
-    { topic: "Sport", q: "Wie viele Ringe sind auf der offiziellen Flagge der Olympischen Spiele abgebildet?", a: ["4", "5", "6", "7"], c: 1 },
-    { topic: "Sport", q: "Welches Land gewann die FIFA Fußball-Weltmeisterschaft der Herren im Jahr 2022?", a: ["Frankreich", "Argentinien", "Kroatien", "Marokko"], c: 1 },
-    { topic: "Sport", q: "Welche europäische Metropole richtete die Olympischen Sommerspiele 2024 aus?", a: ["London", "Tokio", "Paris", "Los Angeles"], c: 2 },
-    { topic: "Sport", q: "Welches Wort benutzt man beim Tennis für einen Spielstand von null Punkten?", a: ["Zero", "Nil", "Love", "None"], c: 2 },
-    { topic: "Sport", q: "Wie lang ist die offizielle Laufdistanz bei einem klassischen Marathonlauf?", a: ["21,1 km", "40,0 km", "42,195 km", "50,0 km"], c: 2 },
-    { topic: "Sport", q: "In welcher Sportart sind die Begriffe 'Dunking', 'Dribbling' und 'Drei-Punkte-Linie' fest verankert?", a: ["Handball", "Basketball", "Eishockey", "Volleyball"], c: 1 },
-    { topic: "Sport", q: "Welche Farbe hat die Karte, die beim Fußball den sofortigen Platzverweis für einen Spieler bedeutet?", a: ["Gelb", "Grün", "Blau", "Rot"], c: 3 }
+    // --- BLOCK 6: LIFESTYLE & SPORTS ---
+    { topic: "Lifestyle & Sports", q: "How many squares are on a classic chessboard in total?", a: ["32", "48", "64", "81"], c: 2 },
+    { topic: "Lifestyle & Sports", q: "In which sport do you hit a ball over a net using rackets on a court?", a: ["Soccer", "Handball", "Tennis", "Basketball"], c: 2 },
+    { topic: "Lifestyle & Sports", q: "How many minutes long is a standard halftime in a professional men's soccer match?", a: ["30", "40", "45", "60"], c: 2 },
+    { topic: "Lifestyle & Sports", q: "What color is the pool ball that must be pocketed last to win a standard game of 8-ball?", a: ["White", "Yellow", "Red", "Black"], c: 3 },
+    { topic: "Lifestyle & Sports", q: "How many darts does a player throw per turn in an official match?", a: ["2 Darts", "3 Darts", "4 Darts", "5 Darts"], c: 1 },
+    { topic: "Lifestyle & Sports", q: "Which sport is played on ice using a puck and sticks?", a: ["Curling", "Ice Hockey", "Figure Skating", "Bobsleigh"], c: 1 },
+    { topic: "Lifestyle & Sports", q: "What is the approximate running distance of a half marathon?", a: ["10 km", "21.1 km", "30 km", "42.2 km"], c: 1 },
+    { topic: "Lifestyle & Sports", q: "Which famous motorsport is hosted in locations like Monaco, Singapore, and Monza?", a: ["Rallye", "Formula 1", "MotoGP", "Nascar"], c: 1 },
+    { topic: "Lifestyle & Sports", q: "From which country does the martial art 'Judo' originally come from?", a: ["China", "Japan", "Korea", "Thailand"], c: 1 },
+    { topic: "Lifestyle & Sports", q: "Which item of clothing is traditionally worn in summer at the beach or pool?", a: ["Swimsuit / Bikini", "Winter Jacket", "Turtleneck Sweater", "Leather Pants"], c: 0 }
 ];
 
 // --- 3. CORE LOGIC ---
@@ -173,7 +173,7 @@ function selectAnswer(idx, btn) {
         currentQuestionIndex++;
         
         // --- CHAPTER TRANSITION LOGIC ---
-        // Jede 10. Frage wird die Chapter-Transition ausgelöst
+        // Every 10 questions, trigger the shift break
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
             showChapterTransition();
         } else if(currentQuestionIndex < quizData.length) {
@@ -194,11 +194,11 @@ function showChapterTransition() {
     setTimeout(() => {
         if(eventScreen) eventScreen.style.display = 'none';
         loadQuestion();
-    }, 2500); // 2.5 Sekunden Pause für den Übergang
+    }, 2500); // 2.5 second pause for the visual transition
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completedv5', 'true');
+    localStorage.setItem('quiz_completedv7', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
