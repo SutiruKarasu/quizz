@@ -198,7 +198,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completed', 'true');
+    localStorage.setItem('quiz_completedv5', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
