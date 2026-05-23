@@ -7,7 +7,6 @@ window.onload = function() {
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
                 <p style="margin-bottom: 30px;">You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
-                <button id="restart-btn" class="primary-btn" style="background: #333; color: #fff;">Debug: Reset (Host Only)</button>
             </div>
         `;
         const restartBtn = document.getElementById('restart-btn');
