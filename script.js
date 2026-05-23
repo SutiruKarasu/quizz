@@ -2,7 +2,7 @@ const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
 // --- 1. ACCESS CONTROL (One-time per device) ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completedv7') === 'true') {
+    if (localStorage.getItem('quiz_completedzf') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="clock-icon">🚫</div>
             <h1 style="color: #ff4757;">Shift Denied</h1>
@@ -14,78 +14,79 @@ window.onload = function() {
 
 // --- 2. THE 60-QUESTION DATABASE ---
 const quizData = [
-    // --- BLOCK 1: GENERAL KNOWLEDGE ---
-    { topic: "General Knowledge", q: "How many hearts does an octopus have?", a: ["1", "2", "3", "4"], c: 2 },
-    { topic: "General Knowledge", q: "Which large land mammal is physically unable to jump?", a: ["Rhino", "Elephant", "Hippo", "Sloth"], c: 1 },
-    { topic: "General Knowledge", q: "What color is a fully grown giraffe's tongue?", a: ["Pink", "Blue-Black", "Bright Red", "White"], c: 1 },
-    { topic: "General Knowledge", q: "Which fruit carries its seeds on the outside?", a: ["Strawberry", "Banana", "Kiwi", "Apple"], c: 0 },
-    { topic: "General Knowledge", q: "Which country has significantly more sheep than human residents?", a: ["Ireland", "New Zealand", "Scotland", "Australia"], c: 1 },
-    { topic: "General Knowledge", q: "Which letter does not appear in the name of any of the 50 US states?", a: ["X", "Z", "Q", "J"], c: 2 },
-    { topic: "General Knowledge", q: "How many teeth does a normal adult human have (including wisdom teeth)?", a: ["28", "30", "32", "34"], c: 2 },
-    { topic: "General Knowledge", q: "Which creature is the official national animal of Scotland?", a: ["Lion", "Unicorn", "Eagle", "Loch Ness Monster"], c: 1 },
-    { topic: "General Knowledge", q: "How many seconds are in one hour?", a: ["60", "1200", "3600", "6000"], c: 2 },
-    { topic: "General Knowledge", q: "According to airport statistics, which item is most frequently left behind in hand luggage?", a: ["Charging Cable", "Neck Pillow", "Umbrella", "Sunglasses"], c: 0 },
+    // --- BLOCK 1: CELEBRITY SECRETS & TRIVIA ---
+    { topic: "Celebrity Secrets", q: "Which Hollywood actor famously bought a haunted mansion and a dinosaur skull?", a: ["Johnny Depp", "Nicolas Cage", "Brad Pitt", "Keanu Reeves"], c: 1 },
+    { topic: "Celebrity Secrets", q: "Which pop star's real name is Stefani Joanne Angelina Germanotta?", a: ["Lady Gaga", "Madonna", "Katy Perry", "Rihanna"], c: 0 },
+    { topic: "Celebrity Secrets", q: "Before becoming a global movie star, which actor worked as a professional wrestler known as 'The Rock'?", a: ["John Cena", "Jason Statham", "Dwayne Johnson", "Vin Diesel"], c: 2 },
+    { topic: "Celebrity Secrets", q: "Which singer famously has a phobia of indoor plants and refuses them in her dressing rooms?", a: ["Beyoncé", "Taylor Swift", "Christina Aguilera", "Britney Spears"], c: 3 },
+    { topic: "Celebrity Secrets", q: "Which billionaire tech founder made a cameo appearance as a robot-fighting enthusiast in 'Iron Man 2'?", a: ["Bill Gates", "Mark Zuckerberg", "Elon Musk", "Jeff Bezos"], c: 2 },
+    { topic: "Celebrity Secrets", q: "Which famous actor spent his early years performing as a stand-up comedian and a mime?", a: ["Jim Carrey", "Robin Williams", "Tom Hanks", "Adam Sandler"], c: 1 },
+    { topic: "Celebrity Secrets", q: "Which pop star icon famously owned a pet chimpanzee named 'Bubbles' in the 1980s?", a: ["Prince", "Michael Jackson", "David Bowie", "Freddie Mercury"], c: 1 },
+    { topic: "Celebrity Secrets", q: "Which actor cut his hand open while filming a dinner scene in 'Django Unchained' but kept acting through the scene?", a: ["Leonardo DiCaprio", "Jamie Foxx", "Brad Pitt", "Christoph Waltz"], c: 0 },
+    { topic: "Celebrity Secrets", q: "Which country music legend and icon is the godmother of pop star Miley Cyrus?", a: ["Cher", "Dolly Parton", "Shania Twain", "Tina Turner"], c: 1 },
+    { topic: "Celebrity Secrets", q: "Which superstar famously insured his iconic smile and teeth for several million dollars?", a: ["Tom Cruise", "Julia Roberts", "Jim Carrey", "Cristiano Ronaldo"], c: 1 },
 
-    // --- BLOCK 2: BAR & DRINKS ---
-    { topic: "Bar & Drinks", q: "What are the two main ingredients of a classic 'Cuba Libre'?", a: ["Vodka & Lemon", "Gin & Tonic", "Rum & Cola", "Whiskey & Ginger Ale"], c: 2 },
-    { topic: "Bar & Drinks", q: "What item is traditionally placed on top of a freshly made Espresso Martini?", a: ["Coffee Beans", "Lemon Slice", "Mint Leaf", "Cinnamon Stick"], c: 0 },
-    { topic: "Bar & Drinks", q: "Which spirit forms the base of a classic 'Caipirinha'?", a: ["Rum", "Cachaça", "Vodka", "Tequila"], c: 1 },
-    { topic: "Bar & Drinks", q: "What is the metal cup used by bartenders to mix drinks called?", a: ["Strainer", "Jigger", "Shaker", "Muddler"], c: 2 },
-    { topic: "Bar & Drinks", q: "From which country does the famous beer brand 'Corona' originate?", a: ["Spain", "Brazil", "Mexico", "Cuba"], c: 2 },
-    { topic: "Bar & Drinks", q: "What does a bartender measure using a 'Jigger'?", a: ["Temperature", "Liquid Volume (cl)", "Carbonation", "Alcohol Percentage"], c: 1 },
-    { topic: "Bar & Drinks", q: "Which cocktail is traditionally served in a copper mug with ginger beer and lime?", a: ["Moscow Mule", "Mojito", "Gin Fizz", "Mai Tai"], c: 0 },
-    { topic: "Bar & Drinks", q: "What grain must make up at least 51% of a classic Bourbon whiskey's mash?", a: ["Barley", "Wheat", "Rye", "Corn"], c: 3 },
-    { topic: "Bar & Drinks", q: "Which fruit provides the juice for a classic 'Mimosa' cocktail?", a: ["Ananas", "Orange", "Cranberry", "Grapefruit"], c: 1 },
-    { topic: "Bar & Drinks", q: "Which herb is muddled to give a classic 'Mojito' its fresh flavor?", a: ["Basilikum", "Rosmarinus", "Mint", "Coriander"], c: 2 },
+    // --- BLOCK 2: NATURE & WILDLIFE ---
+    { topic: "Nature", q: "Which bird is globally recognized as the fastest animal on Earth when diving for prey?", a: ["Golden Eagle", "Peregrine Falcon", "Ostrich", "Hummingbird"], c: 1 },
+    { topic: "Nature", q: "What is the largest living structure on Earth, visible even from outer space?", a: ["The Amazon Rainforest", "The Great Barrier Reef", "The Grand Canyon", "Mount Everest"], c: 1 },
+    { topic: "Nature", q: "Which mammal has the densest and thickest fur of any animal on the planet?", a: ["Polar Bear", "Sea Otter", "Grizzly Bear", "Arctic Fox"], c: 1 },
+    { topic: "Nature", q: "How many bones does a shark have in its entire body naturally?", a: ["0", "50", "200", "400"], c: 0 },
+    { topic: "Nature", q: "What is the only mammal naturally capable of true, sustained flight?", a: ["Flying Squirrel", "Bat", "Sugar Glider", "Eagle"], c: 1 },
+    { topic: "Nature", q: "Which tree species is considered the tallest growing organism on Earth?", a: ["Oak", "Coast Redwood", "Baobab", "Pine"], c: 1 },
+    { topic: "Nature", q: "What percentage of the Earth's surface is covered by oceans and water?", a: ["50%", "60%", "71%", "85%"], c: 2 },
+    { topic: "Nature", q: "Which insect is known for migrating thousands of miles across America every single year?", a: ["Honeybee", "Monarch Butterfly", "Locust", "Dragonfly"], c: 1 },
+    { topic: "Nature", q: "Which deep-sea creature has three separate hearts and blue blood flowing through its body?", a: ["Blue Whale", "Great White Shark", "Octopus", "Jellyfish"], c: 2 },
+    { topic: "Nature", q: "What is the primary gas that makes up the majority of the Earth's atmosphere?", a: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], c: 1 },
 
-    // --- BLOCK 3: ENTERTAINMENT ---
-    { topic: "Entertainment", q: "How many keys does a standard grand piano have?", a: ["76", "84", "88", "92"], c: 2 },
-    { topic: "Entertainment", q: "Which streaming service is known worldwide for original series like 'Stranger Things'?", a: ["Amazon Prime", "Netflix", "Disney+", "Apple TV"], c: 1 },
-    { topic: "Entertainment", q: "Which Swedish pop group won the Eurovision Song Contest in 1974 with the hit 'Waterloo'?", a: ["Roxette", "Ace of Base", "ABBA", "A*Teens"], c: 2 },
-    { topic: "Entertainment", q: "What is the name of the fictional archaeologist who uses a whip in famous adventure movies?", a: ["Lara Croft", "Nathan Drake", "Indiana Jones", "James Bond"], c: 2 },
-    { topic: "Entertainment", q: "Which pop artist released 'Thriller', the best-selling album of all time?", a: ["Eminem", "Michael Jackson", "Prince", "Elvis Presley"], c: 1 },
-    { topic: "Entertainment", q: "Which superhero has been portrayed on cinema screens by Robert Downey Jr.?", a: ["Batman", "Superman", "Iron Man", "Thor"], c: 2 },
-    { topic: "Entertainment", q: "In which year did the famous passenger ship Titanic sink in the Atlantic Ocean?", a: ["1905", "1912", "1920", "1933"], c: 1 },
-    { topic: "Entertainment", q: "Which rapper played the lead role in the semi-autobiographical movie '8 Mile'?", a: ["50 Cent", "Snoop Dogg", "Eminem", "Dr. Dre"], c: 2 },
-    { topic: "Entertainment", q: "What famous board game is all about buying streets and building hotels?", a: ["Risk", "Monopoly", "Scrabble", "Catan"], c: 1 },
-    { topic: "Entertainment", q: "Which fictional detective lives at 221B Baker Street according to Arthur Conan Doyle's books?", a: ["Hercule Poirot", "Sherlock Holmes", "Miss Marple", "Columbo"], c: 1 },
+    // --- BLOCK 3: DISNEY MAGIC ---
+    { topic: "Disney", q: "What is the name of Mickey Mouse's loyal and iconic pet dog?", a: ["Goofy", "Donald", "Pluto", "Bolt"], c: 2 },
+    { topic: "Disney", q: "In the movie 'The Lion King', what does the famous phrase 'Hakuna Matata' mean?", a: ["No worries", "Stay strong", "Family forever", "Good morning"], c: 0 },
+    { topic: "Disney", q: "Which Disney princess famously loses a glass slipper at the royal ball at midnight?", a: ["Snow White", "Cinderella", "Belle", "Ariel"], c: 1 },
+    { topic: "Disney", q: "What is the name of the live-action and animated hybrid universe where superhero 'Captain Jack Sparrow' sails?", a: ["Pirates of the Caribbean", "Peter Pan", "Treasure Planet", "Atlantis"], c: 0 },
+    { topic: "Disney", q: "In 'Aladdin', what type of animal is Jasmine's loyal companion named Rajah?", a: ["Monkey", "Tiger", "Parrot", "Elephant"], c: 1 },
+    { topic: "Disney", q: "Which Disney animated movie features the hit song 'Let It Go' sung by Queen Elsa?", a: ["Tangled", "Brave", "Frozen", "Moana"], c: 2 },
+    { topic: "Disney", q: "What is the name of the fairy companion who accompanies Peter Pan on his adventures?", a: ["Maleficent", "Tinker Bell", "Flora", "Blue Fairy"], c: 1 },
+    { topic: "Disney", q: "How many years did the Genie spend trapped inside the magic lamp before Aladdin found him?", a: ["100 years", "1,000 years", "10,000 years", "50,000 years"], c: 2 },
+    { topic: "Disney", q: "In 'Finding Nemo', what specific type of fish is Nemo and his father Marlin?", a: ["Clownfish", "Blue Tang", "Goldfish", "Pufferfish"], c: 0 },
+    { topic: "Disney", q: "Which classic Disney movie was the very first full-length animated feature film ever released?", a: ["Pinocchio", "Bambi", "Snow White and the Seven Dwarfs", "Dumbo"], c: 2 },
 
-    // --- BLOCK 4: TRAVEL & GEOGRAPHY ---
-    { topic: "Travel & Geography", q: "In which European capital city can you find the famous Eiffel Tower?", a: ["Berlin", "London", "Paris", "Madrid"], c: 2 },
-    { topic: "Travel & Geography", q: "What is the official currency used in the Czech Republic?", a: ["Euro", "Czech Koruna", "Zloty", "Forint"], c: 1 },
-    { topic: "Travel & Geography", q: "What is the official capital city of Spain?", a: ["Barcelona", "Madrid", "Valencia", "Sevilla"], c: 1 },
-    { topic: "Travel & Geography", q: "Which is the longest river on Earth?", a: ["Amazon", "Nile", "Mississippi", "Yangtze"], c: 1 },
-    { topic: "Travel & Geography", q: "Which mountain range geographically separates Europe from Asia?", a: ["Alps", "Andes", "Ural", "Himalayas"], c: 2 },
-    { topic: "Travel & Geography", q: "What is the capital city of the United States of America (USA)?", a: ["New York", "Los Angeles", "Washington, D.C.", "Chicago"], c: 2 },
-    { topic: "Travel & Geography", q: "Which sovereign state is the smallest country in the world by land area?", a: ["Monaco", "San Marino", "Vatican City", "Liechtenstein"], c: 2 },
-    { topic: "Travel & Geography", q: "Which country shares a border directly to the south of Germany?", a: ["Denmark", "Poland", "Austria", "Netherlands"], c: 2 },
-    { topic: "Travel & Geography", q: "Which sea is the Italian city of Venice located on?", a: ["Mediterranean / Adriatic", "North Sea", "Baltic Sea", "Red Sea"], c: 0 },
-    { topic: "Travel & Geography", q: "What is the name of the famous, historic opera house in Sydney, Australia?", a: ["Sydney Opera House", "Royal Albert Hall", "La Scala", "Metropolitan Opera"], c: 0 },
+    // --- BLOCK 4: MEDIA, TV & MOVIES ---
+    { topic: "Media", q: "Which epic fantasy TV show features the rival families Stark, Lannister, and Targaryen?", a: ["The Witcher", "Lord of the Rings", "Game of Thrones", "House of the Dragon"], c: 2 },
+    { topic: "Media", q: "What is the highest-grossing movie of all time at the global box office?", a: ["Titanic", "Avengers: Endgame", "Avatar", "Star Wars: The Force Awakens"], c: 2 },
+    { topic: "Media", q: "Which iconic sitcom revolves around a group of six friends living in New York City hanging out at 'Central Perk'?", a: ["How I Met Your Mother", "The Big Bang Theory", "Friends", "The Office"], c: 2 },
+    { topic: "Media", q: "Who directed the legendary sci-fi and action movies 'Inception', 'The Dark Knight', and 'Oppenheimer'?", a: ["Steven Spielberg", "Quentin Tarantino", "Christopher Nolan", "James Cameron"], c: 2 },
+    { topic: "Media", q: "Which fictional dystopian game show went viral as Netflix's most-watched series launch of all time?", a: ["Stranger Things", "Squid Game", "Money Heist", "The Crown"], c: 1 },
+    { topic: "Media", q: "In the 'Harry Potter' universe, what is the name of the prison guarded by Dementors?", a: ["Azkaban", "Hogwarts", "Gringotts", "Nurmengard"], c: 0 },
+    { topic: "Media", q: "Which major social media app revolutionized mobile video content with a continuous 'For You' feed?", a: ["Instagram", "Snapchat", "TikTok", "X / Twitter"], c: 2 },
+    { topic: "Media", q: "Which famous secret agent card-number designation is held by James Bond?", a: ["005", "007", "009", "011"], c: 1 },
+    { topic: "Media", q: "What is the name of the fiktive town where the mysterious events of 'Stranger Things' take place?", a: ["Springfield", "Riverdale", "Hawkins", "Mystic Falls"], c: 2 },
+    { topic: "Media", q: "Which movie won the historic Oscar for Best Picture at the Academy Awards in 2020 as the first non-English film?", a: ["1917", "Parasite", "Joker", "Once Upon a Time in Hollywood"], c: 1 },
 
-    // --- BLOCK 5: DIGITAL & INTERNET ---
-    { topic: "Digital & Internet", q: "Which symbol is used on social media platforms to tag a keyword or hashtag?", a: ["@", "&", "#", "$"], c: 2 },
-    { topic: "Digital & Internet", q: "What are the small digital icons and faces sent in chats called?", a: ["Logos", "Emojis", "Avatars", "Widgets"], c: 1 },
-    { topic: "Digital & Internet", q: "Which internet browser featuring a red fox logo is developed by Mozilla?", a: ["Safari", "Chrome", "Firefox", "Edge"], c: 2 },
-    { topic: "Digital & Internet", q: "What does 'WWW' stand for at the beginning of a classic website address?", a: ["World Wide Web", "Word Wide Wave", "Web Window World", "World Wide Wireless"], c: 0 },
-    { topic: "Digital & Internet", q: "Which platform is the largest internet search engine in the world?", a: ["Yahoo", "Bing", "Google", "DuckDuckGo"], c: 2 },
-    { topic: "Digital & Internet", q: "What do you call unwanted promotional emails that land in mass quantities in your inbox?", a: ["Trash", "Spam", "Phishing", "Bait"], c: 1 },
-    { topic: "Digital & Internet", q: "Which video platform is the largest globally for streaming and watching user videos?", a: ["Vimeo", "Twitch", "YouTube", "TikTok"], c: 2 },
-    { topic: "Digital & Internet", q: "What protects a home network from unauthorized access coming from the internet?", a: ["Firewall", "Bluetooth", "Mouse", "Graphics Card"], c: 0 },
-    { topic: "Digital & Internet", q: "Which company operates the networks Instagram, Facebook, and WhatsApp?", a: ["Apple", "Google", "Meta", "Microsoft"], c: 2 },
-    { topic: "Digital & Internet", q: "What is the portable storage device that plugs directly into a USB port called?", a: ["SD Card", "USB Flash Drive", "Hard Drive", "Router"], c: 1 },
+    // --- BLOCK 5: GLOBAL CULTURES & TRADITIONS ---
+    { topic: "Cultures", q: "Which traditional festival, known as the 'Festival of Colors', is celebrated widely in India?", a: ["Diwali", "Holi", "Eid", "Ramadan"], c: 1 },
+    { topic: "Cultures", q: "In Japanese culture, what is the traditional, floor-length robe worn for formal occasions called?", a: ["Sari", "Kimono", "Kilt", "Hanbok"], c: 1 },
+    { topic: "Cultures", q: "Which European country is culturally famous for the traditional Oktoberfest and Bratwurst?", a: ["Austria", "Switzerland", "Germany", "Belgium"], c: 2 },
+    { topic: "Cultures", q: "What iconic, historical stone structure was built over centuries to protect the northern borders of China?", a: ["The Great Wall of China", "The Terracotta Army", "The Forbidden City", "The Summer Palace"], c: 0 },
+    { topic: "Cultures", q: "Which country is the birthplace of the traditional 'Day of the Dead' (Día de los Muertos) celebration?", a: ["Spain", "Brazil", "Mexico", "Colombia"], c: 2 },
+    { topic: "Cultures", q: "What traditional martial art and national sport of Korea focuses primarily on dynamic kicking techniques?", a: ["Karate", "Kung Fu", "Taekwondo", "Judo"], c: 2 },
+    { topic: "Cultures", q: "Which ancient civilization constructed the famous mountaintop citadel of Machu Picchu in Peru?", a: ["Aztecs", "Mayans", "Incas", "Romans"], c: 2 },
+    { topic: "Cultures", q: "What is the traditional name of the pattern-woven, wool skirt worn by men in Scotland?", a: ["Toga", "Kilt", "Sarong", "Poncho"], c: 1 },
+    { topic: "Cultures", q: "In Italy, which city is globally celebrated as the historic birthplace of the classic Pizza?", a: ["Rome", "Milan", "Naples", "Florence"], c: 2 },
+    { topic: "Cultures", q: "Which country is famous for its traditional wooden 'Sauna' culture, outnumbering the cars in the nation?", a: ["Sweden", "Norway", "Finland", "Iceland"], c: 2 },
 
-    // --- BLOCK 6: LIFESTYLE & SPORTS ---
-    { topic: "Lifestyle & Sports", q: "How many squares are on a classic chessboard in total?", a: ["32", "48", "64", "81"], c: 2 },
-    { topic: "Lifestyle & Sports", q: "In which sport do you hit a ball over a net using rackets on a court?", a: ["Soccer", "Handball", "Tennis", "Basketball"], c: 2 },
-    { topic: "Lifestyle & Sports", q: "How many minutes long is a standard halftime in a professional men's soccer match?", a: ["30", "40", "45", "60"], c: 2 },
-    { topic: "Lifestyle & Sports", q: "What color is the pool ball that must be pocketed last to win a standard game of 8-ball?", a: ["White", "Yellow", "Red", "Black"], c: 3 },
-    { topic: "Lifestyle & Sports", q: "How many darts does a player throw per turn in an official match?", a: ["2 Darts", "3 Darts", "4 Darts", "5 Darts"], c: 1 },
-    { topic: "Lifestyle & Sports", q: "Which sport is played on ice using a puck and sticks?", a: ["Curling", "Ice Hockey", "Figure Skating", "Bobsleigh"], c: 1 },
-    { topic: "Lifestyle & Sports", q: "What is the approximate running distance of a half marathon?", a: ["10 km", "21.1 km", "30 km", "42.2 km"], c: 1 },
-    { topic: "Lifestyle & Sports", q: "Which famous motorsport is hosted in locations like Monaco, Singapore, and Monza?", a: ["Rallye", "Formula 1", "MotoGP", "Nascar"], c: 1 },
-    { topic: "Lifestyle & Sports", q: "From which country does the martial art 'Judo' originally come from?", a: ["China", "Japan", "Korea", "Thailand"], c: 1 },
-    { topic: "Lifestyle & Sports", q: "Which item of clothing is traditionally worn in summer at the beach or pool?", a: ["Swimsuit / Bikini", "Winter Jacket", "Turtleneck Sweater", "Leather Pants"], c: 0 }
+    // --- BLOCK 6: GAMING & RETRO HITS ---
+    { topic: "Gaming & Retro Hits", q: "Which iconic video game character is a yellow circle that eats dots while running from ghosts?", a: ["Mario", "Sonic", "Pac-Man", "Donkey Kong"], c: 2 },
+    { topic: "Gaming & Retro Hits", q: "What is the best-selling video game of all time, allowing players to build with blocks?", a: ["GTA V", "Tetris", "Minecraft", "Wii Sports"], c: 2 },
+    { topic: "Gaming & Retro Hits", q: "Which Italian plumber is the official mascot of the gaming company Nintendo?", a: ["Luigi", "Wario", "Mario", "Yoshi"], c: 2 },
+    { topic: "Gaming & Retro Hits", q: "What retro puzzle game requires players to fit falling geometric shapes perfectly into lines?", a: ["Pac-Man", "Tetris", "Space Invaders", "Pong"], c: 1 },
+    { topic: "Gaming & Retro Hits", q: "Which handheld gaming console, released by Nintendo in 1989, popularized Tetris worldwide?", a: ["Game Boy", "NES", "Sega Genesis", "PlayStation"], c: 0 },
+    { topic: "Gaming & Retro Hits", q: "What is the name of the main green-clad hero and adventurer in 'The Legend of Zelda' series?", a: ["Zelda", "Link", "Ganon", "Mario"], c: 1 },
+    { topic: "Gaming & Retro Hits", q: "Which blue hedgehog is famous for running at supersonic speeds as Sega's mascot?", a: ["Crash Bandicoot", "Spyro", "Sonic", "Mega Man"], c: 2 },
+    { topic: "Gaming & Retro Hits", q: "In the hit game 'Pokémon', which yellow electric mouse is creature number #025?", a: ["Charmander", "Bulbasaur", "Pikachu", "Squirtle"], c: 2 },
+    { topic: "Gaming & Retro Hits", q: "Which ultra-popular battle royale game features massive building mechanics and cultural dance emotes?", a: ["PUBG", "Fortnite", "Apex Legends", "Call of Duty"], c: 1 },
+    { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
 ];
+
 
 // --- 3. CORE LOGIC ---
 let currentQuestionIndex = 0;
@@ -94,16 +95,21 @@ let timeLeft = 10.0;
 let timerInterval;
 let isAnswered = false;
 
+// STREAK TRACKING VARIABLES
+let streak = 0;
+let maxStreak = 0;
+
 const startBtn = document.getElementById('start-btn');
 const answersContainer = document.getElementById('answers-container');
 const eventScreen = document.getElementById('event-screen');
+const quizScreen = document.getElementById('quiz-screen'); 
 
 if (startBtn) {
     startBtn.onclick = () => {
         const nameValue = document.getElementById('player-name').value.trim();
         if(!nameValue) return alert("Please enter your name!");
         document.getElementById('start-screen').classList.remove('active');
-        document.getElementById('quiz-screen').classList.add('active');
+        quizScreen.classList.add('active');
         loadQuestion();
     };
 }
@@ -113,10 +119,13 @@ function loadQuestion() {
     timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
     
-    // Update UI
+    // UI Updates
     document.getElementById('topic-display').innerText = q.topic;
     document.getElementById('question-counter').innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
     document.getElementById('question-text').innerText = q.q;
+    
+    // Update live streak badge
+    updateStreakUI();
     
     answersContainer.innerHTML = "";
     q.a.forEach((alt, i) => {
@@ -137,7 +146,7 @@ function startTimer() {
         if(timeLeft <= 0) {
             timeLeft = 0;
             clearInterval(timerInterval);
-            selectAnswer(-1); // Timeout
+            selectAnswer(-1); // Handles timeout as a wrong answer
         }
         updateClockUI();
     }, 50);
@@ -150,6 +159,20 @@ function updateClockUI() {
     if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 }
 
+function updateStreakUI() {
+    const streakBadgeEl = document.getElementById('streak-badge');
+    
+    if (streakBadgeEl) {
+        if (streak >= 3) {
+            streakBadgeEl.classList.add('active-streak');
+            streakBadgeEl.innerText = streak >= 5 ? `🔥 STREAK: ${streak} 🔥` : `✨ STREAK: ${streak}`;
+        } else {
+            streakBadgeEl.classList.remove('active-streak');
+            streakBadgeEl.innerText = "";
+        }
+    }
+}
+
 function selectAnswer(idx, btn) {
     if(isAnswered) return;
     isAnswered = true;
@@ -160,20 +183,38 @@ function selectAnswer(idx, btn) {
 
     if(idx === correctIdx) {
         if(btn) btn.classList.add('correct');
-        // MULTIPLIER UPGRADE: timeLeft * 100
-        score += Math.round(timeLeft * 100); 
+        
+        // Advance Streak Tracker
+        streak++;
+        if (streak > maxStreak) maxStreak = streak;
+        
+        // MULTIPLIER FEATURE
+        let streakMultiplier = 1.0;
+        if (streak >= 5) streakMultiplier = 1.5; 
+        else if (streak >= 3) streakMultiplier = 1.2; 
+        
+        score += Math.round(timeLeft * 100 * streakMultiplier); 
         document.getElementById('score-display').innerText = score;
-    } else if(idx !== -1 && btn) {
-        btn.classList.add('wrong');
+    } else {
+        // Wrong Answer -> Reset Streak & Trigger Screen Shake
+        streak = 0;
+        if(btn) btn.classList.add('wrong');
+        
+        if (quizScreen) {
+            quizScreen.classList.add('shake-active');
+            setTimeout(() => {
+                quizScreen.classList.remove('shake-active');
+            }, 500); 
+        }
     }
     
     if(btns[correctIdx]) btns[correctIdx].classList.add('correct');
+    updateStreakUI();
 
     setTimeout(() => {
         currentQuestionIndex++;
         
         // --- CHAPTER TRANSITION LOGIC ---
-        // Every 10 questions, trigger the shift break
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
             showChapterTransition();
         } else if(currentQuestionIndex < quizData.length) {
@@ -186,19 +227,46 @@ function selectAnswer(idx, btn) {
 
 function showChapterTransition() {
     const nextTopic = quizData[currentQuestionIndex].topic;
-    document.getElementById('event-title').innerText = `NEW SHIFT: ${nextTopic}`;
-    document.getElementById('event-desc').innerText = "Recalibrating the clock...";
+    const titleEl = document.getElementById('event-title');
+    const descEl = document.getElementById('event-desc');
     
-    if(eventScreen) eventScreen.style.display = 'flex';
+    if(titleEl) titleEl.innerText = `SHIFT COMPLETED`;
+    if(descEl) descEl.innerText = `Next Phase: ${nextTopic}`;
+    
+    if(eventScreen) {
+        eventScreen.classList.add('fade-in-overlay');
+        eventScreen.style.display = 'flex';
+    }
+    
+    let countdownTime = 3;
+    const countdownContainer = document.createElement('div');
+    countdownContainer.id = "transition-countdown";
+    countdownContainer.innerText = countdownTime;
+    if(eventScreen) eventScreen.appendChild(countdownContainer);
+    
+    let countdownInterval = setInterval(() => {
+        countdownTime--;
+        if(countdownTime <= 0) {
+            clearInterval(countdownInterval);
+        } else if (countdownContainer) {
+            countdownContainer.innerText = countdownTime;
+        }
+    }, 800);
     
     setTimeout(() => {
-        if(eventScreen) eventScreen.style.display = 'none';
+        if(eventScreen) {
+            eventScreen.classList.remove('fade-in-overlay');
+            eventScreen.style.display = 'none';
+            if(document.getElementById("transition-countdown")) {
+                document.getElementById("transition-countdown").remove();
+            }
+        }
         loadQuestion();
-    }, 2500); // 2.5 second pause for the visual transition
+    }, 2600); 
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completedv7', 'true');
+    localStorage.setItem('quiz_completedzf', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
@@ -206,12 +274,16 @@ function showResults() {
     document.getElementById('result-name').innerText = finalName;
     document.getElementById('final-score').innerText = score;
 
+    const finalMaxStreakEl = document.getElementById('final-max-streak');
+    if (finalMaxStreakEl) finalMaxStreakEl.innerText = maxStreak;
+
     fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ 
             Player: finalName, 
             Score: score,
+            MaxStreak: maxStreak, 
             Timestamp: new Date().toLocaleString()
         })
     })
@@ -225,5 +297,5 @@ function showResults() {
 
 const restartBtn = document.getElementById('restart-btn');
 if(restartBtn) {
-    restartBtn.onclick = () => location.reload();
+    restartBtn.onclick = () => localStorage.clear(); location.reload();
 }
