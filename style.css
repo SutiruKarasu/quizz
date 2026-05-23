@@ -9,6 +9,7 @@
     --accent-blue: #00e5ff;
     --color-correct: #2ecc71;
     --color-wrong: #e74c3c;
+    --color-critical: #ff4757;
     --text-main: #ffffff;
     --text-muted: #a0a0a0;
     --border-color: #262835;
@@ -30,6 +31,18 @@ body {
     align-items: center;
     min-height: 100vh;
     overflow: hidden; 
+    transition: box-shadow 1s ease, background-color 1s ease;
+}
+
+/* RED ALERT MODE - Pulsierende Vignette für Hard Mode */
+body.red-alert-mode {
+    box-shadow: inset 0 0 100px rgba(255, 71, 87, 0.15);
+    animation: alert-pulse 2s infinite alternate;
+}
+
+@keyframes alert-pulse {
+    0% { box-shadow: inset 0 0 50px rgba(255, 71, 87, 0.05); }
+    100% { box-shadow: inset 0 0 150px rgba(255, 71, 87, 0.25); }
 }
 
 #app {
@@ -62,20 +75,11 @@ body {
 }
 
 /* ================= START & RESULT SCREEN ================= */
-#start-screen, #result-screen {
-    justify-content: center;
-    align-items: center;
-}
+#start-screen, #result-screen { justify-content: center; align-items: center; }
 
 .login-card {
-    background-color: var(--bg-card);
-    width: 100%;
-    border-radius: 16px;
-    padding: 40px 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: var(--bg-card); width: 100%; border-radius: 16px; padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
@@ -118,9 +122,12 @@ body {
     font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 20px;
 }
 
-.streak-badge { color: var(--accent-orange); font-size: 13px; font-weight: 800; opacity: 0; transition: opacity 0.3s ease; }
+.streak-badge { color: var(--accent-orange); font-size: 12px; font-weight: 800; opacity: 0; transition: opacity 0.3s ease; }
 .streak-badge.active-streak { opacity: 1; text-shadow: 0 0 10px rgba(242, 139, 36, 0.6); animation: pulse 1s infinite; }
 .streak-badge.blue-streak { color: var(--accent-blue); text-shadow: 0 0 10px rgba(0, 229, 255, 0.8); }
+
+.phase-badge { color: var(--color-correct); font-size: 12px; font-weight: 800; display: none; text-shadow: 0 0 10px rgba(46, 204, 113, 0.8); }
+.phase-badge.active { display: block; animation: pulse-fast 0.6s infinite alternate; }
 
 .timer-section { display: flex; justify-content: center; margin-bottom: 30px; }
 .timer-ring {
@@ -156,16 +163,12 @@ body {
 .score-section { text-align: center; margin-top: 15px; padding-bottom: 20px; }
 .score-section p { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 5px; }
 
-.score-container {
-    display: inline-block; padding: 5px 20px; border-radius: 12px; transition: all 0.3s ease;
-}
+.score-container { display: inline-block; padding: 5px 20px; border-radius: 12px; transition: all 0.3s ease; }
 #score-display { font-size: 28px; font-weight: 800; color: var(--accent-yellow); transition: all 0.3s ease; }
 
-/* Orange Flame (Streak 3-4) */
 .score-container.flames-normal { animation: flicker-orange 0.4s infinite alternate; background: rgba(242, 139, 36, 0.1); }
 .score-container.flames-normal #score-display { color: #fff; text-shadow: 0 0 10px #f28b24, 0 0 20px #ff4500, 0 0 30px #ff0000; }
 
-/* Blue Flame (Streak 5+) */
 .score-container.flames-blue { animation: flicker-blue 0.4s infinite alternate; background: rgba(0, 229, 255, 0.1); }
 .score-container.flames-blue #score-display { color: #fff; text-shadow: 0 0 10px #00e5ff, 0 0 20px #0077ff, 0 0 30px #0000ff; }
 
@@ -178,6 +181,7 @@ body {
 .shake-active { animation: shake 0.4s ease-in-out; }
 
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes pulse-fast { 0% { opacity: 0.5; } 100% { opacity: 1; transform: scale(1.05); } }
 
 @keyframes flicker-orange {
     0% { box-shadow: 0 0 10px #f28b24, inset 0 0 10px #ff4500; }
@@ -191,8 +195,22 @@ body {
 /* Transitions */
 #event-screen { background: rgba(10, 11, 16, 0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 100; }
 #event-title { font-size: 28px; color: var(--accent-yellow); margin-bottom: 10px; letter-spacing: 2px; text-align: center; }
-#event-desc { font-size: 16px; color: var(--text-main); margin-bottom: 30px; text-align: center; }
+#event-desc { font-size: 16px; color: var(--text-main); margin-bottom: 30px; text-align: center; line-height: 1.5; }
 #transition-countdown { font-size: 60px; font-weight: 800; color: var(--accent-orange); animation: pulse 0.8s infinite; }
 
 .fade-in-overlay { display: flex !important; animation: fadeIn 0.4s ease forwards; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Glitch Effect für das Wort WARNING */
+.glitch-text {
+    color: var(--color-critical);
+    font-weight: 800;
+    position: relative;
+    display: inline-block;
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+.glitch-text::before, .glitch-text::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+.glitch-text::before { left: 2px; text-shadow: -2px 0 #00e5ff; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
+.glitch-text::after { left: -2px; text-shadow: -2px 0 #ff4757; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 5s infinite linear alternate-reverse; }
