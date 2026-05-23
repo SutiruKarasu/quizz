@@ -1,14 +1,17 @@
 const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
 
-// --- 1. ACCESS CONTROL (One-time per device) ---
+// --- 1. ACCESS CONTROL ---
 window.onload = function() {
     if (localStorage.getItem('quiz_completedzf') === 'true') {
         document.getElementById('start-screen').innerHTML = `
-            <div class="clock-icon">🚫</div>
-            <h1 style="color: #ff4757;">Shift Denied</h1>
-            <p>You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
-            <button onclick="localStorage.clear(); location.reload();" style="width: auto; font-size: 14px; background: #333; color: #fff;">Debug: Reset (Host Only)</button>
+            <div class="login-card" style="text-align: center;">
+                <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
+                <p style="margin-bottom: 30px;">You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
+                <button id="restart-btn" class="primary-btn" style="background: #333; color: #fff;">Debug: Reset (Host Only)</button>
+            </div>
         `;
+        const restartBtn = document.getElementById('restart-btn');
+        if(restartBtn) restartBtn.onclick = () => { localStorage.clear(); location.reload(); };
     }
 };
 
@@ -95,7 +98,6 @@ let timeLeft = 10.0;
 let timerInterval;
 let isAnswered = false;
 
-// STREAK TRACKING VARIABLES
 let streak = 0;
 let maxStreak = 0;
 
@@ -104,13 +106,63 @@ const answersContainer = document.getElementById('answers-container');
 const eventScreen = document.getElementById('event-screen');
 const quizScreen = document.getElementById('quiz-screen'); 
 
+// --- ANIMATE SCORE FUNCTION (Casino Roll Effect) ---
+function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = progress * (2 - progress); // Leicht abbremsende Kurve
+        obj.innerHTML = Math.floor(easeProgress * (end - start) + start);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// --- START BUTTON MIT PREPARATION TIMER ---
 if (startBtn) {
     startBtn.onclick = () => {
         const nameValue = document.getElementById('player-name').value.trim();
         if(!nameValue) return alert("Please enter your name!");
         document.getElementById('start-screen').classList.remove('active');
-        quizScreen.classList.add('active');
-        loadQuestion();
+        
+        // Show Preparation Overlay
+        const titleEl = document.getElementById('event-title');
+        const descEl = document.getElementById('event-desc');
+        
+        titleEl.innerText = "GET READY";
+        descEl.innerText = "Focus your mind.";
+        
+        eventScreen.style.display = 'flex';
+        eventScreen.classList.add('fade-in-overlay');
+        
+        let countdownTime = 3;
+        const countdownContainer = document.createElement('div');
+        countdownContainer.id = "transition-countdown";
+        countdownContainer.innerText = countdownTime;
+        eventScreen.appendChild(countdownContainer);
+        
+        let countdownInterval = setInterval(() => {
+            countdownTime--;
+            if(countdownTime <= 0) {
+                clearInterval(countdownInterval);
+            } else {
+                countdownContainer.innerText = countdownTime;
+            }
+        }, 1000);
+        
+        // Timer vorbei -> Quiz starten
+        setTimeout(() => {
+            eventScreen.classList.remove('fade-in-overlay');
+            eventScreen.style.display = 'none';
+            if(document.getElementById("transition-countdown")) {
+                document.getElementById("transition-countdown").remove();
+            }
+            quizScreen.classList.add('active');
+            loadQuestion();
+        }, 3000);
     };
 }
 
@@ -119,19 +171,17 @@ function loadQuestion() {
     timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
     
-    // UI Updates
-    document.getElementById('topic-display').innerText = q.topic;
-    document.getElementById('question-counter').innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
+    document.getElementById('topic-display').innerText = q.topic.toUpperCase();
+    document.getElementById('question-counter').innerText = `QUESTION ${currentQuestionIndex + 1} / ${quizData.length}`;
     document.getElementById('question-text').innerText = q.q;
     
-    // Update live streak badge
     updateStreakUI();
     
     answersContainer.innerHTML = "";
     q.a.forEach((alt, i) => {
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
-        btn.innerText = alt;
+        btn.innerText = alt.toUpperCase();
         btn.onclick = () => selectAnswer(i, btn);
         answersContainer.appendChild(btn);
     });
@@ -146,7 +196,7 @@ function startTimer() {
         if(timeLeft <= 0) {
             timeLeft = 0;
             clearInterval(timerInterval);
-            selectAnswer(-1); // Handles timeout as a wrong answer
+            selectAnswer(-1); 
         }
         updateClockUI();
     }, 50);
@@ -159,16 +209,30 @@ function updateClockUI() {
     if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 }
 
+// --- FLAMMEN & STREAK LOGIC ---
 function updateStreakUI() {
     const streakBadgeEl = document.getElementById('streak-badge');
+    const scoreContainer = document.getElementById('score-container');
     
     if (streakBadgeEl) {
-        if (streak >= 3) {
+        streakBadgeEl.classList.remove('active-streak', 'blue-streak');
+        if (streak >= 5) {
+            streakBadgeEl.classList.add('active-streak', 'blue-streak');
+            streakBadgeEl.innerText = `🔥 STREAK: ${streak} 🔥`;
+        } else if (streak >= 3) {
             streakBadgeEl.classList.add('active-streak');
-            streakBadgeEl.innerText = streak >= 5 ? `🔥 STREAK: ${streak} 🔥` : `✨ STREAK: ${streak}`;
+            streakBadgeEl.innerText = `✨ STREAK: ${streak}`;
         } else {
-            streakBadgeEl.classList.remove('active-streak');
             streakBadgeEl.innerText = "";
+        }
+    }
+
+    if (scoreContainer) {
+        scoreContainer.classList.remove('flames-normal', 'flames-blue');
+        if (streak >= 5) {
+            scoreContainer.classList.add('flames-blue');
+        } else if (streak >= 3) {
+            scoreContainer.classList.add('flames-normal');
         }
     }
 }
@@ -180,31 +244,29 @@ function selectAnswer(idx, btn) {
     
     const correctIdx = quizData[currentQuestionIndex].c;
     const btns = answersContainer.querySelectorAll('.answer-btn');
+    let oldScore = score;
 
     if(idx === correctIdx) {
         if(btn) btn.classList.add('correct');
         
-        // Advance Streak Tracker
         streak++;
         if (streak > maxStreak) maxStreak = streak;
         
-        // MULTIPLIER FEATURE
         let streakMultiplier = 1.0;
         if (streak >= 5) streakMultiplier = 1.5; 
         else if (streak >= 3) streakMultiplier = 1.2; 
         
+        // PUNKTE BERECHNEN UND ROLLEN LASSEN
         score += Math.round(timeLeft * 100 * streakMultiplier); 
-        document.getElementById('score-display').innerText = score;
+        animateValue(document.getElementById('score-display'), oldScore, score, 800);
+        
     } else {
-        // Wrong Answer -> Reset Streak & Trigger Screen Shake
         streak = 0;
         if(btn) btn.classList.add('wrong');
         
         if (quizScreen) {
             quizScreen.classList.add('shake-active');
-            setTimeout(() => {
-                quizScreen.classList.remove('shake-active');
-            }, 500); 
+            setTimeout(() => { quizScreen.classList.remove('shake-active'); }, 500); 
         }
     }
     
@@ -214,7 +276,6 @@ function selectAnswer(idx, btn) {
     setTimeout(() => {
         currentQuestionIndex++;
         
-        // --- CHAPTER TRANSITION LOGIC ---
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
             showChapterTransition();
         } else if(currentQuestionIndex < quizData.length) {
@@ -231,11 +292,11 @@ function showChapterTransition() {
     const descEl = document.getElementById('event-desc');
     
     if(titleEl) titleEl.innerText = `SHIFT COMPLETED`;
-    if(descEl) descEl.innerText = `Next Phase: ${nextTopic}`;
+    if(descEl) descEl.innerText = `NEXT PHASE: ${nextTopic.toUpperCase()}`;
     
     if(eventScreen) {
-        eventScreen.classList.add('fade-in-overlay');
         eventScreen.style.display = 'flex';
+        eventScreen.classList.add('fade-in-overlay');
     }
     
     let countdownTime = 3;
@@ -271,8 +332,11 @@ function showResults() {
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
     document.getElementById('result-screen').classList.add('active');
-    document.getElementById('result-name').innerText = finalName;
-    document.getElementById('final-score').innerText = score;
+    
+    document.getElementById('result-name').innerText = finalName.toUpperCase();
+    
+    // Animiere auch den Final Score
+    animateValue(document.getElementById('final-score'), 0, score, 1500);
 
     const finalMaxStreakEl = document.getElementById('final-max-streak');
     if (finalMaxStreakEl) finalMaxStreakEl.innerText = maxStreak;
@@ -293,9 +357,4 @@ function showResults() {
     .catch(() => {
         document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
     });
-}
-
-const restartBtn = document.getElementById('restart-btn');
-if(restartBtn) {
-    restartBtn.onclick = () => localStorage.clear(); location.reload();
 }
