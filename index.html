@@ -11,7 +11,7 @@
 
     <div id="app">
         
-        <section id="start-screen" class="screen">
+        <section id="start-screen" class="screen active">
             <div class="login-card">
                 <div class="logo-container">
                     <h1 class="logo-text">
@@ -26,16 +26,60 @@
                 </div>
 
                 <div class="input-group">
-                    <input type="text" id="username" placeholder="Enter your name..." autocomplete="off">
+                    <input type="text" id="player-name" placeholder="Enter your name..." autocomplete="off">
                 </div>
 
-                <button id="clock-in-btn" class="primary-btn">CLOCK IN</button>
+                <button id="start-btn" class="primary-btn">CLOCK IN</button>
             </div>
         </section>
 
-        <section id="quiz-container" class="screen hidden"></section>
+        <section id="quiz-screen" class="screen">
+            <header class="quiz-header">
+                <span id="topic-display" class="category"></span>
+                <span id="streak-badge" class="streak-badge"></span>
+                <span id="question-counter" class="question-progress"></span>
+            </header>
+
+            <div class="timer-section">
+                <div class="timer-ring">
+                    <div id="clock-hand"></div>
+                    <span id="time-display">10</span>
+                </div>
+            </div>
+
+            <div class="question-section">
+                <h2 id="question-text"></h2>
+            </div>
+
+            <div id="answers-container" class="options-section">
+                </div>
+
+            <div class="score-section">
+                <p>Score: <span id="score-display">0</span></p>
+            </div>
+        </section>
+
+        <section id="event-screen" class="screen transition-screen">
+            <h1 id="event-title">SHIFT COMPLETED</h1>
+            <p id="event-desc">Next Phase...</p>
+        </section>
+
+        <section id="result-screen" class="screen">
+            <div class="login-card result-card">
+                <h2>SHIFT ENDED</h2>
+                <h3 id="result-name" class="result-name"></h3>
+                
+                <div class="stats-box">
+                    <p>Final Score: <span id="final-score" class="highlight-score"></span></p>
+                    <p>Max Streak: <span id="final-max-streak"></span></p>
+                </div>
+                
+                <p id="mail-status" class="status-text">Transmitting Data...</p>
+            </div>
+        </section>
 
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
