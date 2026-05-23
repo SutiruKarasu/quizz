@@ -1,48 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CLOCK-INN QUIZ 2.0</title>
+    <title>Clock Inn Quiz 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="bg-gears">
-        <div class="gear gear-1"></div>
-        <div class="gear gear-2"></div>
-    </div>
+    <div id="app">
+        
+        <section id="start-screen" class="screen active">
+            <div class="login-card">
+                <div class="logo-container">
+                    <h1 class="logo-text">
+                        CL<svg class="sun-icon" viewBox="0 0 24 24" fill="#e6c258" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.39 5.26L18.35 4.54L19.29 8.38L22.84 10.15L20.89 13.58L22.18 17.26L18.52 18.52L17.26 22.18L13.58 20.89L10.15 22.84L8.38 19.29L4.54 18.35L5.26 14.39L2 12L5.26 9.61L4.54 5.65L8.38 4.71L10.15 1.16L13.58 3.11L17.26 1.82L18.52 5.48L22.18 6.74L20.89 10.42L22.84 13.85L19.29 15.62L18.35 19.46L14.39 18.74L12 22L9.61 18.74L5.65 19.46L4.71 15.62L1.16 13.85L3.11 10.42L1.82 6.74L5.48 5.48L6.74 1.82L10.42 3.11L13.85 1.16L15.62 4.71L19.46 5.65L18.74 9.61L22 12L18.74 14.39L19.46 18.35L15.62 19.29L13.85 22.84L10.42 20.89L6.74 22.18L5.48 18.52L1.82 17.26L3.11 13.58L1.16 10.15L4.71 8.38L5.65 4.54L9.61 5.26L12 2Z"/></svg>CK-INN
+                    </h1>
+                    <p class="logo-sub">Q U I Z &nbsp; 2 . 0</p>
+                </div>
+                
+                <div class="intro-text">
+                    <p>60 Questions. 6 Categories. 10 Seconds.</p>
+                    <p class="highlight">Precision is everything.</p>
+                </div>
 
-    <div id="start-screen" class="screen active">
-        <div class="login-card">
-            <h1>CLOCK-INN</h1>
-            <p>QUIZ 2.0 | 60 Questions. 6 Categories. 10 Seconds.<br>Precision is everything.</p>
-            <input type="text" id="player-name" placeholder="Enter your name...">
-            <button id="start-btn" class="answer-btn">CLOCK IN</button>
-        </div>
-    </div>
+                <div class="input-group">
+                    <input type="text" id="player-name" placeholder="Enter your name..." autocomplete="off">
+                </div>
 
-    <div id="quiz-screen" class="screen">
-        <div id="phase-badge"></div>
-        <div class="timer-ring">
-            <span id="time-display">10</span>
-            <div id="clock-hand"></div>
-        </div>
-        <h2 id="topic-display">TOPIC</h2>
-        <p id="question-text"></p>
-        <div id="answers-container"></div>
-        <div style="margin-top: 20px;">Score: <span id="score-display">0</span></div>
-    </div>
+                <button id="start-btn" class="primary-btn">CLOCK IN</button>
+            </div>
+        </section>
 
-    <div id="event-screen">
-        <h2>SHIFT COMPLETED</h2>
-    </div>
+        <section id="quiz-screen" class="screen">
+            <header class="quiz-header">
+                <span id="topic-display" class="category"></span>
+                <span id="streak-badge" class="streak-badge"></span>
+                <span id="question-counter" class="question-progress"></span>
+            </header>
 
-    <div id="result-screen" class="screen">
-        <div class="login-card">
-            <h1>SHIFT ENDED</h1>
-            <p>Total Score: <span id="final-score">0</span></p>
-        </div>
+            <div class="timer-section">
+                <div class="timer-ring">
+                    <div id="clock-hand"></div>
+                    <span id="time-display">10</span>
+                </div>
+            </div>
+
+            <div class="question-section">
+                <h2 id="question-text"></h2>
+            </div>
+
+            <div id="answers-container" class="options-section">
+                </div>
+
+            <div class="score-section">
+                <p>SCORE</p>
+                <div id="score-container" class="score-container">
+                    <span id="score-display">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="event-screen" class="screen transition-screen">
+            <h1 id="event-title"></h1>
+            <p id="event-desc"></p>
+        </section>
+
+        <section id="result-screen" class="screen">
+            <div class="login-card result-card">
+                <h2>SHIFT ENDED</h2>
+                <h3 id="result-name" class="result-name"></h3>
+                
+                <div class="stats-box">
+                    <p>Final Score: <span id="final-score" class="highlight-score"></span></p>
+                    <p>Max Streak: <span id="final-max-streak"></span></p>
+                </div>
+                
+                <p id="mail-status" class="status-text">Transmitting Data...</p>
+            </div>
+        </section>
+
     </div>
 
     <script src="script.js"></script>
