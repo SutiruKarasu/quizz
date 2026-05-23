@@ -6,16 +6,18 @@ window.onload = function() {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
-                <p style="margin-bottom: 30px;">You have already clocked in for this event.</p>
-                <button id="restart-btn" class="primary-btn" style="background: #333; color: #fff;">Debug: Reset</button>
+                <p style="margin-bottom: 30px;">You have already clocked in for this event.<br>Only one attempt per session is authorized.</p>
+                <button id="restart-btn" class="primary-btn" style="background: #333; color: #fff;">Debug: Reset (Host Only)</button>
             </div>
         `;
-        document.getElementById('restart-btn').onclick = () => { localStorage.clear(); location.reload(); };
+        const restartBtn = document.getElementById('restart-btn');
+        if(restartBtn) restartBtn.onclick = () => { localStorage.clear(); location.reload(); };
     }
 };
 
 // --- 2. THE 60-QUESTION DATABASE ---
 const quizData = [
+    // --- BLOCK 1: CELEBRITY SECRETS & TRIVIA ---
     { topic: "Celebrity Secrets", q: "Which Hollywood actor famously bought a haunted mansion and a dinosaur skull?", a: ["Johnny Depp", "Nicolas Cage", "Brad Pitt", "Keanu Reeves"], c: 1 },
     { topic: "Celebrity Secrets", q: "Which pop star's real name is Stefani Joanne Angelina Germanotta?", a: ["Lady Gaga", "Madonna", "Katy Perry", "Rihanna"], c: 0 },
     { topic: "Celebrity Secrets", q: "Before becoming a global movie star, which actor worked as a professional wrestler known as 'The Rock'?", a: ["John Cena", "Jason Statham", "Dwayne Johnson", "Vin Diesel"], c: 2 },
@@ -26,6 +28,8 @@ const quizData = [
     { topic: "Celebrity Secrets", q: "Which actor cut his hand open while filming a dinner scene in 'Django Unchained' but kept acting through the scene?", a: ["Leonardo DiCaprio", "Jamie Foxx", "Brad Pitt", "Christoph Waltz"], c: 0 },
     { topic: "Celebrity Secrets", q: "Which country music legend and icon is the godmother of pop star Miley Cyrus?", a: ["Cher", "Dolly Parton", "Shania Twain", "Tina Turner"], c: 1 },
     { topic: "Celebrity Secrets", q: "Which superstar famously insured his iconic smile and teeth for several million dollars?", a: ["Tom Cruise", "Julia Roberts", "Jim Carrey", "Cristiano Ronaldo"], c: 1 },
+
+    // --- BLOCK 2: NATURE & WILDLIFE ---
     { topic: "Nature", q: "Which bird is globally recognized as the fastest animal on Earth when diving for prey?", a: ["Golden Eagle", "Peregrine Falcon", "Ostrich", "Hummingbird"], c: 1 },
     { topic: "Nature", q: "What is the largest living structure on Earth, visible even from outer space?", a: ["The Amazon Rainforest", "The Great Barrier Reef", "The Grand Canyon", "Mount Everest"], c: 1 },
     { topic: "Nature", q: "Which mammal has the densest and thickest fur of any animal on the planet?", a: ["Polar Bear", "Sea Otter", "Grizzly Bear", "Arctic Fox"], c: 1 },
@@ -36,6 +40,8 @@ const quizData = [
     { topic: "Nature", q: "Which insect is known for migrating thousands of miles across America every single year?", a: ["Honeybee", "Monarch Butterfly", "Locust", "Dragonfly"], c: 1 },
     { topic: "Nature", q: "Which deep-sea creature has three separate hearts and blue blood flowing through its body?", a: ["Blue Whale", "Great White Shark", "Octopus", "Jellyfish"], c: 2 },
     { topic: "Nature", q: "What is the primary gas that makes up the majority of the Earth's atmosphere?", a: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], c: 1 },
+
+    // --- BLOCK 3: DISNEY MAGIC ---
     { topic: "Disney", q: "What is the name of Mickey Mouse's loyal and iconic pet dog?", a: ["Goofy", "Donald", "Pluto", "Bolt"], c: 2 },
     { topic: "Disney", q: "In the movie 'The Lion King', what does the famous phrase 'Hakuna Matata' mean?", a: ["No worries", "Stay strong", "Family forever", "Good morning"], c: 0 },
     { topic: "Disney", q: "Which Disney princess famously loses a glass slipper at the royal ball at midnight?", a: ["Snow White", "Cinderella", "Belle", "Ariel"], c: 1 },
@@ -46,6 +52,8 @@ const quizData = [
     { topic: "Disney", q: "How many years did the Genie spend trapped inside the magic lamp before Aladdin found him?", a: ["100 years", "1,000 years", "10,000 years", "50,000 years"], c: 2 },
     { topic: "Disney", q: "In 'Finding Nemo', what specific type of fish is Nemo and his father Marlin?", a: ["Clownfish", "Blue Tang", "Goldfish", "Pufferfish"], c: 0 },
     { topic: "Disney", q: "Which classic Disney movie was the very first full-length animated feature film ever released?", a: ["Pinocchio", "Bambi", "Snow White and the Seven Dwarfs", "Dumbo"], c: 2 },
+
+    // --- BLOCK 4: MEDIA, TV & MOVIES ---
     { topic: "Media", q: "Which epic fantasy TV show features the rival families Stark, Lannister, and Targaryen?", a: ["The Witcher", "Lord of the Rings", "Game of Thrones", "House of the Dragon"], c: 2 },
     { topic: "Media", q: "What is the highest-grossing movie of all time at the global box office?", a: ["Titanic", "Avengers: Endgame", "Avatar", "Star Wars: The Force Awakens"], c: 2 },
     { topic: "Media", q: "Which iconic sitcom revolves around a group of six friends living in New York City hanging out at 'Central Perk'?", a: ["How I Met Your Mother", "The Big Bang Theory", "Friends", "The Office"], c: 2 },
@@ -56,6 +64,8 @@ const quizData = [
     { topic: "Media", q: "Which famous secret agent card-number designation is held by James Bond?", a: ["005", "007", "009", "011"], c: 1 },
     { topic: "Media", q: "What is the name of the fiktive town where the mysterious events of 'Stranger Things' take place?", a: ["Springfield", "Riverdale", "Hawkins", "Mystic Falls"], c: 2 },
     { topic: "Media", q: "Which movie won the historic Oscar for Best Picture at the Academy Awards in 2020 as the first non-English film?", a: ["1917", "Parasite", "Joker", "Once Upon a Time in Hollywood"], c: 1 },
+
+    // --- BLOCK 5: GLOBAL CULTURES & TRADITIONS ---
     { topic: "Cultures", q: "Which traditional festival, known as the 'Festival of Colors', is celebrated widely in India?", a: ["Diwali", "Holi", "Eid", "Ramadan"], c: 1 },
     { topic: "Cultures", q: "In Japanese culture, what is the traditional, floor-length robe worn for formal occasions called?", a: ["Sari", "Kimono", "Kilt", "Hanbok"], c: 1 },
     { topic: "Cultures", q: "Which European country is culturally famous for the traditional Oktoberfest and Bratwurst?", a: ["Austria", "Switzerland", "Germany", "Belgium"], c: 2 },
@@ -66,6 +76,8 @@ const quizData = [
     { topic: "Cultures", q: "What is the traditional name of the pattern-woven, wool skirt worn by men in Scotland?", a: ["Toga", "Kilt", "Sarong", "Poncho"], c: 1 },
     { topic: "Cultures", q: "In Italy, which city is globally celebrated as the historic birthplace of the classic Pizza?", a: ["Rome", "Milan", "Naples", "Florence"], c: 2 },
     { topic: "Cultures", q: "Which country is famous for its traditional wooden 'Sauna' culture, outnumbering the cars in the nation?", a: ["Sweden", "Norway", "Finland", "Iceland"], c: 2 },
+
+    // --- BLOCK 6: GAMING & RETRO HITS ---
     { topic: "Gaming & Retro Hits", q: "Which iconic video game character is a yellow circle that eats dots while running from ghosts?", a: ["Mario", "Sonic", "Pac-Man", "Donkey Kong"], c: 2 },
     { topic: "Gaming & Retro Hits", q: "What is the best-selling video game of all time, allowing players to build with blocks?", a: ["GTA V", "Tetris", "Minecraft", "Wii Sports"], c: 2 },
     { topic: "Gaming & Retro Hits", q: "Which Italian plumber is the official mascot of the gaming company Nintendo?", a: ["Luigi", "Wario", "Mario", "Yoshi"], c: 2 },
@@ -78,112 +90,271 @@ const quizData = [
     { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
 ];
 
-// --- 3. STATE & ENGINE ---
-let audioCtx, currentQuestionIndex = 0, score = 0, streak = 0, maxStreak = 0, timeLeft = 10, timerInterval, isAnswered = false, isDoublePointsPhase = false;
 
-function playMechanicalTick() {
-    if (!audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-    osc.type = 'triangle'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.05);
-    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-}
+// --- 3. CORE LOGIC ---
+let currentQuestionIndex = 0;
+let score = 0;
+let timeLeft = 10.0;
+let timerInterval;
+let isAnswered = false;
 
+let streak = 0;
+let maxStreak = 0;
+
+const startBtn = document.getElementById('start-btn');
+const answersContainer = document.getElementById('answers-container');
+const eventScreen = document.getElementById('event-screen');
+const quizScreen = document.getElementById('quiz-screen'); 
+
+// --- ANIMATE SCORE FUNCTION (Casino Roll Effect) ---
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = Math.floor(progress * (end - start) + start);
-        if (progress < 1) window.requestAnimationFrame(step);
+        const easeProgress = progress * (2 - progress); // Leicht abbremsende Kurve
+        obj.innerHTML = Math.floor(easeProgress * (end - start) + start);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
     };
     window.requestAnimationFrame(step);
 }
 
-document.getElementById('start-btn').onclick = () => {
-    document.getElementById('start-screen').classList.remove('active');
-    document.getElementById('quiz-screen').classList.add('active');
-    loadQuestion();
-};
+// --- START BUTTON MIT PREPARATION TIMER ---
+if (startBtn) {
+    startBtn.onclick = () => {
+        const nameValue = document.getElementById('player-name').value.trim();
+        if(!nameValue) return alert("Please enter your name!");
+        document.getElementById('start-screen').classList.remove('active');
+        
+        // Show Preparation Overlay
+        const titleEl = document.getElementById('event-title');
+        const descEl = document.getElementById('event-desc');
+        
+        titleEl.innerText = "GET READY";
+        descEl.innerText = "Focus your mind.";
+        
+        eventScreen.style.display = 'flex';
+        eventScreen.classList.add('fade-in-overlay');
+        
+        let countdownTime = 3;
+        const countdownContainer = document.createElement('div');
+        countdownContainer.id = "transition-countdown";
+        countdownContainer.innerText = countdownTime;
+        eventScreen.appendChild(countdownContainer);
+        
+        let countdownInterval = setInterval(() => {
+            countdownTime--;
+            if(countdownTime <= 0) {
+                clearInterval(countdownInterval);
+            } else {
+                countdownContainer.innerText = countdownTime;
+            }
+        }, 1000);
+        
+        // Timer vorbei -> Quiz starten
+        setTimeout(() => {
+            eventScreen.classList.remove('fade-in-overlay');
+            eventScreen.style.display = 'none';
+            if(document.getElementById("transition-countdown")) {
+                document.getElementById("transition-countdown").remove();
+            }
+            quizScreen.classList.add('active');
+            loadQuestion();
+        }, 3000);
+    };
+}
 
 function loadQuestion() {
-    isAnswered = false; timeLeft = 10;
-    isDoublePointsPhase = (currentQuestionIndex >= 40 && currentQuestionIndex < 50);
-    
-    if(isDoublePointsPhase) {
-        document.body.classList.add('red-alert-mode');
-        const badge = document.getElementById('phase-badge');
-        if(badge) { badge.classList.add('active'); badge.innerText = "2X POINTS"; }
-    } else {
-        document.body.classList.remove('red-alert-mode');
-        const badge = document.getElementById('phase-badge');
-        if(badge) badge.classList.remove('active');
-    }
-    
+    isAnswered = false;
+    timeLeft = 10.0;
     const q = quizData[currentQuestionIndex];
-    document.getElementById('question-text').innerText = q.q;
-    document.getElementById('topic-display').innerText = q.topic;
     
-    const container = document.getElementById('answers-container');
-    container.innerHTML = "";
+    document.getElementById('topic-display').innerText = q.topic.toUpperCase();
+    document.getElementById('question-counter').innerText = `QUESTION ${currentQuestionIndex + 1} / ${quizData.length}`;
+    document.getElementById('question-text').innerText = q.q;
+    
+    updateStreakUI();
+    
+    answersContainer.innerHTML = "";
     q.a.forEach((alt, i) => {
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
         btn.innerText = alt.toUpperCase();
         btn.onclick = () => selectAnswer(i, btn);
-        container.appendChild(btn);
+        answersContainer.appendChild(btn);
     });
+    
     startTimer();
 }
 
 function startTimer() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         timeLeft -= 0.05;
-        if(timeLeft <= 0) { clearInterval(timerInterval); selectAnswer(-1); }
-        let currentSecond = Math.ceil(timeLeft);
-        if (currentSecond < Math.ceil(timeLeft + 0.05) && !isAnswered && currentSecond > 0) playMechanicalTick();
-        document.getElementById('time-display').innerText = currentSecond;
-        const hand = document.getElementById('clock-hand');
-        if(hand) hand.style.transform = `translateX(-50%) rotate(${(10 - timeLeft) * 36}deg)`;
+        if(timeLeft <= 0) {
+            timeLeft = 0;
+            clearInterval(timerInterval);
+            selectAnswer(-1); 
+        }
+        updateClockUI();
     }, 50);
+}
+
+function updateClockUI() {
+    document.getElementById('time-display').innerText = Math.ceil(timeLeft);
+    const rotation = (10 - timeLeft) * 36;
+    const hand = document.getElementById('clock-hand');
+    if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+}
+
+// --- FLAMMEN & STREAK LOGIC ---
+function updateStreakUI() {
+    const streakBadgeEl = document.getElementById('streak-badge');
+    const scoreContainer = document.getElementById('score-container');
+    
+    if (streakBadgeEl) {
+        streakBadgeEl.classList.remove('active-streak', 'blue-streak');
+        if (streak >= 5) {
+            streakBadgeEl.classList.add('active-streak', 'blue-streak');
+            streakBadgeEl.innerText = `🔥 STREAK: ${streak} 🔥`;
+        } else if (streak >= 3) {
+            streakBadgeEl.classList.add('active-streak');
+            streakBadgeEl.innerText = `✨ STREAK: ${streak}`;
+        } else {
+            streakBadgeEl.innerText = "";
+        }
+    }
+
+    if (scoreContainer) {
+        scoreContainer.classList.remove('flames-normal', 'flames-blue');
+        if (streak >= 5) {
+            scoreContainer.classList.add('flames-blue');
+        } else if (streak >= 3) {
+            scoreContainer.classList.add('flames-normal');
+        }
+    }
 }
 
 function selectAnswer(idx, btn) {
     if(isAnswered) return;
-    isAnswered = true; clearInterval(timerInterval);
+    isAnswered = true;
+    clearInterval(timerInterval);
+    
     const correctIdx = quizData[currentQuestionIndex].c;
+    const btns = answersContainer.querySelectorAll('.answer-btn');
+    let oldScore = score;
+
     if(idx === correctIdx) {
-        streak++;
-        score += Math.round(timeLeft * 100 * (isDoublePointsPhase ? 2 : 1));
-        document.getElementById('score-display').innerText = score;
         if(btn) btn.classList.add('correct');
+        
+        streak++;
+        if (streak > maxStreak) maxStreak = streak;
+        
+        let streakMultiplier = 1.0;
+        if (streak >= 5) streakMultiplier = 1.5; 
+        else if (streak >= 3) streakMultiplier = 1.2; 
+        
+        // PUNKTE BERECHNEN UND ROLLEN LASSEN
+        score += Math.round(timeLeft * 100 * streakMultiplier); 
+        animateValue(document.getElementById('score-display'), oldScore, score, 800);
+        
     } else {
         streak = 0;
         if(btn) btn.classList.add('wrong');
+        
+        if (quizScreen) {
+            quizScreen.classList.add('shake-active');
+            setTimeout(() => { quizScreen.classList.remove('shake-active'); }, 500); 
+        }
     }
+    
+    if(btns[correctIdx]) btns[correctIdx].classList.add('correct');
+    updateStreakUI();
+
     setTimeout(() => {
         currentQuestionIndex++;
-        if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) showChapterTransition();
-        else if(currentQuestionIndex < quizData.length) loadQuestion();
-        else showResults();
-    }, 1000);
+        
+        if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) {
+            showChapterTransition();
+        } else if(currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }, 1500);
 }
 
 function showChapterTransition() {
-    const screen = document.getElementById('event-screen');
-    if(screen) { screen.style.display = 'flex'; setTimeout(() => { screen.style.display = 'none'; loadQuestion(); }, 3000); }
+    const nextTopic = quizData[currentQuestionIndex].topic;
+    const titleEl = document.getElementById('event-title');
+    const descEl = document.getElementById('event-desc');
+    
+    if(titleEl) titleEl.innerText = `SHIFT COMPLETED`;
+    if(descEl) descEl.innerText = `NEXT PHASE: ${nextTopic.toUpperCase()}`;
+    
+    if(eventScreen) {
+        eventScreen.style.display = 'flex';
+        eventScreen.classList.add('fade-in-overlay');
+    }
+    
+    let countdownTime = 3;
+    const countdownContainer = document.createElement('div');
+    countdownContainer.id = "transition-countdown";
+    countdownContainer.innerText = countdownTime;
+    if(eventScreen) eventScreen.appendChild(countdownContainer);
+    
+    let countdownInterval = setInterval(() => {
+        countdownTime--;
+        if(countdownTime <= 0) {
+            clearInterval(countdownInterval);
+        } else if (countdownContainer) {
+            countdownContainer.innerText = countdownTime;
+        }
+    }, 800);
+    
+    setTimeout(() => {
+        if(eventScreen) {
+            eventScreen.classList.remove('fade-in-overlay');
+            eventScreen.style.display = 'none';
+            if(document.getElementById("transition-countdown")) {
+                document.getElementById("transition-countdown").remove();
+            }
+        }
+        loadQuestion();
+    }, 2600); 
 }
 
 function showResults() {
     localStorage.setItem('quiz_completedzf', 'true');
+
+    const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
     document.getElementById('result-screen').classList.add('active');
-    document.getElementById('final-score').innerText = score;
-    fetch(FORMSPREE_URL, { method: 'POST', body: JSON.stringify({ score, name: document.getElementById('player-name').value }) });
+    
+    document.getElementById('result-name').innerText = finalName.toUpperCase();
+    
+    // Animiere auch den Final Score
+    animateValue(document.getElementById('final-score'), 0, score, 1500);
+
+    const finalMaxStreakEl = document.getElementById('final-max-streak');
+    if (finalMaxStreakEl) finalMaxStreakEl.innerText = maxStreak;
+
+    fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ 
+            Player: finalName, 
+            Score: score,
+            MaxStreak: maxStreak, 
+            Timestamp: new Date().toLocaleString()
+        })
+    })
+    .then(() => {
+        document.getElementById('mail-status').innerText = "Report transmitted to host successfully.";
+    })
+    .catch(() => {
+        document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
+    });
 }
