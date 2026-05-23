@@ -78,7 +78,7 @@ const quizData = [
     { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
 ];
 
-// --- 3. STATE & AUDIO ---
+// --- 3. STATE & ENGINE ---
 let audioCtx, currentQuestionIndex = 0, score = 0, streak = 0, maxStreak = 0, timeLeft = 10, timerInterval, isAnswered = false, isDoublePointsPhase = false;
 
 function playMechanicalTick() {
@@ -93,7 +93,17 @@ function playMechanicalTick() {
     osc.start(); osc.stop(audioCtx.currentTime + 0.05);
 }
 
-// --- 4. ENGINE FUNCTIONS ---
+function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+}
+
 document.getElementById('start-btn').onclick = () => {
     document.getElementById('start-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
@@ -147,7 +157,6 @@ function startTimer() {
 function selectAnswer(idx, btn) {
     if(isAnswered) return;
     isAnswered = true; clearInterval(timerInterval);
-    
     const correctIdx = quizData[currentQuestionIndex].c;
     if(idx === correctIdx) {
         streak++;
@@ -158,7 +167,6 @@ function selectAnswer(idx, btn) {
         streak = 0;
         if(btn) btn.classList.add('wrong');
     }
-    
     setTimeout(() => {
         currentQuestionIndex++;
         if(currentQuestionIndex < quizData.length && currentQuestionIndex % 10 === 0) showChapterTransition();
@@ -169,8 +177,7 @@ function selectAnswer(idx, btn) {
 
 function showChapterTransition() {
     const screen = document.getElementById('event-screen');
-    screen.style.display = 'flex';
-    setTimeout(() => { screen.style.display = 'none'; loadQuestion(); }, 3000);
+    if(screen) { screen.style.display = 'flex'; setTimeout(() => { screen.style.display = 'none'; loadQuestion(); }, 3000); }
 }
 
 function showResults() {
