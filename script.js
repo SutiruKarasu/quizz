@@ -3,7 +3,7 @@ const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fD
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completedzf3') === 'true') {
+    if (localStorage.getItem('quiz_completedzf') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
@@ -90,28 +90,80 @@ const quizData = [
     { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
 ];
 
-// --- 3. NATIVE AUDIO SYNTHESIS FOR TICK SOUND ---
+// --- 3. NATIVE AUDIO SYNTHESIS FOR SOUND EFFECTS ---
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
+// Mechanisches Ticken
 function playTickSound() {
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
-    osc.type = 'triangle'; // Weicherer, mechanischer Tock-Sound
+    osc.type = 'triangle';
     osc.frequency.setValueAtTime(320, audioCtx.currentTime); 
-    
     gain.gain.setValueAtTime(0.08, audioCtx.currentTime); 
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04); 
-    
     osc.start(audioCtx.currentTime);
     osc.stop(audioCtx.currentTime + 0.04);
+}
+
+// Harmonisches Doppel-Signal bei Richtig
+function playCorrectSound() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    
+    // Erster Ton (helles C)
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(523.25, now); 
+    gain1.gain.setValueAtTime(0.06, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.08);
+
+    // Zweiter Ton kurz danach (höheres E)
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(659.25, now + 0.07); 
+    gain2.gain.setValueAtTime(0.06, now + 0.07);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.start(now + 0.07);
+    osc2.stop(now + 0.22);
+}
+
+// Tieferer Brummton mit Abfall bei Falsch
+function playWrongSound() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+    
+    osc.type = 'sawtooth'; 
+    osc.frequency.setValueAtTime(160, now); 
+    osc.frequency.linearRampToValueAtTime(100, now + 0.25); // Frequenz fällt ab
+    
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(350, now); // Nimmt die schrillen Höhen raus
+    
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start(now);
+    osc.stop(now + 0.25);
 }
 
 // --- 4. CORE LOGIC ---
@@ -130,7 +182,6 @@ const answersContainer = document.getElementById('answers-container');
 const eventScreen = document.getElementById('event-screen');
 const quizScreen = document.getElementById('quiz-screen'); 
 
-// --- ANIMATE SCORE FUNCTION (Casino Roll Effect) ---
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -145,7 +196,6 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// --- START BUTTON WITH PREPARATION TIMER ---
 if (startBtn) {
     startBtn.onclick = () => {
         const nameValue = document.getElementById('player-name').value.trim();
@@ -242,7 +292,6 @@ function updateClockUI() {
     if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 }
 
-// --- STREAK & COLOR-SHIFT CLOCK LOGIC ---
 function updateStreakUI() {
     const streakBadgeEl = document.getElementById('streak-badge');
     const scoreContainer = document.getElementById('score-container');
@@ -286,6 +335,7 @@ function selectAnswer(idx, btn) {
 
     if(idx === correctIdx) {
         if(btn) btn.classList.add('correct');
+        playCorrectSound(); // <-- SOUND BEI RICHTIG
         
         streak++;
         if (streak > maxStreak) maxStreak = streak;
@@ -300,6 +350,7 @@ function selectAnswer(idx, btn) {
     } else {
         streak = 0;
         if(btn) btn.classList.add('wrong');
+        playWrongSound(); // <-- SOUND BEI FALSCH (ODER TIMEOUT)
         
         if (quizScreen) {
             quizScreen.classList.add('shake-active');
@@ -364,7 +415,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completedzf3', 'true');
+    localStorage.setItem('quiz_completedzf', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
