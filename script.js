@@ -1,8 +1,9 @@
-const FORMSPREE_URL = "https://formspree.io/f/xzdojayg";
+// --- GOOGLE SHEETS INTERFACE URL ---
+const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fDpF1VyaeIeSCVcAjYE8FC9kRGB6lHww7iBlzlAch_p0AqSOQ0hyUdl5dCw/exec";
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completedzf') === 'true') {
+    if (localStorage.getItem('quiz_completedzf3') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
@@ -89,13 +90,37 @@ const quizData = [
     { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
 ];
 
+// --- 3. NATIVE AUDIO SYNTHESIS FOR TICK SOUND ---
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
 
-// --- 3. CORE LOGIC ---
+function playTickSound() {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.type = 'triangle'; // Weicherer, mechanischer Tock-Sound
+    osc.frequency.setValueAtTime(320, audioCtx.currentTime); 
+    
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime); 
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04); 
+    
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.04);
+}
+
+// --- 4. CORE LOGIC ---
 let currentQuestionIndex = 0;
 let score = 0;
 let timeLeft = 10.0;
 let timerInterval;
 let isAnswered = false;
+let lastSecond = 10; 
 
 let streak = 0;
 let maxStreak = 0;
@@ -111,7 +136,7 @@ function animateValue(obj, start, end, duration) {
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const easeProgress = progress * (2 - progress); // Leicht abbremsende Kurve
+        const easeProgress = progress * (2 - progress); 
         obj.innerHTML = Math.floor(easeProgress * (end - start) + start);
         if (progress < 1) {
             window.requestAnimationFrame(step);
@@ -120,17 +145,18 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// --- START BUTTON MIT PREPARATION TIMER ---
+// --- START BUTTON WITH PREPARATION TIMER ---
 if (startBtn) {
     startBtn.onclick = () => {
         const nameValue = document.getElementById('player-name').value.trim();
         if(!nameValue) return alert("Please enter your name!");
+        
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
         document.getElementById('start-screen').classList.remove('active');
         
-        // Show Preparation Overlay
         const titleEl = document.getElementById('event-title');
         const descEl = document.getElementById('event-desc');
-        
         titleEl.innerText = "GET READY";
         descEl.innerText = "Focus your mind.";
         
@@ -149,10 +175,10 @@ if (startBtn) {
                 clearInterval(countdownInterval);
             } else {
                 countdownContainer.innerText = countdownTime;
+                playTickSound();
             }
         }, 1000);
         
-        // Timer vorbei -> Quiz starten
         setTimeout(() => {
             eventScreen.classList.remove('fade-in-overlay');
             eventScreen.style.display = 'none';
@@ -168,6 +194,7 @@ if (startBtn) {
 function loadQuestion() {
     isAnswered = false;
     timeLeft = 10.0;
+    lastSecond = 10;
     const q = quizData[currentQuestionIndex];
     
     document.getElementById('topic-display').innerText = q.topic.toUpperCase();
@@ -192,6 +219,13 @@ function startTimer() {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         timeLeft -= 0.05;
+        
+        let currentSecond = Math.ceil(timeLeft);
+        if (currentSecond < lastSecond && currentSecond > 0 && !isAnswered) {
+            playTickSound();
+            lastSecond = currentSecond;
+        }
+
         if(timeLeft <= 0) {
             timeLeft = 0;
             clearInterval(timerInterval);
@@ -208,10 +242,11 @@ function updateClockUI() {
     if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 }
 
-// --- FLAMMEN & STREAK LOGIC ---
+// --- STREAK & COLOR-SHIFT CLOCK LOGIC ---
 function updateStreakUI() {
     const streakBadgeEl = document.getElementById('streak-badge');
     const scoreContainer = document.getElementById('score-container');
+    const timerRing = document.querySelector('.timer-ring');
     
     if (streakBadgeEl) {
         streakBadgeEl.classList.remove('active-streak', 'blue-streak');
@@ -226,12 +261,16 @@ function updateStreakUI() {
         }
     }
 
-    if (scoreContainer) {
+    if (scoreContainer && timerRing) {
         scoreContainer.classList.remove('flames-normal', 'flames-blue');
+        timerRing.classList.remove('flames-normal', 'flames-blue');
+        
         if (streak >= 5) {
             scoreContainer.classList.add('flames-blue');
+            timerRing.classList.add('flames-blue'); 
         } else if (streak >= 3) {
             scoreContainer.classList.add('flames-normal');
+            timerRing.classList.add('flames-normal');
         }
     }
 }
@@ -255,7 +294,6 @@ function selectAnswer(idx, btn) {
         if (streak >= 5) streakMultiplier = 1.5; 
         else if (streak >= 3) streakMultiplier = 1.2; 
         
-        // PUNKTE BERECHNEN UND ROLLEN LASSEN
         score += Math.round(timeLeft * 100 * streakMultiplier); 
         animateValue(document.getElementById('score-display'), oldScore, score, 800);
         
@@ -326,34 +364,34 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completedzf', 'true');
+    localStorage.setItem('quiz_completedzf3', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
     document.getElementById('result-screen').classList.add('active');
     
     document.getElementById('result-name').innerText = finalName.toUpperCase();
-    
-    // Animiere auch den Final Score
     animateValue(document.getElementById('final-score'), 0, score, 1500);
 
     const finalMaxStreakEl = document.getElementById('final-max-streak');
     if (finalMaxStreakEl) finalMaxStreakEl.innerText = maxStreak;
 
-    fetch(FORMSPREE_URL, {
+    // DATA SYNC WITH GOOGLE SHEETS
+    fetch(GOOGLE_WEB_APP_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        mode: 'no-cors', 
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
             Player: finalName, 
             Score: score,
-            MaxStreak: maxStreak, 
-            Timestamp: new Date().toLocaleString()
+            Timestamp: new Date().toLocaleTimeString('de-DE') + ' Uhr'
         })
     })
     .then(() => {
-        document.getElementById('mail-status').innerText = "Report transmitted to host successfully.";
+        document.getElementById('mail-status').innerText = "Data safely stored in Google Sheets.";
     })
-    .catch(() => {
+    .catch((err) => {
+        console.error(err);
         document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
     });
 }
