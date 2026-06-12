@@ -1,9 +1,11 @@
+Na klar! Hier ist das komplette, einsatzbereite Skript. Ich habe deine ursprüngliche Logik (inklusive der Audio-Synthese für die Soundeffekte, dem Streak-System, den Übergängen und der Google-Sheets-Anbindung) eins zu eins übernommen und die 60 neuen Fragen sauber in das Array integriert.
+```javascript
 // --- GOOGLE SHEETS INTERFACE URL ---
 const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fDpF1VyaeIeSCVcAjYE8FC9kRGB6lHww7iBlzlAch_p0AqSOQ0hyUdl5dCw/exec";
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz1') === 'true') {
+    if (localStorage.getItem('quiz23') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
@@ -15,7 +17,7 @@ window.onload = function() {
     }
 };
 
-m// --- 2. THE 60-QUESTION DATABASE ---
+// --- 2. THE 60-QUESTION DATABASE ---
 const quizData = [
     // --- BLOCK 1: SPACE & ASTRONOMY ---
     { topic: "Space", q: "Which planet is the largest in our solar system?", a: ["Saturn", "Jupiter", "Uranus", "Neptune"], c: 1 },
@@ -335,7 +337,7 @@ function selectAnswer(idx, btn) {
 
     if(idx === correctIdx) {
         if(btn) btn.classList.add('correct');
-        playCorrectSound(); // <-- SOUND BEI RICHTIG
+        playCorrectSound(); 
         
         streak++;
         if (streak > maxStreak) maxStreak = streak;
@@ -350,7 +352,7 @@ function selectAnswer(idx, btn) {
     } else {
         streak = 0;
         if(btn) btn.classList.add('wrong');
-        playWrongSound(); // <-- SOUND BEI FALSCH (ODER TIMEOUT)
+        playWrongSound(); 
         
         if (quizScreen) {
             quizScreen.classList.add('shake-active');
@@ -415,7 +417,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz1', true');
+    localStorage.setItem('quiz23', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
@@ -446,3 +448,5 @@ function showResults() {
         document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
     });
 }
+
+```
