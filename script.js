@@ -15,79 +15,79 @@ window.onload = function() {
     }
 };
 
-// --- 2. THE 60-QUESTION DATABASE ---
+m// --- 2. THE 60-QUESTION DATABASE ---
 const quizData = [
-    // --- BLOCK 1: CELEBRITY SECRETS & TRIVIA ---
-    { topic: "Celebrity Secrets", q: "Which Hollywood actor famously bought a haunted mansion and a dinosaur skull?", a: ["Johnny Depp", "Nicolas Cage", "Brad Pitt", "Keanu Reeves"], c: 1 },
-    { topic: "Celebrity Secrets", q: "Which pop star's real name is Stefani Joanne Angelina Germanotta?", a: ["Lady Gaga", "Madonna", "Katy Perry", "Rihanna"], c: 0 },
-    { topic: "Celebrity Secrets", q: "Before becoming a global movie star, which actor worked as a professional wrestler known as 'The Rock'?", a: ["John Cena", "Jason Statham", "Dwayne Johnson", "Vin Diesel"], c: 2 },
-    { topic: "Celebrity Secrets", q: "Which singer famously has a phobia of indoor plants and refuses them in her dressing rooms?", a: ["Beyoncé", "Taylor Swift", "Christina Aguilera", "Britney Spears"], c: 3 },
-    { topic: "Celebrity Secrets", q: "Which billionaire tech founder made a cameo appearance as a robot-fighting enthusiast in 'Iron Man 2'?", a: ["Bill Gates", "Mark Zuckerberg", "Elon Musk", "Jeff Bezos"], c: 2 },
-    { topic: "Celebrity Secrets", q: "Which famous actor spent his early years performing as a stand-up comedian and a mime?", a: ["Jim Carrey", "Robin Williams", "Tom Hanks", "Adam Sandler"], c: 1 },
-    { topic: "Celebrity Secrets", q: "Which pop star icon famously owned a pet chimpanzee named 'Bubbles' in the 1980s?", a: ["Prince", "Michael Jackson", "David Bowie", "Freddie Mercury"], c: 1 },
-    { topic: "Celebrity Secrets", q: "Which actor cut his hand open while filming a dinner scene in 'Django Unchained' but kept acting through the scene?", a: ["Leonardo DiCaprio", "Jamie Foxx", "Brad Pitt", "Christoph Waltz"], c: 0 },
-    { topic: "Celebrity Secrets", q: "Which country music legend and icon is the godmother of pop star Miley Cyrus?", a: ["Cher", "Dolly Parton", "Shania Twain", "Tina Turner"], c: 1 },
-    { topic: "Celebrity Secrets", q: "Which superstar famously insured his iconic smile and teeth for several million dollars?", a: ["Tom Cruise", "Julia Roberts", "Jim Carrey", "Cristiano Ronaldo"], c: 1 },
+    // --- BLOCK 1: SPACE & ASTRONOMY ---
+    { topic: "Space", q: "Which planet is the largest in our solar system?", a: ["Saturn", "Jupiter", "Uranus", "Neptune"], c: 1 },
+    { topic: "Space", q: "Who was the first human to ever travel into space?", a: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"], c: 2 },
+    { topic: "Space", q: "Which is the hottest planet in our solar system?", a: ["Mercury", "Mars", "Venus", "Jupiter"], c: 2 },
+    { topic: "Space", q: "What is the name of the galaxy that contains Earth?", a: ["Andromeda", "Sombrero", "Triangulum", "Milky Way"], c: 3 },
+    { topic: "Space", q: "As of recent discoveries, which planet has the most moons?", a: ["Jupiter", "Saturn", "Uranus", "Neptune"], c: 1 },
+    { topic: "Space", q: "Which astronomer formulated the laws of planetary motion?", a: ["Galileo Galilei", "Isaac Newton", "Johannes Kepler", "Nicolaus Copernicus"], c: 2 },
+    { topic: "Space", q: "What exactly is the 'Great Red Spot' on Jupiter?", a: ["A massive storm", "A giant volcano", "An ocean of lava", "A massive crater"], c: 0 },
+    { topic: "Space", q: "Which Apollo mission was the first to successfully land humans on the Moon?", a: ["Apollo 8", "Apollo 11", "Apollo 13", "Apollo 17"], c: 1 },
+    { topic: "Space", q: "What is the closest star to Earth?", a: ["The Sun", "Proxima Centauri", "Sirius", "Alpha Centauri A"], c: 0 },
+    { topic: "Space", q: "Which planet is often referred to as the 'Red Planet' due to its iron oxide surface?", a: ["Venus", "Jupiter", "Saturn", "Mars"], c: 3 },
 
-    // --- BLOCK 2: NATURE & WILDLIFE ---
-    { topic: "Nature", q: "Which bird is globally recognized as the fastest animal on Earth when diving for prey?", a: ["Golden Eagle", "Peregrine Falcon", "Ostrich", "Hummingbird"], c: 1 },
-    { topic: "Nature", q: "What is the largest living structure on Earth, visible even from outer space?", a: ["The Amazon Rainforest", "The Great Barrier Reef", "The Grand Canyon", "Mount Everest"], c: 1 },
-    { topic: "Nature", q: "Which mammal has the densest and thickest fur of any animal on the planet?", a: ["Polar Bear", "Sea Otter", "Grizzly Bear", "Arctic Fox"], c: 1 },
-    { topic: "Nature", q: "How many bones does a shark have in its entire body naturally?", a: ["0", "50", "200", "400"], c: 0 },
-    { topic: "Nature", q: "What is the only mammal naturally capable of true, sustained flight?", a: ["Flying Squirrel", "Bat", "Sugar Glider", "Eagle"], c: 1 },
-    { topic: "Nature", q: "Which tree species is considered the tallest growing organism on Earth?", a: ["Oak", "Coast Redwood", "Baobab", "Pine"], c: 1 },
-    { topic: "Nature", q: "What percentage of the Earth's surface is covered by oceans and water?", a: ["50%", "60%", "71%", "85%"], c: 2 },
-    { topic: "Nature", q: "Which insect is known for migrating thousands of miles across America every single year?", a: ["Honeybee", "Monarch Butterfly", "Locust", "Dragonfly"], c: 1 },
-    { topic: "Nature", q: "Which deep-sea creature has three separate hearts and blue blood flowing through its body?", a: ["Blue Whale", "Great White Shark", "Octopus", "Jellyfish"], c: 2 },
-    { topic: "Nature", q: "What is the primary gas that makes up the majority of the Earth's atmosphere?", a: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], c: 1 },
+    // --- BLOCK 2: FOOD & CULINARY HISTORY ---
+    { topic: "Food History", q: "Which European country is credited with inventing the modern pizza?", a: ["France", "Italy", "Greece", "Spain"], c: 1 },
+    { topic: "Food History", q: "What is the primary ingredient used to make traditional guacamole?", a: ["Tomato", "Onion", "Avocado", "Lime"], c: 2 },
+    { topic: "Food History", q: "Which spice is known as the most expensive in the world by weight?", a: ["Saffron", "Vanilla", "Cardamom", "Cinnamon"], c: 0 },
+    { topic: "Food History", q: "What rice-based seafood dish is considered the national dish of Spain?", a: ["Tapas", "Paella", "Tortilla", "Gazpacho"], c: 1 },
+    { topic: "Food History", q: "Despite their name, 'French fries' were actually invented in which country?", a: ["France", "USA", "Belgium", "Germany"], c: 2 },
+    { topic: "Food History", q: "Botanically speaking, what type of food is a macadamia?", a: ["Fruit", "Nut", "Vegetable", "Legume"], c: 1 },
+    { topic: "Food History", q: "Which country currently stands as the largest producer of coffee in the world?", a: ["Colombia", "Vietnam", "Ethiopia", "Brazil"], c: 3 },
+    { topic: "Food History", q: "According to global retail data, what is the most frequently stolen food in the world?", a: ["Cheese", "Chocolate", "Meat", "Wine"], c: 0 },
+    { topic: "Food History", q: "The popular hot sauce 'Sriracha' is named after a coastal city in which country?", a: ["Vietnam", "Japan", "Thailand", "China"], c: 2 },
+    { topic: "Food History", q: "What plant is traditional tofu primarily made from?", a: ["Rice", "Soybeans", "Wheat", "Corn"], c: 1 },
 
-    // --- BLOCK 3: DISNEY MAGIC ---
-    { topic: "Disney", q: "What is the name of Mickey Mouse's loyal and iconic pet dog?", a: ["Goofy", "Donald", "Pluto", "Bolt"], c: 2 },
-    { topic: "Disney", q: "In the movie 'The Lion King', what does the famous phrase 'Hakuna Matata' mean?", a: ["No worries", "Stay strong", "Family forever", "Good morning"], c: 0 },
-    { topic: "Disney", q: "Which Disney princess famously loses a glass slipper at the royal ball at midnight?", a: ["Snow White", "Cinderella", "Belle", "Ariel"], c: 1 },
-    { topic: "Disney", q: "What is the name of the live-action and animated hybrid universe where superhero 'Captain Jack Sparrow' sails?", a: ["Pirates of the Caribbean", "Peter Pan", "Treasure Planet", "Atlantis"], c: 0 },
-    { topic: "Disney", q: "In 'Aladdin', what type of animal is Jasmine's loyal companion named Rajah?", a: ["Monkey", "Tiger", "Parrot", "Elephant"], c: 1 },
-    { topic: "Disney", q: "Which Disney animated movie features the hit song 'Let It Go' sung by Queen Elsa?", a: ["Tangled", "Brave", "Frozen", "Moana"], c: 2 },
-    { topic: "Disney", q: "What is the name of the fairy companion who accompanies Peter Pan on his adventures?", a: ["Maleficent", "Tinker Bell", "Flora", "Blue Fairy"], c: 1 },
-    { topic: "Disney", q: "How many years did the Genie spend trapped inside the magic lamp before Aladdin found him?", a: ["100 years", "1,000 years", "10,000 years", "50,000 years"], c: 2 },
-    { topic: "Disney", q: "In 'Finding Nemo', what specific type of fish is Nemo and his father Marlin?", a: ["Clownfish", "Blue Tang", "Goldfish", "Pufferfish"], c: 0 },
-    { topic: "Disney", q: "Which classic Disney movie was the very first full-length animated feature film ever released?", a: ["Pinocchio", "Bambi", "Snow White and the Seven Dwarfs", "Dumbo"], c: 2 },
+    // --- BLOCK 3: TECHNOLOGY & INVENTIONS ---
+    { topic: "Technology", q: "Who is widely considered the father of theoretical computer science and artificial intelligence?", a: ["Bill Gates", "Steve Jobs", "Alan Turing", "Charles Babbage"], c: 2 },
+    { topic: "Technology", q: "In website URLs, what does 'HTTP' stand for?", a: ["HyperText Transfer Protocol", "High-Tech Transfer Program", "Hyper-Transfer Text Page", "Hyperlink Text Process"], c: 0 },
+    { topic: "Technology", q: "Which company created the first commercially available handheld mobile phone in 1983?", a: ["Nokia", "Motorola", "Apple", "Samsung"], c: 1 },
+    { topic: "Technology", q: "In what year did Tim Berners-Lee invent the World Wide Web?", a: ["1985", "1989", "1995", "1999"], c: 1 },
+    { topic: "Technology", q: "Launched in 1957, what was the name of the first artificial Earth satellite?", a: ["Sputnik 1", "Apollo 1", "Voyager 1", "Explorer 1"], c: 0 },
+    { topic: "Technology", q: "Who is credited with inventing the first practical telephone?", a: ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Guglielmo Marconi"], c: 1 },
+    { topic: "Technology", q: "What does the 'U' in the acronym USB stand for?", a: ["Unified", "Unique", "Universal", "Utility"], c: 2 },
+    { topic: "Technology", q: "Which massive social media platform originally launched under the name 'Twttr'?", a: ["Facebook", "Twitter", "Instagram", "Snapchat"], c: 1 },
+    { topic: "Technology", q: "What was the name of the first programmable, general-purpose electronic digital computer?", a: ["UNIVAC", "Colossus", "Mark I", "ENIAC"], c: 3 },
+    { topic: "Technology", q: "Who co-founded Microsoft alongside Bill Gates?", a: ["Paul Allen", "Steve Wozniak", "Larry Page", "Elon Musk"], c: 0 },
 
-    // --- BLOCK 4: MEDIA, TV & MOVIES ---
-    { topic: "Media", q: "Which epic fantasy TV show features the rival families Stark, Lannister, and Targaryen?", a: ["The Witcher", "Lord of the Rings", "Game of Thrones", "House of the Dragon"], c: 2 },
-    { topic: "Media", q: "What is the highest-grossing movie of all time at the global box office?", a: ["Titanic", "Avengers: Endgame", "Avatar", "Star Wars: The Force Awakens"], c: 2 },
-    { topic: "Media", q: "Which iconic sitcom revolves around a group of six friends living in New York City hanging out at 'Central Perk'?", a: ["How I Met Your Mother", "The Big Bang Theory", "Friends", "The Office"], c: 2 },
-    { topic: "Media", q: "Who directed the legendary sci-fi and action movies 'Inception', 'The Dark Knight', and 'Oppenheimer'?", a: ["Steven Spielberg", "Quentin Tarantino", "Christopher Nolan", "James Cameron"], c: 2 },
-    { topic: "Media", q: "Which fictional dystopian game show went viral as Netflix's most-watched series launch of all time?", a: ["Stranger Things", "Squid Game", "Money Heist", "The Crown"], c: 1 },
-    { topic: "Media", q: "In the 'Harry Potter' universe, what is the name of the prison guarded by Dementors?", a: ["Azkaban", "Hogwarts", "Gringotts", "Nurmengard"], c: 0 },
-    { topic: "Media", q: "Which major social media app revolutionized mobile video content with a continuous 'For You' feed?", a: ["Instagram", "Snapchat", "TikTok", "X / Twitter"], c: 2 },
-    { topic: "Media", q: "Which famous secret agent card-number designation is held by James Bond?", a: ["005", "007", "009", "011"], c: 1 },
-    { topic: "Media", q: "What is the name of the fiktive town where the mysterious events of 'Stranger Things' take place?", a: ["Springfield", "Riverdale", "Hawkins", "Mystic Falls"], c: 2 },
-    { topic: "Media", q: "Which movie won the historic Oscar for Best Picture at the Academy Awards in 2020 as the first non-English film?", a: ["1917", "Parasite", "Joker", "Once Upon a Time in Hollywood"], c: 1 },
+    // --- BLOCK 4: MUSIC HISTORY & LEGENDS ---
+    { topic: "Music Legends", q: "Which global superstar is universally referred to as the 'King of Pop'?", a: ["Elvis Presley", "Prince", "Michael Jackson", "Stevie Wonder"], c: 2 },
+    { topic: "Music Legends", q: "Which British rock band released the legendary 1973 album 'The Dark Side of the Moon'?", a: ["The Beatles", "Pink Floyd", "Led Zeppelin", "The Rolling Stones"], c: 1 },
+    { topic: "Music Legends", q: "How many strings does a standard acoustic violin have?", a: ["Four", "Five", "Six", "Eight"], c: 0 },
+    { topic: "Music Legends", q: "Which composer famously wrote 'Symphony No. 9' while completely deaf?", a: ["Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach", "Frederic Chopin"], c: 1 },
+    { topic: "Music Legends", q: "Which legendary guitarist played an iconic rendition of the US National Anthem at Woodstock?", a: ["Eric Clapton", "Jimmy Page", "Carlos Santana", "Jimi Hendrix"], c: 3 },
+    { topic: "Music Legends", q: "According to Guinness World Records, what is the best-selling single of all time?", a: ["Bohemian Rhapsody", "Thriller", "White Christmas", "Shape of You"], c: 2 },
+    { topic: "Music Legends", q: "Freddie Mercury was the legendary lead singer of which iconic rock band?", a: ["AC/DC", "Queen", "Aerosmith", "Guns N' Roses"], c: 1 },
+    { topic: "Music Legends", q: "What genre of music originated in the African-American communities of New Orleans?", a: ["Jazz", "Blues", "Country", "Rock and Roll"], c: 0 },
+    { topic: "Music Legends", q: "Which female artist is widely known as the 'Queen of Soul'?", a: ["Diana Ross", "Whitney Houston", "Aretha Franklin", "Tina Turner"], c: 2 },
+    { topic: "Music Legends", q: "The legendary rock band 'The Beatles' originated from which English city?", a: ["London", "Liverpool", "Manchester", "Birmingham"], c: 1 },
 
-    // --- BLOCK 5: GLOBAL CULTURES & TRADITIONS ---
-    { topic: "Cultures", q: "Which traditional festival, known as the 'Festival of Colors', is celebrated widely in India?", a: ["Diwali", "Holi", "Eid", "Ramadan"], c: 1 },
-    { topic: "Cultures", q: "In Japanese culture, what is the traditional, floor-length robe worn for formal occasions called?", a: ["Sari", "Kimono", "Kilt", "Hanbok"], c: 1 },
-    { topic: "Cultures", q: "Which European country is culturally famous for the traditional Oktoberfest and Bratwurst?", a: ["Austria", "Switzerland", "Germany", "Belgium"], c: 2 },
-    { topic: "Cultures", q: "What iconic, historical stone structure was built over centuries to protect the northern borders of China?", a: ["The Great Wall of China", "The Terracotta Army", "The Forbidden City", "The Summer Palace"], c: 0 },
-    { topic: "Cultures", q: "Which country is the birthplace of the traditional 'Day of the Dead' (Día de los Muertos) celebration?", a: ["Spain", "Brazil", "Mexico", "Colombia"], c: 2 },
-    { topic: "Cultures", q: "What traditional martial art and national sport of Korea focuses primarily on dynamic kicking techniques?", a: ["Karate", "Kung Fu", "Taekwondo", "Judo"], c: 2 },
-    { topic: "Cultures", q: "Which ancient civilization constructed the famous mountaintop citadel of Machu Picchu in Peru?", a: ["Aztecs", "Mayans", "Incas", "Romans"], c: 2 },
-    { topic: "Cultures", q: "What is the traditional name of the pattern-woven, wool skirt worn by men in Scotland?", a: ["Toga", "Kilt", "Sarong", "Poncho"], c: 1 },
-    { topic: "Cultures", q: "In Italy, which city is globally celebrated as the historic birthplace of the classic Pizza?", a: ["Rome", "Milan", "Naples", "Florence"], c: 2 },
-    { topic: "Cultures", q: "Which country is famous for its traditional wooden 'Sauna' culture, outnumbering the cars in the nation?", a: ["Sweden", "Norway", "Finland", "Iceland"], c: 2 },
+    // --- BLOCK 5: MYTHOLOGY & FOLKLORE ---
+    { topic: "Mythology", q: "In ancient Greek mythology, who is the King of the Gods?", a: ["Poseidon", "Hades", "Zeus", "Apollo"], c: 2 },
+    { topic: "Mythology", q: "What is the name of King Arthur's legendary magical sword?", a: ["Joyeuse", "Excalibur", "Durandal", "Balisarda"], c: 1 },
+    { topic: "Mythology", q: "In Norse mythology, what is the name of the thunder god Thor's hammer?", a: ["Mjölnir", "Gungnir", "Leviathan", "Aegis"], c: 0 },
+    { topic: "Mythology", q: "Which mythical bird is famous for bursting into flames and being reborn from its own ashes?", a: ["Griffin", "Dragon", "Pegasus", "Phoenix"], c: 3 },
+    { topic: "Mythology", q: "Who was the ancient Egyptian god of the afterlife, the underworld, and the dead?", a: ["Ra", "Osiris", "Anubis", "Horus"], c: 1 },
+    { topic: "Mythology", q: "Which gorgon from Greek myth had snakes for hair and could turn onlookers to stone?", a: ["Chimera", "Hydra", "Medusa", "Sphinx"], c: 2 },
+    { topic: "Mythology", q: "In Roman mythology, who is the god of war?", a: ["Mars", "Jupiter", "Neptune", "Vulcan"], c: 0 },
+    { topic: "Mythology", q: "Which legendary cryptid is said to inhabit a famous loch in the Scottish Highlands?", a: ["Banshee", "Loch Ness Monster", "Kelpie", "Selkie"], c: 1 },
+    { topic: "Mythology", q: "According to Plato, what highly advanced legendary island nation sank into the ocean?", a: ["Avalon", "El Dorado", "Atlantis", "Lemuria"], c: 2 },
+    { topic: "Mythology", q: "In Japanese folklore, what are the supernatural spirits and entities known as 'Yokai'?", a: ["Monsters and spirits", "Samurai ancestors", "Holy dragons", "Temple priests"], c: 0 },
 
-    // --- BLOCK 6: GAMING & RETRO HITS ---
-    { topic: "Gaming & Retro Hits", q: "Which iconic video game character is a yellow circle that eats dots while running from ghosts?", a: ["Mario", "Sonic", "Pac-Man", "Donkey Kong"], c: 2 },
-    { topic: "Gaming & Retro Hits", q: "What is the best-selling video game of all time, allowing players to build with blocks?", a: ["GTA V", "Tetris", "Minecraft", "Wii Sports"], c: 2 },
-    { topic: "Gaming & Retro Hits", q: "Which Italian plumber is the official mascot of the gaming company Nintendo?", a: ["Luigi", "Wario", "Mario", "Yoshi"], c: 2 },
-    { topic: "Gaming & Retro Hits", q: "What retro puzzle game requires players to fit falling geometric shapes perfectly into lines?", a: ["Pac-Man", "Tetris", "Space Invaders", "Pong"], c: 1 },
-    { topic: "Gaming & Retro Hits", q: "Which handheld gaming console, released by Nintendo in 1989, popularized Tetris worldwide?", a: ["Game Boy", "NES", "Sega Genesis", "PlayStation"], c: 0 },
-    { topic: "Gaming & Retro Hits", q: "What is the name of the main green-clad hero and adventurer in 'The Legend of Zelda' series?", a: ["Zelda", "Link", "Ganon", "Mario"], c: 1 },
-    { topic: "Gaming & Retro Hits", q: "Which blue hedgehog is famous for running at supersonic speeds as Sega's mascot?", a: ["Crash Bandicoot", "Spyro", "Sonic", "Mega Man"], c: 2 },
-    { topic: "Gaming & Retro Hits", q: "In the hit game 'Pokémon', which yellow electric mouse is creature number #025?", a: ["Charmander", "Bulbasaur", "Pikachu", "Squirtle"], c: 2 },
-    { topic: "Gaming & Retro Hits", q: "Which ultra-popular battle royale game features massive building mechanics and cultural dance emotes?", a: ["PUBG", "Fortnite", "Apex Legends", "Call of Duty"], c: 1 },
-    { topic: "Gaming & Retro Hits", q: "What iconic 1970s arcade game is considered the very first commercially successful video game, simulating table tennis?", a: ["Space Invaders", "Asteroids", "Pong", "Pac-Man"], c: 2 }
+    // --- BLOCK 6: HUMAN ANATOMY & BIOLOGY ---
+    { topic: "Anatomy", q: "What is the largest organ in the human body?", a: ["Liver", "Skin", "Lungs", "Heart"], c: 1 },
+    { topic: "Anatomy", q: "How many bones are there in a standard adult human body?", a: ["186", "195", "206", "215"], c: 2 },
+    { topic: "Anatomy", q: "Which part of the human brain is primarily responsible for balance and coordination?", a: ["Cerebellum", "Cerebrum", "Brainstem", "Hypothalamus"], c: 0 },
+    { topic: "Anatomy", q: "What is the primary biological function of red blood cells?", a: ["Fighting infection", "Clotting blood", "Digesting food", "Carrying oxygen"], c: 3 },
+    { topic: "Anatomy", q: "What is the rarest human blood type across the global population?", a: ["O Positive", "AB Negative", "A Negative", "B Positive"], c: 1 },
+    { topic: "Anatomy", q: "Which major organ is responsible for pumping oxygenated blood throughout the body?", a: ["Heart", "Lungs", "Kidneys", "Brain"], c: 0 },
+    { topic: "Anatomy", q: "What is the hardest naturally occurring substance in the human body?", a: ["Femur bone", "Skull", "Tooth enamel", "Kneecap"], c: 2 },
+    { topic: "Anatomy", q: "Where are the smallest bones in the human body (the ossicles) located?", a: ["Fingers", "Ear", "Toes", "Nose"], c: 1 },
+    { topic: "Anatomy", q: "What is the chemical acronym for the molecule that provides energy to cells?", a: ["DNA", "ATP", "RNA", "H2O"], c: 1 },
+    { topic: "Anatomy", q: "Which human internal organ has the unique ability to regenerate itself from as little as 25% of its tissue?", a: ["Heart", "Brain", "Lungs", "Liver"], c: 3 }
 ];
 
 // --- 3. NATIVE AUDIO SYNTHESIS FOR SOUND EFFECTS ---
