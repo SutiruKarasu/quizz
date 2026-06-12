@@ -3,7 +3,7 @@ const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fD
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_completedzf') === 'true') {
+    if (localStorage.getItem('quiz1') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
@@ -415,7 +415,7 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_completedzf', 'true');
+    localStorage.setItem('quiz1', true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
