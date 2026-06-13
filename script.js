@@ -3,7 +3,8 @@ const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fD
 
 // --- 1. ACCESS CONTROL ---
 window.onload = function() {
-    if (localStorage.getItem('quiz_c') === 'true') {
+    // Geändert auf 'quiz_v2', damit alte Spieler wieder teilnehmen können
+    if (localStorage.getItem('quiz_v2') === 'true') {
         document.getElementById('start-screen').innerHTML = `
             <div class="login-card" style="text-align: center;">
                 <h1 style="color: #ff4757; margin-bottom: 15px;">Shift Denied</h1>
@@ -15,79 +16,79 @@ window.onload = function() {
     }
 };
 
-// --- 2. THE 60-QUESTION DATABASE ---
+// --- 2. THE 60-QUESTION DATABASE (NEW QUESTIONS) ---
 const quizData = [
-    // --- BLOCK 1: SPACE & COSMOS ---
-    { topic: "Space", q: "Which planet is known as the 'Red Planet'?", a: ["Venus", "Mars", "Jupiter", "Saturn"], c: 1 },
-    { topic: "Space", q: "What is the largest planet in our solar system?", a: ["Earth", "Saturn", "Jupiter", "Neptune"], c: 2 },
-    { topic: "Space", q: "Which galaxy is home to the Earth?", a: ["Andromeda", "Milky Way", "Sombrero", "Triangulum"], c: 1 },
-    { topic: "Space", q: "What is the closest star to Earth?", a: ["Proxima Centauri", "Sirius", "The Sun", "Betelgeuse"], c: 2 },
-    { topic: "Space", q: "Which moon of Saturn is famous for having a thick atmosphere and liquid lakes?", a: ["Titan", "Enceladus", "Europa", "Io"], c: 0 },
-    { topic: "Space", q: "What do we call a star that has collapsed under its own gravity?", a: ["Red Dwarf", "Black Hole", "White Dwarf", "Supernova"], c: 1 },
-    { topic: "Space", q: "How many planets are currently recognized in our solar system?", a: ["7", "8", "9", "10"], c: 1 },
-    { topic: "Space", q: "Which planet rotates on its side?", a: ["Uranus", "Neptune", "Mercury", "Mars"], c: 0 },
-    { topic: "Space", q: "What is the name of the first human-made satellite to orbit Earth?", a: ["Apollo 11", "Sputnik 1", "Voyager", "Hubble"], c: 1 },
-    { topic: "Space", q: "What is the study of the universe called?", a: ["Astrology", "Astronomy", "Geology", "Physics"], c: 1 },
+    // --- BLOCK 1: NATURE & ANIMALS ---
+    { topic: "Nature", q: "What is the fastest land animal?", a: ["Cheetah", "Lion", "Horse", "Gazelle"], c: 0 },
+    { topic: "Nature", q: "What is the largest mammal in the world?", a: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"], c: 1 },
+    { topic: "Nature", q: "Which bird is known for its ability to fly backwards?", a: ["Eagle", "Pigeon", "Hummingbird", "Woodpecker"], c: 2 },
+    { topic: "Nature", q: "How many legs does an arachnid (spider) have?", a: ["6", "8", "10", "12"], c: 1 },
+    { topic: "Nature", q: "What do you call a group of lions?", a: ["Pack", "Herd", "Flock", "Pride"], c: 3 },
+    { topic: "Nature", q: "Which sea creature has three hearts?", a: ["Dolphin", "Shark", "Octopus", "Seahorse"], c: 2 },
+    { topic: "Nature", q: "What is the tallest species of tree in the world?", a: ["Oak", "Redwood", "Pine", "Maple"], c: 1 },
+    { topic: "Nature", q: "Which bear lives exclusively in the Arctic?", a: ["Grizzly Bear", "Black Bear", "Polar Bear", "Panda Bear"], c: 2 },
+    { topic: "Nature", q: "What is the national animal of Australia?", a: ["Koala", "Kangaroo", "Platypus", "Emu"], c: 1 },
+    { topic: "Nature", q: "Which animal is known to have the longest lifespan?", a: ["Giant Tortoise", "Elephant", "Parrot", "Chimpanzee"], c: 0 },
 
-    // --- BLOCK 2: WORLD HISTORY ---
-    { topic: "History", q: "Who was the first Emperor of Rome?", a: ["Julius Caesar", "Augustus", "Nero", "Constantine"], c: 1 },
-    { topic: "History", q: "In which year did the Titanic sink?", a: ["1910", "1912", "1914", "1918"], c: 1 },
-    { topic: "History", q: "Which civilization built the pyramids of Giza?", a: ["Romans", "Greeks", "Egyptians", "Mayans"], c: 2 },
-    { topic: "History", q: "Who painted the Mona Lisa?", a: ["Van Gogh", "Picasso", "Da Vinci", "Michelangelo"], c: 2 },
-    { topic: "History", q: "Which war was fought between the North and South regions of the US?", a: ["WWII", "Civil War", "Revolutionary War", "Cold War"], c: 1 },
-    { topic: "History", q: "Who discovered electricity?", a: ["Nikola Tesla", "Benjamin Franklin", "Thomas Edison", "Isaac Newton"], c: 1 },
-    { topic: "History", q: "What was the name of the ship that brought the Pilgrims to America?", a: ["Santa Maria", "Mayflower", "Endeavour", "Beagle"], c: 1 },
-    { topic: "History", q: "The Berlin Wall fell in which year?", a: ["1987", "1989", "1991", "1993"], c: 1 },
-    { topic: "History", q: "Who was the longest-reigning British monarch?", a: ["Victoria", "Elizabeth I", "Elizabeth II", "George III"], c: 2 },
-    { topic: "History", q: "Which empire was ruled by Genghis Khan?", a: ["Ottoman", "Mongol", "Persian", "Roman"], c: 1 },
+    // --- BLOCK 2: FOOD & DRINK ---
+    { topic: "Food", q: "What is the primary ingredient in guacamole?", a: ["Tomato", "Avocado", "Onion", "Lime"], c: 1 },
+    { topic: "Food", q: "Which country is the origin of Pizza?", a: ["France", "Greece", "USA", "Italy"], c: 3 },
+    { topic: "Food", q: "What is sushi traditionally wrapped in?", a: ["Lettuce", "Rice Paper", "Seaweed", "Tortilla"], c: 2 },
+    { topic: "Food", q: "Which nut is used to make marzipan?", a: ["Peanut", "Almond", "Walnut", "Cashew"], c: 1 },
+    { topic: "Food", q: "What is tofu made from?", a: ["Wheat", "Almonds", "Soybeans", "Rice"], c: 2 },
+    { topic: "Food", q: "Which fast-food chain is famous for the 'Golden Arches'?", a: ["Burger King", "Wendy's", "McDonald's", "KFC"], c: 2 },
+    { topic: "Food", q: "What type of pasta is shaped like little bows or butterflies?", a: ["Spaghetti", "Penne", "Farfalle", "Macaroni"], c: 2 },
+    { topic: "Food", q: "What is the main ingredient in traditional hummus?", a: ["Lentils", "Chickpeas", "Black Beans", "Peas"], c: 1 },
+    { topic: "Food", q: "Which beverage is brewed from roasted beans?", a: ["Tea", "Coffee", "Hot Chocolate", "Kombucha"], c: 1 },
+    { topic: "Food", q: "What is the spiciest chili pepper in the world (as of recent records)?", a: ["Jalapeno", "Habanero", "Carolina Reaper", "Ghost Pepper"], c: 2 },
 
-    // --- BLOCK 3: TECH & INNOVATION ---
-    { topic: "Tech", q: "What does 'CPU' stand for?", a: ["Central Process Unit", "Core Processing Unit", "Computer Personal Unit", "Central Processor Unit"], c: 0 },
-    { topic: "Tech", q: "Which company created the iPhone?", a: ["Microsoft", "Google", "Apple", "Samsung"], c: 2 },
-    { topic: "Tech", q: "What is the main language used for AI development today?", a: ["HTML", "Python", "CSS", "SQL"], c: 1 },
-    { topic: "Tech", q: "Which of these is a web browser?", a: ["Linux", "Safari", "Windows", "Android"], c: 1 },
-    { topic: "Tech", q: "What does 'HTTP' stand for?", a: ["HyperText Transfer Protocol", "High Tech Transfer Program", "Home Tool Transfer Page", "Hyperlink Transfer Protocol"], c: 0 },
-    { topic: "Tech", q: "Who is the founder of Microsoft?", a: ["Steve Jobs", "Bill Gates", "Jeff Bezos", "Elon Musk"], c: 1 },
-    { topic: "Tech", q: "What is the term for a malicious software program?", a: ["Hardware", "Malware", "Firmware", "Software"], c: 1 },
-    { topic: "Tech", q: "Which device is used to connect multiple networks?", a: ["Router", "Monitor", "Keyboard", "Mouse"], c: 0 },
-    { topic: "Tech", q: "What is the most popular video platform?", a: ["Vimeo", "YouTube", "Dailymotion", "Twitch"], c: 1 },
-    { topic: "Tech", q: "What unit measures internet speed?", a: ["Mbps", "GB", "Hz", "Pixel"], c: 0 },
+    // --- BLOCK 3: CINEMA & MOVIES ---
+    { topic: "Cinema", q: "Who directed the movie 'Jurassic Park'?", a: ["James Cameron", "Steven Spielberg", "George Lucas", "Christopher Nolan"], c: 1 },
+    { topic: "Cinema", q: "What is the first rule of Fight Club?", a: ["Always win", "Do not talk about Fight Club", "Bring your own gloves", "No weapons"], c: 1 },
+    { topic: "Cinema", q: "What color is the pill Neo takes in 'The Matrix'?", a: ["Blue", "Red", "Green", "Yellow"], c: 1 },
+    { topic: "Cinema", q: "Which movie holds the record for the highest-grossing film of all time?", a: ["Avengers: Endgame", "Titanic", "Avatar", "Star Wars"], c: 2 },
+    { topic: "Cinema", q: "Who played the character Jack in 'Titanic'?", a: ["Brad Pitt", "Johnny Depp", "Leonardo DiCaprio", "Tom Cruise"], c: 2 },
+    { topic: "Cinema", q: "What is the name of the hobbit who destroys the One Ring?", a: ["Sam", "Merry", "Pippin", "Frodo"], c: 3 },
+    { topic: "Cinema", q: "Which horror movie features a terrifying clown named Pennywise?", a: ["Halloween", "IT", "Scream", "The Conjuring"], c: 1 },
+    { topic: "Cinema", q: "Who is Darth Vader's son?", a: ["Han Solo", "Chewbacca", "Luke Skywalker", "Kylo Ren"], c: 2 },
+    { topic: "Cinema", q: "Which actor plays Iron Man in the Marvel Cinematic Universe?", a: ["Chris Evans", "Chris Hemsworth", "Robert Downey Jr.", "Mark Ruffalo"], c: 2 },
+    { topic: "Cinema", q: "Which animated film features a flying house suspended by balloons?", a: ["Toy Story", "Up", "Finding Nemo", "Shrek"], c: 1 },
 
-    // --- BLOCK 4: SCIENCE ---
-    { topic: "Science", q: "What is the chemical symbol for water?", a: ["HO2", "H2O", "O2H", "WH2"], c: 1 },
-    { topic: "Science", q: "Which gas do plants absorb from the atmosphere?", a: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Helium"], c: 2 },
-    { topic: "Science", q: "What is the center of an atom called?", a: ["Electron", "Proton", "Nucleus", "Neutron"], c: 2 },
-    { topic: "Science", q: "Which blood type is the universal donor?", a: ["A+", "O-", "B-", "AB+"], c: 1 },
-    { topic: "Science", q: "How many bones are in the adult human body?", a: ["206", "208", "210", "204"], c: 0 },
-    { topic: "Science", q: "Which planet is the hottest?", a: ["Mercury", "Venus", "Mars", "Jupiter"], c: 1 },
-    { topic: "Science", q: "What is the hardest natural substance?", a: ["Gold", "Iron", "Diamond", "Quartz"], c: 2 },
-    { topic: "Science", q: "What force keeps us on the ground?", a: ["Magnetism", "Friction", "Gravity", "Inertia"], c: 2 },
-    { topic: "Science", q: "Which organ pumps blood?", a: ["Brain", "Lungs", "Heart", "Liver"], c: 2 },
-    { topic: "Science", q: "What is the study of living things?", a: ["Biology", "Chemistry", "Physics", "Geology"], c: 0 },
+    // --- BLOCK 4: ARTS & LITERATURE ---
+    { topic: "Arts", q: "Who painted 'The Starry Night'?", a: ["Claude Monet", "Vincent van Gogh", "Pablo Picasso", "Salvador Dali"], c: 1 },
+    { topic: "Arts", q: "Who wrote the dystopian novel '1984'?", a: ["Aldous Huxley", "George Orwell", "Ray Bradbury", "J.D. Salinger"], c: 1 },
+    { topic: "Arts", q: "Which artist is famous for painting melting clocks?", a: ["Salvador Dali", "Frida Kahlo", "Andy Warhol", "Henri Matisse"], c: 0 },
+    { topic: "Arts", q: "Who is the author of the 'Harry Potter' series?", a: ["J.R.R. Tolkien", "C.S. Lewis", "J.K. Rowling", "Stephen King"], c: 2 },
+    { topic: "Arts", q: "In which museum is the 'Mona Lisa' currently displayed?", a: ["The Met", "British Museum", "The Louvre", "Prado Museum"], c: 2 },
+    { topic: "Arts", q: "What is the traditional Japanese art of paper folding called?", a: ["Ikebana", "Origami", "Haiku", "Bonsai"], c: 1 },
+    { topic: "Arts", q: "Who wrote the ancient Greek epic 'The Odyssey'?", a: ["Sophocles", "Homer", "Aristotle", "Plato"], c: 1 },
+    { topic: "Arts", q: "Which famous playwright wrote 'Hamlet'?", a: ["William Shakespeare", "Arthur Miller", "Oscar Wilde", "Anton Chekhov"], c: 0 },
+    { topic: "Arts", q: "What architectural style is Notre-Dame Cathedral in Paris?", a: ["Baroque", "Renaissance", "Gothic", "Modernist"], c: 2 },
+    { topic: "Arts", q: "Who sculpted the famous masterpiece 'David'?", a: ["Donatello", "Raphael", "Leonardo da Vinci", "Michelangelo"], c: 3 },
 
-    // --- BLOCK 5: SPORTS & GEOGRAPHY ---
-    { topic: "General", q: "How many players are on a soccer team?", a: ["9", "10", "11", "12"], c: 2 },
-    { topic: "General", q: "Which country is the largest by land area?", a: ["USA", "China", "Russia", "Canada"], c: 2 },
-    { topic: "General", q: "Which city is known as the Big Apple?", a: ["Chicago", "New York", "Los Angeles", "Miami"], c: 1 },
-    { topic: "General", q: "Which sport uses a shuttlecock?", a: ["Tennis", "Badminton", "Table Tennis", "Squash"], c: 1 },
-    { topic: "General", q: "Which is the longest river in the world?", a: ["Amazon", "Nile", "Yangtze", "Mississippi"], c: 1 },
-    { topic: "General", q: "How many rings are on the Olympic flag?", a: ["4", "5", "6", "7"], c: 1 },
-    { topic: "General", q: "Which country is famous for Sushi?", a: ["China", "Thailand", "Japan", "Korea"], c: 2 },
-    { topic: "General", q: "What is the capital of France?", a: ["Berlin", "Madrid", "Paris", "Rome"], c: 2 },
-    { topic: "General", q: "Which mountain is the highest in the world?", a: ["K2", "Everest", "Kilimanjaro", "Denali"], c: 1 },
-    { topic: "General", q: "In which sport do you score a 'Touchdown'?", a: ["Soccer", "Rugby", "American Football", "Basketball"], c: 2 },
+    // --- BLOCK 5: MYTHOLOGY ---
+    { topic: "Mythology", q: "Who is the Greek god of the sea?", a: ["Zeus", "Hades", "Poseidon", "Apollo"], c: 2 },
+    { topic: "Mythology", q: "What is the name of Thor's magical hammer?", a: ["Gungnir", "Mjolnir", "Excalibur", "Aegis"], c: 1 },
+    { topic: "Mythology", q: "Who was the king of the Roman gods?", a: ["Mars", "Jupiter", "Neptune", "Mercury"], c: 1 },
+    { topic: "Mythology", q: "Which mythological creature is half-man and half-bull?", a: ["Centaur", "Minotaur", "Satyr", "Griffin"], c: 1 },
+    { topic: "Mythology", q: "Who flew too close to the sun with wings made of wax?", a: ["Icarus", "Daedalus", "Perseus", "Theseus"], c: 0 },
+    { topic: "Mythology", q: "In Egyptian mythology, who is the god of the afterlife?", a: ["Ra", "Horus", "Osiris", "Seth"], c: 2 },
+    { topic: "Mythology", q: "What is the Greek realm of the dead called?", a: ["Tartarus", "Hades", "Elysium", "Valhalla"], c: 1 },
+    { topic: "Mythology", q: "Which Greek goddess sprang fully grown from Zeus's head?", a: ["Aphrodite", "Hera", "Athena", "Artemis"], c: 2 },
+    { topic: "Mythology", q: "Who cursed himself by wishing everything he touched turned to gold?", a: ["King Arthur", "King Midas", "King Solomon", "King Oedipus"], c: 1 },
+    { topic: "Mythology", q: "What mythical bird is known to rise from its own ashes?", a: ["Griffin", "Thunderbird", "Phoenix", "Harpy"], c: 2 },
 
-    // --- BLOCK 6: POP CULTURE ---
-    { topic: "Pop Culture", q: "Who is the 'King of Pop'?", a: ["Prince", "Michael Jackson", "Elvis Presley", "Freddie Mercury"], c: 1 },
-    { topic: "Pop Culture", q: "Which band is from Liverpool?", a: ["The Rolling Stones", "The Who", "The Beatles", "Queen"], c: 2 },
-    { topic: "Pop Culture", q: "Who is the main character in 'The Legend of Zelda'?", a: ["Zelda", "Ganon", "Link", "Mario"], c: 2 },
-    { topic: "Pop Culture", q: "Which film features the line 'May the Force be with you'?", a: ["Star Trek", "Star Wars", "Avatar", "Dune"], c: 1 },
-    { topic: "Pop Culture", q: "What is the name of the wizard school in Harry Potter?", a: ["Rivendell", "Hogwarts", "Narnia", "Middle Earth"], c: 1 },
-    { topic: "Pop Culture", q: "Which character lives in a pineapple under the sea?", a: ["Patrick", "SpongeBob", "Squidward", "Mr. Krabs"], c: 1 },
-    { topic: "Pop Culture", q: "Which superhero is known as the 'Dark Knight'?", a: ["Superman", "Iron Man", "Batman", "Spider-Man"], c: 2 },
-    { topic: "Pop Culture", q: "Which streaming service has 'Stranger Things'?", a: ["Hulu", "Disney+", "Netflix", "Prime Video"], c: 2 },
-    { topic: "Pop Culture", q: "Who wrote 'Romeo and Juliet'?", a: ["Dickens", "Shakespeare", "Hemingway", "Austen"], c: 1 },
-    { topic: "Pop Culture", q: "What is the name of the superhero team led by Nick Fury?", a: ["Justice League", "Avengers", "X-Men", "Guardians"], c: 1 }
+    // --- BLOCK 6: GAMING ---
+    { topic: "Gaming", q: "What is the best-selling video game console of all time?", a: ["Xbox 360", "PlayStation 2", "Nintendo Wii", "PlayStation 4"], c: 1 },
+    { topic: "Gaming", q: "What is the highest-grossing video game franchise globally?", a: ["Mario", "Call of Duty", "Pokémon", "Grand Theft Auto"], c: 2 },
+    { topic: "Gaming", q: "Who is the main protagonist of the 'Halo' series?", a: ["Master Chief", "Marcus Fenix", "Kratos", "Doomguy"], c: 0 },
+    { topic: "Gaming", q: "What popular block-building game was created by Markus Persson?", a: ["Terraria", "Roblox", "Minecraft", "Fortnite"], c: 2 },
+    { topic: "Gaming", q: "What is the name of Mario's taller brother?", a: ["Wario", "Toad", "Bowser", "Luigi"], c: 3 },
+    { topic: "Gaming", q: "Which company created the Game Boy?", a: ["Sega", "Sony", "Nintendo", "Atari"], c: 2 },
+    { topic: "Gaming", q: "In the classic arcade game 'Pac-Man', what are the primary enemies?", a: ["Aliens", "Zombies", "Ghosts", "Robots"], c: 2 },
+    { topic: "Gaming", q: "What explosive enemy is famous for destroying players' buildings in Minecraft?", a: ["Zombie", "Skeleton", "Enderman", "Creeper"], c: 3 },
+    { topic: "Gaming", q: "What is the primary setting of the 'Fallout' game series?", a: ["Fantasy Realm", "Post-apocalyptic wasteland", "Cyberpunk city", "Deep Space"], c: 1 },
+    { topic: "Gaming", q: "Which popular game involves playing soccer with rocket-powered cars?", a: ["Twisted Metal", "Rocket League", "Forza Horizon", "Gran Turismo"], c: 1 }
 ];
 
 
@@ -416,7 +417,8 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    localStorage.setItem('quiz_c', 'true');
+    // Geändert auf 'quiz_v2' zur Datenspeicherung
+    localStorage.setItem('quiz_v2', 'true');
 
     const finalName = document.getElementById('player-name').value;
     document.getElementById('quiz-screen').classList.remove('active');
