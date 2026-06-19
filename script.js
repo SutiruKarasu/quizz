@@ -1,3 +1,5 @@
+Hier ist dein kompletter, modifizierter JavaScript-Code. Ich habe deine drei neuen Features (Punkte-Prognose, die taktischen Lifelines/Perks und die finale Rang-Berechnung) nahtlos in deine bestehende Engine, die Audio-Synthese und das Google-Sheets-Matching integriert.
+```javascript
 // --- GOOGLE SHEETS INTERFACE URL ---
 const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fDpF1VyaeIeSCVcAjYE8FC9kRGB6lHww7iBlzlAch_p0AqSOQ0hyUdl5dCw/exec";
 
@@ -91,12 +93,10 @@ const quizData = [
     { topic: "Gaming", q: "Which popular game involves playing soccer with rocket-powered cars?", a: ["Twisted Metal", "Rocket League", "Forza Horizon", "Gran Turismo"], c: 1 }
 ];
 
-
 // --- 3. NATIVE AUDIO SYNTHESIS FOR SOUND EFFECTS ---
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-// Mechanisches Ticken
 function playTickSound() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
@@ -111,12 +111,10 @@ function playTickSound() {
     osc.stop(audioCtx.currentTime + 0.04);
 }
 
-// Harmonisches Doppel-Signal bei Richtig
 function playCorrectSound() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
     
-    // Erster Ton (helles C)
     const osc1 = audioCtx.createOscillator();
     const gain1 = audioCtx.createGain();
     osc1.type = 'sine';
@@ -128,7 +126,6 @@ function playCorrectSound() {
     osc1.start(now);
     osc1.stop(now + 0.08);
 
-    // Zweiter Ton kurz danach (höheres E)
     const osc2 = audioCtx.createOscillator();
     const gain2 = audioCtx.createGain();
     osc2.type = 'sine';
@@ -141,7 +138,6 @@ function playCorrectSound() {
     osc2.stop(now + 0.22);
 }
 
-// Tieferer Brummton mit Abfall bei Falsch
 function playWrongSound() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
@@ -152,10 +148,10 @@ function playWrongSound() {
     
     osc.type = 'sawtooth'; 
     osc.frequency.setValueAtTime(160, now); 
-    osc.frequency.linearRampToValueAtTime(100, now + 0.25); // Frequenz fällt ab
+    osc.frequency.linearRampToValueAtTime(100, now + 0.25); 
     
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(350, now); // Nimmt die schrillen Höhen raus
+    filter.frequency.setValueAtTime(350, now); 
     
     gain.gain.setValueAtTime(0.12, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
@@ -179,12 +175,18 @@ let lastSecond = 10;
 let streak = 0;
 let maxStreak = 0;
 
+// NEU: Globaler State für Prediction & Perks
+let predictedScore = 0;
+let perk5050Used = false;
+let perkOvertimeUsed = false;
+
 const startBtn = document.getElementById('start-btn');
 const answersContainer = document.getElementById('answers-container');
 const eventScreen = document.getElementById('event-screen');
 const quizScreen = document.getElementById('quiz-screen'); 
 
 function animateValue(obj, start, end, duration) {
+    if (!obj) return;
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
@@ -198,10 +200,50 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
+// --- INITIALIZE LIFELINE/PERK LISTENERS ---
+const perk5050Btn = document.getElementById('perk-5050');
+const perkOvertimeBtn = document.getElementById('perk-overtime');
+
+if (perk5050Btn) {
+    perk5050Btn.onclick = () => {
+        if (perk5050Used || isAnswered || currentQuestionIndex >= quizData.length) return;
+        perk5050Used = true;
+        perk5050Btn.disabled = true;
+        perk5050Btn.classList.add('used-perk');
+        
+        const correctIdx = quizData[currentQuestionIndex].c;
+        const btns = answersContainer.querySelectorAll('.answer-btn');
+        let hiddenCount = 0;
+        
+        for (let i = 0; i < btns.length; i++) {
+            if (i !== correctIdx && hiddenCount < 2) {
+                btns[i].style.visibility = 'hidden'; // Layout bleibt stabil
+                hiddenCount++;
+            }
+        }
+    };
+}
+
+if (perkOvertimeBtn) {
+    perkOvertimeBtn.onclick = () => {
+        if (perkOvertimeUsed || isAnswered || currentQuestionIndex >= quizData.length) return;
+        perkOvertimeUsed = true;
+        perkOvertimeBtn.disabled = true;
+        perkOvertimeBtn.classList.add('used-perk');
+        
+        timeLeft += 5.0;
+        updateClockUI();
+    };
+}
+
 if (startBtn) {
     startBtn.onclick = () => {
         const nameValue = document.getElementById('player-name').value.trim();
         if(!nameValue) return alert("Please enter your name!");
+        
+        // NEU: Score Prediction auslesen
+        const predictionInput = document.getElementById('score-prediction');
+        predictedScore = parseInt(predictionInput ? predictionInput.value : 0) || 0;
         
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -288,7 +330,8 @@ function startTimer() {
 }
 
 function updateClockUI() {
-    document.getElementById('time-display').innerText = Math.ceil(timeLeft);
+    document.getElementById('time-display').innerText = Math.max(0, Math.ceil(timeLeft));
+    // Erlaubt flüssiges Zurückdrehen des Zeigers bei Overtime-Perk
     const rotation = (10 - timeLeft) * 36;
     const hand = document.getElementById('clock-hand');
     if(hand) hand.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
@@ -337,7 +380,7 @@ function selectAnswer(idx, btn) {
 
     if(idx === correctIdx) {
         if(btn) btn.classList.add('correct');
-        playCorrectSound(); // <-- SOUND BEI RICHTIG
+        playCorrectSound(); 
         
         streak++;
         if (streak > maxStreak) maxStreak = streak;
@@ -352,7 +395,7 @@ function selectAnswer(idx, btn) {
     } else {
         streak = 0;
         if(btn) btn.classList.add('wrong');
-        playWrongSound(); // <-- SOUND BEI FALSCH (ODER TIMEOUT)
+        playWrongSound(); 
         
         if (quizScreen) {
             quizScreen.classList.add('shake-active');
@@ -417,7 +460,6 @@ function showChapterTransition() {
 }
 
 function showResults() {
-    // Geändert auf 'quiz_v2' zur Datenspeicherung
     localStorage.setItem('quiz_v2', 'true');
 
     const finalName = document.getElementById('player-name').value;
@@ -425,19 +467,63 @@ function showResults() {
     document.getElementById('result-screen').classList.add('active');
     
     document.getElementById('result-name').innerText = finalName.toUpperCase();
-    animateValue(document.getElementById('final-score'), 0, score, 1500);
+
+    // NEU: Logik für den Prediction-Multiplier & Score-Splitting
+    const baseScore = score;
+    const difference = Math.abs(baseScore - predictedScore);
+    let multiplier = 1.0;
+
+    if (difference === 0) {
+        multiplier = 2.0; // Perfekter Tipp!
+    } else if (difference <= 2000) {
+        multiplier = 1.5; // Sehr nah dran (Toleranzfenster)
+    } else if (difference <= 5000) {
+        multiplier = 1.2; // Guter Riecher
+    }
+
+    const totalScore = Math.round(baseScore * multiplier);
+
+    // UI Elemente befüllen
+    const finalBaseScoreEl = document.getElementById('final-base-score');
+    if (finalBaseScoreEl) finalBaseScoreEl.innerText = baseScore;
+
+    const multiplierZone = document.getElementById('multiplier-zone');
+    const appliedMultiplierEl = document.getElementById('applied-multiplier');
+    
+    if (multiplier > 1.0) {
+        if (multiplierZone) {
+            multiplierZone.classList.remove('class-hidden');
+            multiplierZone.style.display = 'block';
+        }
+        if (appliedMultiplierEl) appliedMultiplierEl.innerText = `x${multiplier.toFixed(1)}`;
+    } else {
+        if (multiplierZone) multiplierZone.style.display = 'none';
+    }
+
+    // Animiert den finalen TOTAL SCORE statt der Base
+    animateValue(document.getElementById('final-score'), 0, totalScore, 1500);
 
     const finalMaxStreakEl = document.getElementById('final-max-streak');
     if (finalMaxStreakEl) finalMaxStreakEl.innerText = maxStreak;
 
-    // DATA SYNC WITH GOOGLE SHEETS
+    // NEU: Performance Rank Berechnung (S, A, B, C, D) basierend auf Gesamtpunkten
+    const rankEl = document.getElementById('performance-rank');
+    let rank = "D";
+    if (totalScore >= 60000) rank = "S";
+    else if (totalScore >= 45000) rank = "A";
+    else if (totalScore >= 30000) rank = "B";
+    else if (totalScore >= 15000) rank = "C";
+    
+    if (rankEl) rankEl.innerText = rank;
+
+    // DATA SYNC WITH GOOGLE SHEETS (Sendet den gewichteten totalScore)
     fetch(GOOGLE_WEB_APP_URL, {
         method: 'POST',
         mode: 'no-cors', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
             Player: finalName, 
-            Score: score,
+            Score: totalScore,
             Timestamp: new Date().toLocaleTimeString('de-DE') + ' Uhr'
         })
     })
@@ -449,3 +535,5 @@ function showResults() {
         document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
     });
 }
+
+```
