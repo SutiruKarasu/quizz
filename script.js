@@ -1,5 +1,4 @@
-Hier ist dein kompletter, modifizierter JavaScript-Code. Ich habe deine drei neuen Features (Punkte-Prognose, die taktischen Lifelines/Perks und die finale Rang-Berechnung) nahtlos in deine bestehende Engine, die Audio-Synthese und das Google-Sheets-Matching integriert.
-```javascript
+
 // --- GOOGLE SHEETS INTERFACE URL ---
 const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fDpF1VyaeIeSCVcAjYE8FC9kRGB6lHww7iBlzlAch_p0AqSOQ0hyUdl5dCw/exec";
 
