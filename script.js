@@ -1,3 +1,4 @@
+alert("JS wurde erfolgreich geladen!");
 
 // --- GOOGLE SHEETS INTERFACE URL ---
 const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVcLK_qD7fDpF1VyaeIeSCVcAjYE8FC9kRGB6lHww7iBlzlAch_p0AqSOQ0hyUdl5dCw/exec";
