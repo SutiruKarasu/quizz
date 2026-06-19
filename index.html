@@ -1,3 +1,10 @@
+Das ist ein verdammt cleanes Basis-HTML – keine unnötigen Verschachtelungen, perfektes Fundament für ein performantes Custom-Interface.
+Ich habe deine Idee mit dem Punkte-Tipp direkt eingebaut und mir zwei weitere Features überlegt, die perfekt in das industrielle **"Clock Inn" / Schichtarbeits-Theme** passen:
+ 1. **Punkte-Prognose (Deine Idee):** Ein Input-Feld im Start-Screen, wo das Team seine Punktzahl schätzt. Im End-Screen gibt es direkt das Feld für den angewendeten Multiplikator, falls sie nah dran waren.
+ 2. **Shift Perks (Lifelines):** Zwei "Überstunden- / Notfall-Knöpfe" (50:50 und +5s Overtime), um bei dem harten 10-Sekunden-Limit taktische Tiefe reinzubringen.
+ 3. **Performance-Rang & Multiplikator-Anzeige:** Ein dynamisches Feld im Result-Screen, das den Spielern je nach Score eine Note (S, A, B, C) verpasst und anzeigt, ob der "Prediction Bonus" gezündet hat.
+Hier ist dein erweitertes HTML:
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -29,6 +36,11 @@
                     <input type="text" id="player-name" placeholder="Enter your Team Name" autocomplete="off">
                 </div>
 
+                <div class="input-group prediction-group">
+                    <input type="number" id="score-prediction" placeholder="Predict your Final Score" autocomplete="off" min="0">
+                    <small class="input-hint">Hit close to your guess for a final Multiplier!</small>
+                </div>
+
                 <button id="start-btn" class="primary-btn">CLOCK IN</button>
             </div>
         </section>
@@ -45,6 +57,11 @@
                     <div id="clock-hand"></div>
                     <span id="time-display">10</span>
                 </div>
+            </div>
+
+            <div class="perks-container">
+                <button id="perk-5050" class="perk-btn">50:50</button>
+                <button id="perk-overtime" class="perk-btn">+5s Overtime</button>
             </div>
 
             <div class="question-section">
@@ -73,8 +90,20 @@
                 <h3 id="result-name" class="result-name"></h3>
                 
                 <div class="stats-box">
-                    <p>Final Score: <span id="final-score" class="highlight-score"></span></p>
-                    <p>Max Streak: <span id="final-max-streak"></span></p>
+                    <p>Base Score: <span id="final-base-score">0</span></p>
+                    <p>Max Streak: <span id="final-max-streak">0</span></p>
+                    
+                    <div id="multiplier-zone" class="multiplier-zone class-hidden">
+                        <p class="bonus-alert">🎯 Prediction Bonus: <span id="applied-multiplier">x1.5</span></p>
+                    </div>
+                    
+                    <hr class="stats-divider">
+                    <p class="total-score-row">Total Score: <span id="final-score" class="highlight-score">0</span></p>
+                </div>
+
+                <div class="rank-container">
+                    <span class="rank-label">Performance Grade</span>
+                    <div id="performance-rank" class="rank-badge">-</div>
                 </div>
                 
                 <p id="mail-status" class="status-text">Transmitting Data...</p>
@@ -87,3 +116,4 @@
 
 </body>
 </html>
+
