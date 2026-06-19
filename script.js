@@ -535,5 +535,3 @@ function showResults() {
         document.getElementById('mail-status').innerText = "Sync error. Please screenshot your score!";
     });
 }
-
-```
