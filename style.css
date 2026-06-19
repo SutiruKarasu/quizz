@@ -167,11 +167,9 @@ body {
 }
 #score-display { font-size: 28px; font-weight: 800; color: var(--accent-yellow); transition: all 0.3s ease; }
 
-/* Orange Flame (Streak 3-4) */
 .score-container.flames-normal { animation: flicker-orange 0.4s infinite alternate; background: rgba(242, 139, 36, 0.1); }
 .score-container.flames-normal #score-display { color: #fff; text-shadow: 0 0 10px #f28b24, 0 0 20px #ff4500, 0 0 30px #ff0000; }
 
-/* Blue Flame (Streak 5+) */
 .score-container.flames-blue { animation: flicker-blue 0.4s infinite alternate; background: rgba(0, 229, 255, 0.1); }
 .score-container.flames-blue #score-display { color: #fff; text-shadow: 0 0 10px #00e5ff, 0 0 20px #0077ff, 0 0 30px #0000ff; }
 
@@ -194,7 +192,6 @@ body {
     100% { box-shadow: 0 0 25px #0077ff, inset 0 0 15px #00e5ff; }
 }
 
-/* Transitions */
 #event-screen { background: rgba(10, 11, 16, 0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 100; }
 #event-title { font-size: 28px; color: var(--accent-yellow); margin-bottom: 10px; letter-spacing: 2px; text-align: center; }
 #event-desc { font-size: 16px; color: var(--text-main); margin-bottom: 30px; text-align: center; }
@@ -204,28 +201,36 @@ body {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ================= DYNAMIC CLOCK STREAK STYLES ================= */
-.timer-ring {
-    transition: all 0.3s ease;
-}
-#clock-hand {
-    transition: transform 0.05s linear, background-color 0.3s ease;
-}
+.timer-ring { transition: all 0.3s ease; }
+#clock-hand { transition: transform 0.05s linear, background-color 0.3s ease; }
 
-/* Orange Flame Clock (Streak 3-4) */
-.timer-ring.flames-normal { 
-    border-color: var(--accent-orange); 
-    box-shadow: 0 0 20px rgba(242, 139, 36, 0.4), inset 0 0 10px rgba(242, 139, 36, 0.2); 
-}
-.timer-ring.flames-normal #clock-hand { 
-    background-color: #ff4500; 
-}
+.timer-ring.flames-normal { border-color: var(--accent-orange); box-shadow: 0 0 20px rgba(242, 139, 36, 0.4), inset 0 0 10px rgba(242, 139, 36, 0.2); }
+.timer-ring.flames-normal #clock-hand { background-color: #ff4500; }
 
-/* Blue Flame Clock (Streak 5+) */
-.timer-ring.flames-blue { 
-    border-color: var(--accent-blue); 
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), inset 0 0 10px rgba(0, 229, 255, 0.2); 
+.timer-ring.flames-blue { border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), inset 0 0 10px rgba(0, 229, 255, 0.2); }
+.timer-ring.flames-blue #clock-hand { background-color: #ffffff; box-shadow: 0 0 8px #ffffff; }
+
+/* ================= NEW FEATURES: PERKS & RANKING ================= */
+.perks-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 25px; padding: 0 10px; }
+.perk-btn {
+    flex: 1; background-color: var(--bg-button); border: 1px solid var(--border-color);
+    color: var(--accent-yellow); padding: 14px; border-radius: 12px; font-size: 13px;
+    font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: all 0.2s ease;
+    text-transform: uppercase; display: flex; justify-content: center; align-items: center;
 }
-.timer-ring.flames-blue #clock-hand { 
-    background-color: #ffffff; 
-    box-shadow: 0 0 8px #ffffff;
+.perk-btn:active { transform: scale(0.95); }
+.perk-btn.used-perk { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
+
+.class-hidden { display: none !important; }
+#multiplier-zone {
+    background: rgba(46, 204, 113, 0.05); border: 1px solid var(--color-correct);
+    border-radius: 12px; padding: 12px; margin-top: 15px; font-size: 14px; animation: pulse 2s infinite;
 }
+#applied-multiplier { color: var(--color-correct); font-weight: 800; font-size: 18px; margin-left: 5px; }
+
+.rank-container {
+    margin: 25px 0; text-align: center; background-color: var(--bg-button);
+    padding: 20px; border-radius: 16px; border: 1px solid var(--border-color);
+}
+.rank-label { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 3px; margin-bottom: 10px; }
+#performance-rank { font-size: 72px; font-weight: 900; color: var(--accent-blue); text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); margin: 0; }
